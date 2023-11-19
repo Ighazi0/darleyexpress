@@ -34,6 +34,7 @@ dependencies:
   shared_preferences: ^2.2.1
   shimmer: ^3.0.0
   icons_plus: ^4.0.0
+  carousel_slider: ^4.2.1
 
   paymob_payment: ^0.0.1+1
   flutter_stripe: ^9.5.0+1

@@ -2,11 +2,12 @@ class ProductModel {
   final String id;
   final String titleEn;
   final String titleAr;
-  final String url;
+  final int stock;
   final DateTime? timestamp;
   final String link;
   final List? favorites;
-  final String description;
+  final String descriptionAr;
+  final String descriptionEn;
   final double price;
   final double discount;
   final List? media;
@@ -17,12 +18,13 @@ class ProductModel {
       {this.id = '',
       this.titleEn = '',
       this.titleAr = '',
-      this.url = '',
       this.timestamp,
       this.favorites,
       this.link = '',
-      this.description = '',
+      this.descriptionAr = '',
+      this.descriptionEn = '',
       this.price = 0.0,
+      this.stock = 0,
       this.discount = 0.0,
       this.media,
       this.extra,
@@ -33,14 +35,15 @@ class ProductModel {
         titleEn: json['titleEn'] ?? '',
         titleAr: json['titleAr'] ?? '',
         id: json['id'] ?? '',
-        url: json['url'] ?? '',
         timestamp: json['timestamp'] ?? DateTime.now(),
         link: json['link'] ?? '',
         category: json['category'] ?? '',
         media: json['media'] ?? [],
         discount: json['discount'] ?? 0.0,
+        stock: json['stock'] ?? 0,
         price: json['price'] ?? 0.0,
-        description: json['description'] ?? '',
+        descriptionAr: json['descriptionAr'] ?? '',
+        descriptionEn: json['descriptionEn'] ?? '',
         favorites: json['favorites'] ?? []);
   }
 }

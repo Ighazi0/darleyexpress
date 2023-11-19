@@ -17,7 +17,7 @@ class _UserBottomBarState extends State<UserBottomBar> {
       color: Colors.white,
       child: SafeArea(
         child: Container(
-          height: 70,
+          height: 65,
           decoration: const BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -60,7 +60,7 @@ class _UserBottomBarState extends State<UserBottomBar> {
                           Icon(
                             staticData.bottomBar[index].values.first,
                             color: userCubit.selectedIndex == index
-                                ? Colors.amber
+                                ? Colors.orangeAccent
                                 : Colors.black,
                           ),
                           Text(
@@ -69,7 +69,7 @@ class _UserBottomBarState extends State<UserBottomBar> {
                                 .tr(context),
                             style: TextStyle(
                               color: userCubit.selectedIndex == index
-                                  ? Colors.amber
+                                  ? Colors.orangeAccent
                                   : Colors.black,
                             ),
                           )

@@ -10,14 +10,14 @@ class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<UserAppBar> createState() => _UserAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(scroll ? 100 : 170);
+  Size get preferredSize => Size.fromHeight(scroll ? 100 : 160);
 }
 
 class _UserAppBarState extends State<UserAppBar> {
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
-        preferredSize: Size(dWidth, 170),
+        preferredSize: Size(dWidth, 160),
         child: SafeArea(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -62,7 +62,29 @@ class _UserAppBarState extends State<UserAppBar> {
                                     BorderRadius.all(Radius.circular(10))),
                             margin: const EdgeInsets.only(top: 5),
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                var id = DateTime.now()
+                                    .millisecondsSinceEpoch
+                                    .toString();
+                                firestore.collection('products').doc(id).set({
+                                  'id': id,
+                                  'timeStamp': DateTime.now(),
+                                  'titleAr': '',
+                                  'titleEn': 'Classic Black EDT For Men 100ml',
+                                  'link': '',
+                                  'descriptionEn': '',
+                                  'descriptionAr': '',
+                                  'price': 39.00,
+                                  'discount': 0.0,
+                                  'stock': 5,
+                                  'media': [
+                                    'https://f.nooncdn.com/p/v1613666782/N11200839A_1.jpg?format=avif&width=240',
+                                    'https://f.nooncdn.com/p/v1613666782/N11200839A_2.jpg?format=avif&width=240'
+                                  ],
+                                  'extra': [],
+                                  'category': '1700424150102',
+                                });
+                              },
                               child: const Padding(
                                 padding: EdgeInsets.all(10),
                                 child: Icon(
@@ -75,7 +97,7 @@ class _UserAppBarState extends State<UserAppBar> {
                       ],
                     ),
                   const SizedBox(
-                    height: 40,
+                    height: 30,
                   ),
                   Row(
                     children: [
