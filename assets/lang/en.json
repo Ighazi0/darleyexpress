@@ -1,0 +1,27 @@
+{
+  "darley":"Darley Express",
+  "signUp":"Sign Up",
+    "signIn":"Sign In",
+    "pleaseEmail":"Please enter valid Email", 
+     "email":"Email",
+       "pleasePassword":"Please enter your password",  
+       "password":"Password",
+       "welcomeBack":"Welcome back, You've been missed",
+       "forgot":"Forgot password?",
+       "dontHave":"Don't have an account?",
+       "or":"OR",
+       "fill":"Fill your information below or register with your social account",
+       "haveAcc":"Already have an account?",
+       "name":"Name",
+       "pleaseName":"Please enter your name", 
+       "agree":"Agree with",
+       "term":"Terms & Conditions",
+       "search":"Search",
+       "deliverTO": "Deliver to",
+       "home":"Home",
+       "profile":"Profile",
+       "cart":"Cart",   
+       "wishlist":"Wishlist"
+      
+    
+}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "482601678376",
+    "project_id": "darleycomma",
+    "storage_bucket": "darleycomma.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:482601678376:android:fdd4ad64ec1e5ce37c271d",
+        "android_client_info": {
+          "package_name": "com.comma.darleyexpress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "482601678376-iuegsqrda3m2u2qtb6j4mq06tirlomop.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCX3DS4w1tdKUKlDaya86rwqhwbb7cDPcA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "482601678376-iuegsqrda3m2u2qtb6j4mq06tirlomop.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
