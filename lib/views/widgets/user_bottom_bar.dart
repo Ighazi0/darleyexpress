@@ -1,3 +1,4 @@
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,9 @@ class _UserBottomBarState extends State<UserBottomBar> {
                                 : Colors.black,
                           ),
                           Text(
-                            staticData.bottomBar[index].keys.first,
+                            staticData.bottomBar[index].keys.first
+                                .toString()
+                                .tr(context),
                             style: TextStyle(
                               color: userCubit.selectedIndex == index
                                   ? Colors.amber

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/static_data.dart';
+import 'package:darleyexpress/controller/static_functions.dart';
+import 'package:darleyexpress/controller/static_widgets.dart';
 import 'package:darleyexpress/cubit/auth_cubit.dart';
 import 'package:darleyexpress/cubit/locale_cubit.dart';
 import 'package:darleyexpress/views/screens/forgot_password.dart';
@@ -29,6 +31,8 @@ final double dHeight = physical.height / devicePixelRatio;
 final double dWidth = physical.width / devicePixelRatio;
 
 StaticData staticData = StaticData();
+StaticWidgets staticWidgets = StaticWidgets();
+StaticFunctions staticFunctions = StaticFunctions();
 
 Color primaryColor = const Color(0xffF7BD11);
 

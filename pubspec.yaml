@@ -17,12 +17,17 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   dio: ^5.3.3
+  share_plus: ^6.3.4
+  url_launcher: ^6.2.1
+  fluttertoast: ^8.2.4
   firebase_core: ^2.21.0
   firebase_auth: ^4.12.1
   firebase_storage: ^11.4.1
   firebase_dynamic_links: ^5.4.3
   firebase_messaging: ^14.7.3
   cloud_firestore: ^4.12.2
+  google_sign_in: ^6.1.5
+  sign_in_with_apple: ^5.0.0
   lottie: ^2.7.0
   cached_network_image: ^3.3.0
   flutter_bloc: ^8.1.3

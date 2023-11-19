@@ -2,6 +2,8 @@ import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/auth_cubit.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
+import 'package:darleyexpress/views/widgets/forgot_bottom_sheet.dart';
+import 'package:darleyexpress/views/widgets/text_field_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,23 +73,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             }
                             return null;
                           },
-                          title: 'name'.tr(context)),
+                          title: 'name'),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     TextFieldAuth(
                         hint: 'example@gmail.com',
                         function: auth.auth,
                         controller: auth.email,
                         validator: (value) {
-                          if (value!.isEmpty) {
+                          if (!value!.contains('@') && !value.contains('.')) {
                             return 'pleaseEmail'.tr(context);
                           }
                           return null;
                         },
-                        title: 'email'.tr(context)),
+                        title: 'email'),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     TextFieldAuth(
                         hint: '',
@@ -95,12 +97,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         function: auth.auth,
                         controller: auth.password,
                         validator: (value) {
-                          if (value!.length < 6) {
+                          if (value!.length < 8) {
                             return 'pleasePassword'.tr(context);
                           }
                           return null;
                         },
-                        title: 'password'.tr(context)),
+                        title: 'password'),
                     if (signIn)
                       Container(
                         margin: const EdgeInsets.only(bottom: 25),
@@ -108,12 +110,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: TextButton(
                             style: ButtonStyle(
                                 overlayColor: MaterialStateProperty.all(
-                                    Colors.red.shade100)),
-                            onPressed: () {},
+                                    Colors.amber.shade50)),
+                            onPressed: () {
+                              staticWidgets.showBottom(
+                                  context, const BottomSheetForgot(), 0.4, 0.5);
+                            },
                             child: Text(
                               'forgot'.tr(context),
-                              style: const TextStyle(
-                                  color: Color(0xffFF4747),
+                              style: TextStyle(
+                                  color: primaryColor,
                                   decoration: TextDecoration.underline),
                             )),
                       ),
@@ -129,7 +134,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 onChanged: (v) {
                                   auth.agreeTerm();
                                 },
-                                activeColor: const Color(0xffFF4747),
+                                activeColor: primaryColor,
                               ),
                               Text(
                                 'agree'.tr(context),
@@ -142,28 +147,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   onPressed: () {},
                                   child: Text(
                                     'term'.tr(context),
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 16,
-                                        color: Color(0xffFF4747),
+                                        color: primaryColor,
                                         decoration: TextDecoration.underline),
                                   ))
                             ],
                           )),
                     Align(
                       child: state is LoadingState
-                          ? const CircularProgressIndicator(
-                              color: Color(0xffFF4747),
+                          ? CircularProgressIndicator(
+                              color: primaryColor,
                             )
                           : MaterialButton(
                               minWidth: dWidth,
                               height: 50,
                               onPressed: () async {
-                                auth.auth();
+                                auth.auth(context);
                               },
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(25))),
-                              color: const Color(0xffFF4747),
+                              color: primaryColor,
                               child: Text(
                                 signIn
                                     ? 'signIn'.tr(context)
@@ -173,68 +178,76 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 50, bottom: 30),
-                      child: Row(
+                    if (signIn)
+                      Container(
+                        padding: const EdgeInsets.only(top: 50, bottom: 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              width: 100,
+                              child: const Divider(
+                                thickness: 1,
+                              ),
+                            ),
+                            Text('or'.tr(context)),
+                            Container(
+                              width: 100,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: const Divider(
+                                thickness: 1,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    if (signIn)
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
-                            width: 100,
-                            child: const Divider(
-                              thickness: 1,
-                            ),
-                          ),
-                          Text('or'.tr(context)),
-                          Container(
-                            width: 100,
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
-                            child: const Divider(
-                              thickness: 1,
-                            ),
-                          )
+                          InkWell(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(100)),
+                              onTap: () {
+                                auth.appleSignIn();
+                              },
+                              child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(100))),
+                                  child: Logo(
+                                    Logos.apple,
+                                    size: 30,
+                                  ))),
+                          InkWell(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(100)),
+                              onTap: () {
+                                auth.googleSignIn();
+                              },
+                              child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(100))),
+                                  child: Logo(
+                                    Logos.google,
+                                    size: 30,
+                                  ))),
                         ],
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(100)),
-                            onTap: () {},
-                            child: Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(100))),
-                                child: Logo(
-                                  Logos.apple,
-                                  size: 30,
-                                ))),
-                        InkWell(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(100)),
-                            onTap: () {},
-                            child: Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(100))),
-                                child: Logo(
-                                  Logos.google,
-                                  size: 30,
-                                ))),
-                      ],
-                    ),
                     const SizedBox(
                       height: 25,
                     ),
@@ -258,7 +271,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                           style: ButtonStyle(
                               overlayColor: MaterialStateProperty.all(
-                                  Colors.red.shade100)),
+                                  Colors.amber.shade50)),
                           child: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 500),
                             child: Text(
@@ -267,13 +280,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     : 'signIn'.tr(context),
                                 key: ValueKey<String>(
                                     signIn ? 'signUp' : 'signIn'),
-                                style: const TextStyle(
-                                    color: Color(0xffFF4747),
+                                style: TextStyle(
+                                    color: primaryColor,
                                     decoration: TextDecoration.underline)),
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    Align(
+                      child: TextButton(
+                        onPressed: () async {
+                          await firebaseAuth.signInAnonymously();
+                          navigatorKey.currentState
+                              ?.pushReplacementNamed('user');
+                        },
+                        style: ButtonStyle(
+                            overlayColor: MaterialStateProperty.all(
+                                Colors.amber.shade50)),
+                        child: Text('skip'.tr(context),
+                            key: ValueKey<String>(signIn ? 'signUp' : 'signIn'),
+                            style: TextStyle(
+                              color: primaryColor,
+                            )),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -281,71 +311,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
         },
       ),
-    );
-  }
-}
-
-class TextFieldAuth extends StatefulWidget {
-  const TextFieldAuth(
-      {super.key,
-      required this.function,
-      required this.controller,
-      required this.validator,
-      required this.hint,
-      this.secure = false,
-      required this.title});
-  final String title;
-  final String hint;
-  final Function function;
-  final bool secure;
-  final String? Function(String?)? validator;
-  final TextEditingController controller;
-
-  @override
-  State<TextFieldAuth> createState() => _TextFieldAuthState();
-}
-
-class _TextFieldAuthState extends State<TextFieldAuth> {
-  bool showPass = false;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          child: Text(widget.title),
-        ),
-        TextFormField(
-            obscureText: !showPass && widget.secure,
-            cursorColor: const Color(0xffFF4747),
-            onFieldSubmitted: (value) => widget.function(),
-            decoration: InputDecoration(
-                hintText: widget.hint,
-                suffixIcon: widget.secure
-                    ? IconButton(
-                        onPressed: () {
-                          setState(() {
-                            showPass = !showPass;
-                          });
-                        },
-                        icon: Icon(
-                          showPass ? Icons.visibility : Icons.visibility_off,
-                          color: const Color(0xffFF4747),
-                        ))
-                    : null,
-                fillColor: Colors.grey.shade300,
-                filled: true,
-                enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 15)),
-            controller: widget.controller,
-            validator: widget.validator),
-      ],
     );
   }
 }
