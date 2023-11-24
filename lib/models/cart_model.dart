@@ -1,35 +1,12 @@
+import 'package:darleyexpress/models/product_model.dart';
+
 class CartModel {
-  final String id;
-  final String titleEn;
-  final String titleAr;
-  final String code;
-  final double discount;
-  final double max;
-  final DateTime? timestamp;
-  final DateTime? endTime;
-  final String link;
+  final ProductModel productData;
+  final int count;
 
-  CartModel(
-      {this.id = '',
-      this.titleEn = '',
-      this.titleAr = '',
-      this.code = '',
-      this.timestamp,
-      this.endTime,
-      this.discount = 0.0,
-      this.max = 0.0,
-      this.link = ''});
+  CartModel({required this.productData, this.count = 0});
 
-  factory CartModel.fromJson(Map json) {
-    return CartModel(
-        titleEn: json['titleEn'] ?? '',
-        titleAr: json['titleAr'] ?? '',
-        id: json['id'] ?? '',
-        code: json['code'] ?? '',
-        timestamp: json['timestamp'] ?? DateTime.now(),
-        endTime: json['endTime'] ?? DateTime.now(),
-        link: json['link'] ?? '',
-        max: json['max'] ?? 0.0,
-        discount: json['discount'] ?? 0.0);
+  factory CartModel.fromJson(ProductModel product, int c) {
+    return CartModel(productData: product, count: c);
   }
 }

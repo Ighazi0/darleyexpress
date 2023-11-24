@@ -12,6 +12,7 @@ class ProductModel {
   final double discount;
   final List? media;
   final String category;
+  final String mainCategory;
   final List? extra;
 
   ProductModel(
@@ -28,6 +29,7 @@ class ProductModel {
       this.discount = 0.0,
       this.media,
       this.extra,
+      this.mainCategory = '',
       this.category = ''});
 
   factory ProductModel.fromJson(Map json) {
@@ -38,6 +40,7 @@ class ProductModel {
         timestamp: json['timestamp'] ?? DateTime.now(),
         link: json['link'] ?? '',
         category: json['category'] ?? '',
+        mainCategory: json['mainCategory'] ?? '',
         media: json['media'] ?? [],
         discount: json['discount'] ?? 0.0,
         stock: json['stock'] ?? 0,

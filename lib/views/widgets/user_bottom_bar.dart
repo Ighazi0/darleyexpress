@@ -1,7 +1,10 @@
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
+import 'package:darleyexpress/views/widgets/icon_badge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserBottomBar extends StatefulWidget {
   const UserBottomBar({super.key});
@@ -26,56 +29,76 @@ class _UserBottomBarState extends State<UserBottomBar> {
               ],
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(
-                4,
-                (index) => InkWell(
-                      onTap: () {
-                        userCubit.changeIndex(index);
-                        setState(() {});
-                      },
-                      child: Column(
-                        children: [
-                          Stack(
+          child: BlocBuilder<UserCubit, UserState>(
+            builder: (context, state) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(
+                    4,
+                    (index) => InkWell(
+                          onTap: () {
+                            userCubit.changeIndex(index);
+                          },
+                          child: Stack(
                             children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                margin: const EdgeInsets.only(bottom: 10),
-                                decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(200),
-                                      bottomRight: Radius.circular(200),
+                              Column(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      AnimatedContainer(
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                        margin:
+                                            const EdgeInsets.only(bottom: 10),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              bottomLeft: Radius.circular(200),
+                                              bottomRight: Radius.circular(200),
+                                            ),
+                                            color: primaryColor),
+                                        width: 20,
+                                        height: userCubit.selectedIndex == index
+                                            ? 10
+                                            : 0,
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  ),
+                                  Icon(
+                                    staticData.bottomBar[index].values.first,
+                                    color: userCubit.selectedIndex == index
+                                        ? Colors.orangeAccent
+                                        : Colors.black,
+                                  ),
+                                  Text(
+                                    staticData.bottomBar[index].keys.first
+                                        .toString()
+                                        .tr(context),
+                                    style: TextStyle(
+                                      color: userCubit.selectedIndex == index
+                                          ? Colors.orangeAccent
+                                          : Colors.black,
                                     ),
-                                    color: primaryColor),
-                                width: 20,
-                                height:
-                                    userCubit.selectedIndex == index ? 10 : 0,
+                                  )
+                                ],
                               ),
-                              const SizedBox(
-                                height: 20,
-                              )
+                              if (index == 2 && userCubit.cartList.isNotEmpty)
+                                Positioned(
+                                  right: -1,
+                                  top: 11,
+                                  child: BadgeIcon(
+                                    badgeText:
+                                        userCubit.cartList.length.toString(),
+                                  ),
+                                )
                             ],
                           ),
-                          Icon(
-                            staticData.bottomBar[index].values.first,
-                            color: userCubit.selectedIndex == index
-                                ? Colors.orangeAccent
-                                : Colors.black,
-                          ),
-                          Text(
-                            staticData.bottomBar[index].keys.first
-                                .toString()
-                                .tr(context),
-                            style: TextStyle(
-                              color: userCubit.selectedIndex == index
-                                  ? Colors.orangeAccent
-                                  : Colors.black,
-                            ),
-                          )
-                        ],
-                      ),
-                    )),
+                        )),
+              );
+            },
           ),
         ),
       ),

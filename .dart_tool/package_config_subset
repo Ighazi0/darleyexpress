@@ -10,10 +10,6 @@ analyzer
 2.19
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/analyzer-5.13.0/
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/analyzer-5.13.0/lib/
-archive
-2.12
-file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/archive-3.4.9/
-file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/archive-3.4.9/lib/
 args
 2.19
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/args-2.4.2/
@@ -242,10 +238,6 @@ lints
 3.0
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/lints-2.1.1/
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/lints-2.1.1/lib/
-lottie
-3.1
-file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/lottie-2.7.0/
-file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/lottie-2.7.0/lib/
 matcher
 2.18
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/matcher-0.12.16/
@@ -326,10 +318,6 @@ plugin_platform_interface
 3.0
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.7/
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.7/lib/
-pointycastle
-2.14
-file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/pointycastle-3.7.3/
-file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/pointycastle-3.7.3/lib/
 provider
 2.12
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/provider-6.1.1/
@@ -506,6 +494,10 @@ vector_math
 2.14
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/vector_math-2.1.4/
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/vector_math-2.1.4/lib/
+visibility_detector
+2.12
+file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/visibility_detector-0.4.0+2/
+file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/visibility_detector-0.4.0+2/lib/
 watcher
 3.0
 file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/watcher-1.1.0/

@@ -5,6 +5,7 @@ import 'package:darleyexpress/controller/static_functions.dart';
 import 'package:darleyexpress/controller/static_widgets.dart';
 import 'package:darleyexpress/cubit/auth_cubit.dart';
 import 'package:darleyexpress/cubit/locale_cubit.dart';
+import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/views/screens/forgot_password.dart';
 import 'package:darleyexpress/views/screens/register_screen.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AuthCubit(),
         ),
+        BlocProvider(
+          create: (context) => UserCubit(),
+        ),
       ],
       child: BlocBuilder<LocaleCubit, ChangeLocaleState>(
         builder: (context, state) {
@@ -58,7 +62,9 @@ class MyApp extends StatelessWidget {
             navigatorKey: navigatorKey,
             scaffoldMessengerKey: snackbarKey,
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(primaryColor: primaryColor),
+            theme: ThemeData(
+                primaryColor: primaryColor,
+                appBarTheme: AppBarTheme(backgroundColor: primaryColor)),
             supportedLocales: const [Locale('en'), Locale('ar')],
             localizationsDelegates: const [
               AppLocalizations.delegate,

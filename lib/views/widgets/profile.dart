@@ -1,3 +1,4 @@
+import 'package:darleyexpress/controller/my_app.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
@@ -5,6 +6,13 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      width: dWidth,
+      height: dHeight,
+      color: Colors.white,
+      child: const Column(
+        children: [],
+      ),
+    );
   }
 }
