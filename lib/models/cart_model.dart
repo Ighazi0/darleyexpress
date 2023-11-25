@@ -1,10 +1,10 @@
 import 'package:darleyexpress/models/product_model.dart';
 
 class CartModel {
-  final ProductModel productData;
+  final ProductModel? productData;
   final int count;
 
-  CartModel({required this.productData, this.count = 0});
+  CartModel({this.productData, this.count = 0});
 
   factory CartModel.fromJson(ProductModel product, int c) {
     return CartModel(productData: product, count: c);

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
+import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -58,62 +59,43 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                 ],
               ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                decoration: BoxDecoration(
-                    border: Border.all(width: 0.5),
-                    borderRadius: const BorderRadius.all(Radius.circular(10))),
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        if (count > 1) {
-                          setState(() {
-                            count--;
-                          });
-                        }
-                      },
-                      child: const Icon(
-                        Icons.remove,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(count.toString()),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          count++;
-                        });
-                      },
-                      child: const Icon(
-                        Icons.add,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  userCubit.addToCart(widget.product, count);
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: primaryColor,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
-                  child: const Icon(
-                    Icons.add_shopping_cart,
-                    color: Colors.white,
+              Row(
+                children: [
+                  Counter(
+                    remove: () {
+                      setState(() {
+                        count--;
+                      });
+                    },
+                    other: () {},
+                    add: () {
+                      setState(() {
+                        count++;
+                      });
+                    },
+                    count: count,
                   ),
-                ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      userCubit.addToCart(widget.product, count);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: primaryColor,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
+                      child: const Icon(
+                        Icons.add_shopping_cart,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -164,25 +146,42 @@ class _ProductDetailsState extends State<ProductDetails> {
                 child: CircleAvatar(
                   radius: 18,
                   backgroundColor: Colors.white,
-                  child: InkWell(
-                    onTap: () async {
-                      setState(() {
-                        favorite = !favorite;
-                      });
-                      try {
-                        await userCubit.favoriteStatus(widget.product);
-                      } catch (e) {
-                        setState(() {
-                          favorite = !favorite;
-                        });
-                      }
-                    },
-                    child: Icon(
-                      favorite ? Icons.favorite : Icons.favorite_border,
-                      color: Colors.red,
-                      size: 20,
-                    ),
-                  ),
+                  child: StreamBuilder(
+                      stream: firestore
+                          .collection('products')
+                          .doc(widget.product.id)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          ProductModel product = ProductModel.fromJson(
+                              snapshot.data!.data() as Map);
+                          return IconButton(
+                            icon: Icon(
+                              product.favorites!
+                                      .contains(firebaseAuth.currentUser!.uid)
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: Colors.red,
+                              size: 18,
+                            ),
+                            onPressed: () async {
+                              await userCubit.favoriteStatus(product);
+                            },
+                          );
+                        }
+
+                        return IconButton(
+                          icon: Icon(
+                            widget.product.favorites!
+                                    .contains(firebaseAuth.currentUser!.uid)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: Colors.red,
+                            size: 18,
+                          ),
+                          onPressed: () async {},
+                        );
+                      }),
                 ),
               )
             ],

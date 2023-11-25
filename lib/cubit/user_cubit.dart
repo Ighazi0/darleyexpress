@@ -13,6 +13,11 @@ class UserCubit extends Cubit<UserState> {
   int selectedIndex = 0;
   Map<String, CartModel> cartList = {};
 
+  removeFromCart(id) {
+    cartList.remove(id);
+    emit(UserLoaded());
+  }
+
   addToCart(ProductModel p, int c) {
     if (cartList.containsKey(p.id)) {
       cartList.update(
