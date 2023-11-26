@@ -10,22 +10,36 @@ class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<UserAppBar> createState() => _UserAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(scroll ? 85 : 145);
+  Size get preferredSize => const Size.fromHeight(145);
 }
 
 class _UserAppBarState extends State<UserAppBar> {
+  bool end = true;
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
         preferredSize: Size(dWidth, 160),
-        child: Container(
+        child: AnimatedContainer(
+          height: widget.scroll ? 85 : 145,
+          onEnd: () {
+            if (!widget.scroll) {
+              setState(() {
+                end = true;
+              });
+            } else {
+              setState(() {
+                end = false;
+              });
+            }
+          },
+          duration: const Duration(milliseconds: 250),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
             color: primaryColor,
           ),
           child: Column(
             children: [
-              if (!widget.scroll)
+              if (!widget.scroll && end)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -62,24 +76,7 @@ class _UserAppBarState extends State<UserAppBar> {
                         margin: const EdgeInsets.only(top: 5),
                         child: InkWell(
                           onTap: () {
-                            // var id = DateTime.now()
-                            //     .millisecondsSinceEpoch
-                            //     .toString();
-                            // firestore
-                            //     .collection('categories')
-                            //     .doc('1700424150102')
-                            //     .collection('categories')
-                            //     .doc(id)
-                            //     .set({
-                            //   'id': id,
-                            //   'timeStamp': DateTime.now(),
-                            //   'titleAr': 'عطور للزجال',
-                            //   'titleEn': 'men perfumes',
-                            //   'link': '',
-                            //   'url':
-                            //       'https://assets.vogue.com/photos/6054ceb33de64a1c8b706d68/3:4/w_748%2Cc_limit/slide_6.jpg',
-                            //   'category': '1700424150102',
-                            // });
+                            Navigator.pushNamed(context, 'notification');
                           },
                           child: const Padding(
                             padding: EdgeInsets.all(10),

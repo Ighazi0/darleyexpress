@@ -6,7 +6,9 @@ import 'package:darleyexpress/controller/static_widgets.dart';
 import 'package:darleyexpress/cubit/auth_cubit.dart';
 import 'package:darleyexpress/cubit/locale_cubit.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/views/screens/checkout_screen.dart';
 import 'package:darleyexpress/views/screens/forgot_password.dart';
+import 'package:darleyexpress/views/screens/notification_screen.dart';
 import 'package:darleyexpress/views/screens/register_screen.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
@@ -85,6 +87,8 @@ class MyApp extends StatelessWidget {
             routes: {
               'register': (context) => const RegisterScreen(),
               'user': (context) => const UserScreen(),
+              'checkout': (context) => const CheckoutScreen(),
+              'notification': (context) => const NotificationScreen(),
               'forgot': (context) => const ForgotPasswordScreen()
             },
             home: const SplashScreen(),

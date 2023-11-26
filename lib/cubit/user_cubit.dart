@@ -13,6 +13,24 @@ class UserCubit extends Cubit<UserState> {
   int selectedIndex = 0;
   Map<String, CartModel> cartList = {};
 
+  double totalCartPrice() {
+    double t = 0;
+    cartList.values
+        .map((e) => e.productData!.price * e.count)
+        .forEach((element) {
+      t = element + t;
+    });
+    return t;
+  }
+
+  int totalCartCount() {
+    int c = 0;
+    cartList.values.map((e) => e.count).forEach((element) {
+      c = element + c;
+    });
+    return c;
+  }
+
   removeFromCart(id) {
     cartList.remove(id);
     emit(UserLoaded());

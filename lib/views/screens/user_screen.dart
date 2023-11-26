@@ -24,7 +24,8 @@ class _UserScreenState extends State<UserScreen> {
       builder: (context, state) {
         userCubit = BlocProvider.of<UserCubit>(context);
         return Scaffold(
-            backgroundColor: primaryColor,
+            backgroundColor:
+                userCubit.selectedIndex == 0 ? primaryColor : Colors.white,
             bottomNavigationBar: const UserBottomBar(),
             body: SafeArea(
               child: IndexedStack(

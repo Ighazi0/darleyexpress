@@ -91,7 +91,7 @@ class _UserBottomBarState extends State<UserBottomBar> {
                                   top: 11,
                                   child: BadgeIcon(
                                     badgeText:
-                                        userCubit.cartList.length.toString(),
+                                        userCubit.totalCartCount().toString(),
                                   ),
                                 )
                             ],

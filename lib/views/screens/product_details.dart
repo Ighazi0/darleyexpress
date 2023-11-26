@@ -114,7 +114,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     Navigator.pop(context);
                   },
                   child: Icon(
-                    Icons.arrow_back_ios_new,
+                    Icons.arrow_back,
                     color: primaryColor,
                     size: 20,
                   ),

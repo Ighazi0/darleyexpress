@@ -7,6 +7,7 @@ import 'package:darleyexpress/models/banner_model.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/category_screen.dart';
+import 'package:darleyexpress/views/widgets/categories_bottom_sheet.dart';
 import 'package:darleyexpress/views/widgets/product_tile.dart';
 import 'package:darleyexpress/views/widgets/shimmer.dart';
 import 'package:darleyexpress/views/widgets/user_app_bar.dart';
@@ -119,7 +120,10 @@ class _HomeState extends State<Home> {
                       ),
                       const Spacer(),
                       TextButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+                          staticWidgets.showBottom(context,
+                              const BottomSheetCategories(), 0.75, 0.9);
+                        },
                         style: ButtonStyle(
                             overlayColor: MaterialStateProperty.all(
                                 Colors.amber.shade50)),

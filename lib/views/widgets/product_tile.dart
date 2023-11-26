@@ -4,8 +4,10 @@ import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/product_details.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
+import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 class ProductTile extends StatefulWidget {
   const ProductTile({super.key, required this.product});
@@ -37,15 +39,18 @@ class _ProductTileState extends State<ProductTile> {
                 margin: const EdgeInsets.only(bottom: 5),
                 height: 200,
                 child: GridTile(
-                    header: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: CircleAvatar(
-                            radius: 17,
-                            backgroundColor: Colors.white,
-                            child: StreamBuilder(
+                    header: Align(
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        height: 35,
+                        width: 35,
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100))),
+                        margin: const EdgeInsets.all(5),
+                        child: widget.product.id.isNotEmpty
+                            ? StreamBuilder(
                                 stream: firestore
                                     .collection('products')
                                     .doc(widget.product.id)
@@ -84,32 +89,51 @@ class _ProductTileState extends State<ProductTile> {
                                           .favoriteStatus(widget.product);
                                     },
                                   );
-                                }),
-                          ),
-                        ),
-                      ],
+                                })
+                            : const SizedBox(),
+                      ),
                     ),
-                    footer: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: CircleAvatar(
-                            radius: 17,
-                            backgroundColor: Colors.white,
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.add_shopping_cart,
-                                color: Colors.amber,
-                                size: 18,
+                    footer: Align(
+                      alignment: Alignment.centerRight,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        width: userCubit.cartList.containsKey(widget.product.id)
+                            ? 100
+                            : 35,
+                        height: 35,
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100))),
+                        margin: const EdgeInsets.all(5),
+                        child: userCubit.cartList.containsKey(widget.product.id)
+                            ? FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Counter(
+                                  remove: () {
+                                    userCubit.addToCart(widget.product, -1);
+                                  },
+                                  add: () {
+                                    userCubit.addToCart(widget.product, 1);
+                                  },
+                                  other: () {
+                                    userCubit.removeFromCart(widget.product.id);
+                                  },
+                                  count: userCubit
+                                      .cartList[widget.product.id]!.count,
+                                ),
+                              )
+                            : IconButton(
+                                icon: const Icon(
+                                  BoxIcons.bx_cart_add,
+                                  color: Colors.amber,
+                                  size: 20,
+                                ),
+                                onPressed: () {
+                                  userCubit.addToCart(widget.product, 1);
+                                },
                               ),
-                              onPressed: () {
-                                userCubit.addToCart(widget.product, 1);
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                     child: Container(
                       decoration: const BoxDecoration(
