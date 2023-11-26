@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/user_model.dart';
+import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +35,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   logOut() async {
+    userCubit.selectedIndex = 0;
+    _googleSignIn.signOut();
     userData = UserModel();
     await firebaseAuth.signOut();
     navigatorKey.currentState?.pushReplacementNamed('register');
@@ -183,11 +186,13 @@ class AuthCubit extends Cubit<AuthState> {
             'link',
             (v) => link,
           );
-          await firestore
+          firestore
               .collection('users')
               .doc(firebaseAuth.currentUser!.uid)
               .set(data);
           userData = UserModel.fromJson(data);
+        } else {
+          await getUserData();
         }
       });
     } else {
@@ -197,7 +202,7 @@ class AuthCubit extends Cubit<AuthState> {
         'link',
         (v) => link,
       );
-      await firestore
+      firestore
           .collection('users')
           .doc(firebaseAuth.currentUser!.uid)
           .set(data);

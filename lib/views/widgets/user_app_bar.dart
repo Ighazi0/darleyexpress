@@ -1,5 +1,6 @@
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -10,7 +11,7 @@ class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<UserAppBar> createState() => _UserAppBarState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(145);
+  Size get preferredSize => const Size.fromHeight(140);
 }
 
 class _UserAppBarState extends State<UserAppBar> {
@@ -20,7 +21,7 @@ class _UserAppBarState extends State<UserAppBar> {
     return PreferredSize(
         preferredSize: Size(dWidth, 160),
         child: AnimatedContainer(
-          height: widget.scroll ? 85 : 145,
+          height: widget.scroll ? 80 : 140,
           onEnd: () {
             if (!widget.scroll) {
               setState(() {
@@ -43,29 +44,36 @@ class _UserAppBarState extends State<UserAppBar> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'deliverTO'.tr(context),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const Row(
-                          children: [
-                            Icon(Icons.location_on, color: Colors.white),
-                            Text(
-                              'Amman, Marj Alhammam',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Icon(Icons.keyboard_arrow_down, color: Colors.white)
-                          ],
-                        )
-                      ],
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, 'address');
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'deliverTO'.tr(context),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.location_on,
+                                  color: Colors.white),
+                              Text(
+                                auth.userData.address!.first['address'],
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const Icon(Icons.keyboard_arrow_down,
+                                  color: Colors.white)
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                     const Spacer(),
                     Container(
@@ -90,7 +98,7 @@ class _UserAppBarState extends State<UserAppBar> {
                   ],
                 ),
               const SizedBox(
-                height: 25,
+                height: 20,
               ),
               TextField(
                 decoration: InputDecoration(

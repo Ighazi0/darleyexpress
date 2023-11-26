@@ -1,4 +1,5 @@
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
@@ -10,8 +11,15 @@ class Profile extends StatelessWidget {
       width: dWidth,
       height: dHeight,
       color: Colors.white,
-      child: const Column(
-        children: [],
+      child: Column(
+        children: [
+          MaterialButton(
+            onPressed: () {
+              auth.logOut();
+            },
+            color: primaryColor,
+          )
+        ],
       ),
     );
   }

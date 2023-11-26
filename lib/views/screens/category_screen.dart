@@ -3,6 +3,7 @@ import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/sub_category_screen.dart';
+import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:darleyexpress/views/widgets/product_tile.dart';
 import 'package:darleyexpress/views/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
@@ -19,33 +20,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 70,
-        leading: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(width: 0.5),
-                borderRadius: const BorderRadius.all(Radius.circular(100))),
-            child: InkWell(
-              onTap: () async {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-                size: 20,
-              ),
-            ),
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          widget.category.titleEn,
-          style: const TextStyle(color: Colors.black),
-        ),
+      appBar: AppBarCustom(
+        title: widget.category.titleEn,
       ),
       body: RefreshIndicator(
         onRefresh: () async {
