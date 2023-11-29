@@ -7,6 +7,9 @@ import 'package:darleyexpress/cubit/auth_cubit.dart';
 import 'package:darleyexpress/cubit/locale_cubit.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/views/screens/address_screen.dart';
+import 'package:darleyexpress/views/screens/admin_banners.dart';
+import 'package:darleyexpress/views/screens/admin_products.dart';
+import 'package:darleyexpress/views/screens/admin_screen.dart';
 import 'package:darleyexpress/views/screens/checkout_screen.dart';
 import 'package:darleyexpress/views/screens/forgot_password.dart';
 import 'package:darleyexpress/views/screens/notification_screen.dart';
@@ -14,6 +17,7 @@ import 'package:darleyexpress/views/screens/register_screen.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -26,6 +30,7 @@ final GlobalKey<ScaffoldMessengerState> snackbarKey =
 
 FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 FirebaseFirestore firestore = FirebaseFirestore.instance;
+FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
 final physical =
     WidgetsBinding.instance.platformDispatcher.views.first.physicalSize;
@@ -88,6 +93,9 @@ class MyApp extends StatelessWidget {
             routes: {
               'register': (context) => const RegisterScreen(),
               'user': (context) => const UserScreen(),
+              'admin': (context) => const AdminScreen(),
+              'adminP': (context) => const AdminProducts(),
+              'adminB': (context) => const AdminBanners(),
               'address': (context) => const AddressScreen(),
               'checkout': (context) => const CheckoutScreen(),
               'notification': (context) => const NotificationScreen(),

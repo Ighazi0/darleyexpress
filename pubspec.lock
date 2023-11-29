@@ -445,6 +445,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.12.1"
+  hl_image_picker:
+    dependency: "direct main"
+    description:
+      name: hl_image_picker
+      sha256: d484803ed58c993f3a6ca392545c7812829e25d760ed3a979504ac1917c87996
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.8"
+  hl_image_picker_android:
+    dependency: transitive
+    description:
+      name: hl_image_picker_android
+      sha256: "096da1f0a7f4ef40796799af1adf55fbf6abfb35e7f53046f0b258008f11a126"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.3"
+  hl_image_picker_ios:
+    dependency: transitive
+    description:
+      name: hl_image_picker_ios
+      sha256: "4fdd73d3d5a85fc35fe4e314d0404e8bf316cdc7958025b4f010335574aef57d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.5"
+  hl_image_picker_platform_interface:
+    dependency: transitive
+    description:
+      name: hl_image_picker_platform_interface
+      sha256: "9690724ba6f3f92ae120a138d6e702c3426a3acd29f4c2ede7b0620bf81aee5b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
   http:
     dependency: transitive
     description:
@@ -621,14 +653,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
-  paymob_payment:
-    dependency: "direct main"
-    description:
-      name: paymob_payment
-      sha256: "5a7f6ef9c1d538b5bdff52e757f09a97755b0c0cabe9f5098a13cc005477584c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.1+1"
   petitparser:
     dependency: transitive
     description:
@@ -882,6 +906,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.5.0+1"
+  syncfusion_flutter_charts:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_charts
+      sha256: "719af736c2fa189a0d6574e0bf23bc32df8ee9589980d456bcf391a8bd55aa1b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "23.2.4"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: "8a1220f978491f56431c66dacf1bb97bf2abcd1458b542fe0dfbf1a630c67260"
+      url: "https://pub.dev"
+    source: hosted
+    version: "23.2.4"
   synchronized:
     dependency: transitive
     description:
@@ -1018,14 +1058,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  visibility_detector:
-    dependency: "direct main"
-    description:
-      name: visibility_detector
-      sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0+2"
   watcher:
     dependency: transitive
     description:
@@ -1042,38 +1074,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.4-beta"
-  webview_flutter:
-    dependency: transitive
-    description:
-      name: webview_flutter
-      sha256: "42393b4492e629aa3a88618530a4a00de8bb46e50e7b3993fedbfdc5352f0dbf"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.4.2"
-  webview_flutter_android:
-    dependency: transitive
-    description:
-      name: webview_flutter_android
-      sha256: "8326ee235f87605a2bfc444a4abc897f4abc78d83f054ba7d3d1074ce82b4fbf"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.12.1"
-  webview_flutter_platform_interface:
-    dependency: transitive
-    description:
-      name: webview_flutter_platform_interface
-      sha256: adb8c03c2be231bea5a8ed0e9039e9d18dbb049603376beaefa15393ede468a5
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.7.0"
-  webview_flutter_wkwebview:
-    dependency: transitive
-    description:
-      name: webview_flutter_wkwebview
-      sha256: accdaaa49a2aca2dc3c3230907988954cdd23fed0a19525d6c9789d380f4dc76
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.9.4"
   win32:
     dependency: transitive
     description:

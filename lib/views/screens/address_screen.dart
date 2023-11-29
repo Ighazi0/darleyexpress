@@ -14,6 +14,7 @@ class _AddressScreenState extends State<AddressScreen> {
     return const Scaffold(
         appBar: AppBarCustom(
       title: 'Address',
+      action: {},
     ));
   }
 }

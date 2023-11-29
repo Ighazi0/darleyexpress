@@ -44,10 +44,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   checkUser() async {
     if (firebaseAuth.currentUser != null) {
-      if (firebaseAuth.currentUser!.uid == staticData.adminUID) {
-        await Future.delayed(const Duration(seconds: 1));
-      }
-      if (firebaseAuth.currentUser!.isAnonymous) {
+      if (firebaseAuth.currentUser!.isAnonymous ||
+          firebaseAuth.currentUser!.uid == staticData.adminUID) {
         await Future.delayed(const Duration(seconds: 1));
       } else {
         final stopwatch = Stopwatch()..start();
@@ -65,24 +63,30 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   getUserData() async {
-    try {
-      await firestore
-          .collection('users')
-          .doc(firebaseAuth.currentUser!.uid)
-          .get()
-          .then((value) {
-        userData = UserModel.fromJson(value.data() as Map);
-      });
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'error');
+    if (firebaseAuth.currentUser!.uid != staticData.adminUID) {
+      try {
+        await firestore
+            .collection('users')
+            .doc(firebaseAuth.currentUser!.uid)
+            .get()
+            .then((value) {
+          userData = UserModel.fromJson(value.data() as Map);
+        });
+      } catch (e) {
+        Fluttertoast.showToast(msg: 'error');
+      }
     }
   }
 
   navigator() async {
-    if (userData.uid.isEmpty) {
-      navigatorKey.currentState?.pushReplacementNamed('register');
+    if (firebaseAuth.currentUser?.uid == staticData.adminUID) {
+      navigatorKey.currentState?.pushReplacementNamed('admin');
     } else {
-      navigatorKey.currentState?.pushReplacementNamed('user');
+      if (userData.uid.isEmpty) {
+        navigatorKey.currentState?.pushReplacementNamed('register');
+      } else {
+        navigatorKey.currentState?.pushReplacementNamed('user');
+      }
     }
   }
 

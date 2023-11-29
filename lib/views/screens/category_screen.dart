@@ -22,6 +22,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return Scaffold(
       appBar: AppBarCustom(
         title: widget.category.titleEn,
+        action: const {},
       ),
       body: RefreshIndicator(
         onRefresh: () async {

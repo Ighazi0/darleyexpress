@@ -20,6 +20,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
     return Scaffold(
         appBar: AppBarCustom(
           title: widget.category.titleEn,
+          action: const {},
         ),
         body: Padding(
           padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
@@ -43,7 +44,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                           height: 10,
                         ),
                         const Text(
-                          'No products available',
+                          'No category available',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         )
                       ],

@@ -4,7 +4,6 @@ import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
-import 'package:darleyexpress/views/widgets/payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -22,6 +21,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Scaffold(
       appBar: const AppBarCustom(
         title: 'CHECKOUT',
+        action: {},
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -68,8 +68,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               value: 'card',
               groupValue: payment,
               onChanged: (v) async {
-                staticWidgets.showBottom(
-                    context, const PaymentBottomSheet(), 0.6, 0.75);
+                await staticFunctions.makePayment();
                 // setState(() {
                 //   payment = v.toString();
                 // });

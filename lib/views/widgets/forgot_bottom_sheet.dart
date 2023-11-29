@@ -2,7 +2,7 @@
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
-import 'package:darleyexpress/views/widgets/text_field_auth.dart';
+import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -57,7 +57,7 @@ class _BottomSheetForgotState extends State<BottomSheetForgot> {
           Padding(
             padding:
                 const EdgeInsets.only(top: 30, bottom: 40, left: 20, right: 20),
-            child: TextFieldAuth(
+            child: EditText(
                 hint: 'example@gmail.com',
                 function: auth.auth,
                 controller: auth.email,

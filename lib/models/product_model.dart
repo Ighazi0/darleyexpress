@@ -37,7 +37,8 @@ class ProductModel {
         titleEn: json['titleEn'] ?? '',
         titleAr: json['titleAr'] ?? '',
         id: json['id'] ?? '',
-        timestamp: json['timestamp'] ?? DateTime.now(),
+        timestamp: DateTime.parse(
+            json['timestamp'] ?? DateTime.now().toIso8601String()),
         link: json['link'] ?? '',
         category: json['category'] ?? '',
         mainCategory: json['mainCategory'] ?? '',

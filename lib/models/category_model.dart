@@ -20,7 +20,8 @@ class CategoryModel {
       titleAr: json['titleAr'] ?? '',
       id: json['id'] ?? '',
       url: json['url'] ?? '',
-      timestamp: json['timestamp'] ?? DateTime.now(),
+      timestamp:
+          DateTime.parse(json['timestamp'] ?? DateTime.now().toIso8601String()),
       link: json['link'] ?? '',
     );
   }

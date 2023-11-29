@@ -344,6 +344,30 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "hl_image_picker",
+      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/hl_image_picker-1.2.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "hl_image_picker_android",
+      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/hl_image_picker_android-1.2.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "hl_image_picker_ios",
+      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/hl_image_picker_ios-1.2.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "hl_image_picker_platform_interface",
+      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/hl_image_picker_platform_interface-1.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "http",
       "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/http-1.1.0",
       "packageUri": "lib/",
@@ -474,12 +498,6 @@
       "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/path_provider_windows-2.2.1",
       "packageUri": "lib/",
       "languageVersion": "2.19"
-    },
-    {
-      "name": "paymob_payment",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/paymob_payment-0.0.1+1",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
     },
     {
       "name": "petitparser",
@@ -674,6 +692,18 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "syncfusion_flutter_charts",
+      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/syncfusion_flutter_charts-23.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "syncfusion_flutter_core",
+      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/syncfusion_flutter_core-23.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "synchronized",
       "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/synchronized-3.1.0",
       "packageUri": "lib/",
@@ -776,12 +806,6 @@
       "languageVersion": "2.14"
     },
     {
-      "name": "visibility_detector",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/visibility_detector-0.4.0+2",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "watcher",
       "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/watcher-1.1.0",
       "packageUri": "lib/",
@@ -792,30 +816,6 @@
       "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/web-0.1.4-beta",
       "packageUri": "lib/",
       "languageVersion": "3.1"
-    },
-    {
-      "name": "webview_flutter",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/webview_flutter-4.4.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.19"
-    },
-    {
-      "name": "webview_flutter_android",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/webview_flutter_android-3.12.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.19"
-    },
-    {
-      "name": "webview_flutter_platform_interface",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/webview_flutter_platform_interface-2.7.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
-    },
-    {
-      "name": "webview_flutter_wkwebview",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.9.4",
-      "packageUri": "lib/",
-      "languageVersion": "2.19"
     },
     {
       "name": "win32",
@@ -848,7 +848,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2023-11-26T22:22:04.124110Z",
+  "generated": "2023-11-29T20:54:34.327441Z",
   "generator": "pub",
   "generatorVersion": "3.1.4"
 }

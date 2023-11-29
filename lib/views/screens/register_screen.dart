@@ -3,7 +3,7 @@ import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/auth_cubit.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/forgot_bottom_sheet.dart';
-import 'package:darleyexpress/views/widgets/text_field_auth.dart';
+import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,7 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     if (!signIn)
-                      TextFieldAuth(
+                      EditText(
                           hint: 'Ex. Ghazi',
                           function: auth.auth,
                           controller: auth.name,
@@ -77,7 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    TextFieldAuth(
+                    EditText(
                         hint: 'example@gmail.com',
                         function: auth.auth,
                         controller: auth.email,
@@ -91,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    TextFieldAuth(
+                    EditText(
                         hint: '',
                         secure: true,
                         function: auth.auth,

@@ -1,17 +1,18 @@
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:flutter/material.dart';
 
-class TextFieldAuth extends StatefulWidget {
-  const TextFieldAuth(
+class EditText extends StatefulWidget {
+  const EditText(
       {super.key,
       required this.function,
       required this.controller,
       required this.validator,
       required this.hint,
       this.secure = false,
+      this.number = false,
       required this.title});
   final String title;
+  final bool number;
   final String hint;
   final Function function;
   final bool secure;
@@ -19,10 +20,10 @@ class TextFieldAuth extends StatefulWidget {
   final TextEditingController controller;
 
   @override
-  State<TextFieldAuth> createState() => _TextFieldAuthState();
+  State<EditText> createState() => _EditTextState();
 }
 
-class _TextFieldAuthState extends State<TextFieldAuth> {
+class _EditTextState extends State<EditText> {
   bool showPass = false;
   @override
   Widget build(BuildContext context) {
@@ -31,9 +32,12 @@ class _TextFieldAuthState extends State<TextFieldAuth> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          child: Text(widget.title.tr(context)),
+          child: Text(
+            widget.title,
+          ),
         ),
         TextFormField(
+            keyboardType: widget.number ? TextInputType.number : null,
             obscureText: !showPass && widget.secure,
             cursorColor: primaryColor,
             onFieldSubmitted: (value) => widget.function(),
