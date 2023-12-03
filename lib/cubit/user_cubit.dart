@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -9,7 +10,7 @@ part 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
   UserCubit() : super(UserInitial());
-
+  TextEditingController search = TextEditingController();
   int selectedIndex = 0;
   Map<String, CartModel> cartList = {};
 

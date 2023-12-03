@@ -13,12 +13,28 @@ class Profile extends StatelessWidget {
       color: Colors.white,
       child: Column(
         children: [
-          MaterialButton(
-            onPressed: () {
+          ListTile(
+            title: Text(auth.userData.name),
+          ),
+          const ListTile(
+            title: Text(
+              'Last orders',
+            ),
+            leading: Icon(Icons.content_paste),
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.logout,
+              color: Colors.red,
+            ),
+            title: const Text(
+              'Log Out',
+              style: TextStyle(color: Colors.red),
+            ),
+            onTap: () {
               auth.logOut();
             },
-            color: primaryColor,
-          )
+          ),
         ],
       ),
     );

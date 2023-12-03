@@ -7,6 +7,7 @@ import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:darleyexpress/views/widgets/remove_cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -103,7 +104,14 @@ class _CartState extends State<Cart> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
                               onPressed: () {
-                                Navigator.pushNamed(context, 'checkout');
+                                if (firebaseAuth.currentUser!.isAnonymous) {
+                                  navigatorKey.currentState
+                                      ?.pushReplacementNamed('register');
+                                  Fluttertoast.showToast(
+                                      msg: 'Please sign in first');
+                                } else {
+                                  Navigator.pushNamed(context, 'checkout');
+                                }
                               },
                               height: 45,
                               shape: const RoundedRectangleBorder(
@@ -133,7 +141,10 @@ class _CartState extends State<Cart> {
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset('assets/images/empty_cart.png'),
+                            Image.asset(
+                              'assets/images/empty_cart.png',
+                              height: 150,
+                            ),
                             const SizedBox(
                               height: 10,
                             ),

@@ -120,6 +120,7 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
         'category': cat.split('%')[1],
         'mainCategory': mainCat.split('%')[1],
         'dicount': 0,
+        'seller': 0,
         'media': media,
         'extra': [],
         'price': double.parse(price.text),

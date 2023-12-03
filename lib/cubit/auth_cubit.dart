@@ -114,6 +114,9 @@ class AuthCubit extends Cubit<AuthState> {
           true);
 
       await navigator();
+      email.clear();
+      name.clear();
+      password.clear();
     } catch (e) {
       emit(AuthInitial());
       Fluttertoast.showToast(msg: e.toString());
@@ -146,6 +149,9 @@ class AuthCubit extends Cubit<AuthState> {
       await createUser(googleSignInAccount.displayName.toString(),
           googleSignInAccount.photoUrl ?? '', googleSignInAccount.email, true);
       await navigator();
+      email.clear();
+      name.clear();
+      password.clear();
     } catch (e) {
       emit(AuthInitial());
       Fluttertoast.showToast(msg: e.toString());
@@ -225,6 +231,9 @@ class AuthCubit extends Cubit<AuthState> {
       } else {
         await signUp();
       }
+      email.clear();
+      name.clear();
+      password.clear();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         Fluttertoast.showToast(msg: e.code.tr(context));
@@ -240,9 +249,6 @@ class AuthCubit extends Cubit<AuthState> {
           email: email.text.trim(), password: password.text);
       await createUser(name.text, '', email.text.trim(), false);
       navigator();
-      email.clear();
-      name.clear();
-      password.clear();
     } else {
       snackbarKey.currentState?.showSnackBar(const SnackBar(
         width: 300,
@@ -264,8 +270,5 @@ class AuthCubit extends Cubit<AuthState> {
         email: email.text.trim(), password: password.text);
     await getUserData();
     await navigator();
-    email.clear();
-    name.clear();
-    password.clear();
   }
 }

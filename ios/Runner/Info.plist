@@ -43,7 +43,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Darley Express want to access your camera to upload Images</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Darley Express want to access your photos to upkuploadoad Images</string>
+	<string>Darley Express want to access your photos to upload Images</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

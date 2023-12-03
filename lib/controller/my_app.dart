@@ -8,6 +8,7 @@ import 'package:darleyexpress/cubit/locale_cubit.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/views/screens/address_screen.dart';
 import 'package:darleyexpress/views/screens/admin_banners.dart';
+import 'package:darleyexpress/views/screens/admin_coupons.dart';
 import 'package:darleyexpress/views/screens/admin_products.dart';
 import 'package:darleyexpress/views/screens/admin_screen.dart';
 import 'package:darleyexpress/views/screens/checkout_screen.dart';
@@ -97,6 +98,7 @@ class MyApp extends StatelessWidget {
               'adminP': (context) => const AdminProducts(),
               'adminB': (context) => const AdminBanners(),
               'address': (context) => const AddressScreen(),
+              'coupons': (context) => const AdminCoupons(),
               'checkout': (context) => const CheckoutScreen(),
               'notification': (context) => const NotificationScreen(),
               'forgot': (context) => const ForgotPasswordScreen()

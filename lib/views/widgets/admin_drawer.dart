@@ -39,6 +39,13 @@ class AdminDrawer extends StatelessWidget {
           },
         ),
         ListTile(
+          leading: const Icon(Icons.local_activity),
+          title: const Text('Coupons'),
+          onTap: () {
+            Navigator.pushNamed(context, 'coupons');
+          },
+        ),
+        ListTile(
           leading: const Icon(
             Icons.logout,
             color: Colors.red,
