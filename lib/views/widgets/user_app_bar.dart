@@ -26,7 +26,8 @@ class _UserAppBarState extends State<UserAppBar> {
         return PreferredSize(
             preferredSize: Size(dWidth, 140),
             child: AnimatedContainer(
-              height: widget.scroll || auth.userData.uid.isEmpty ? 80 : 140,
+              height:
+                  widget.scroll || auth.userData.address!.isEmpty ? 80 : 140,
               onEnd: () {
                 if (!widget.scroll) {
                   setState(() {
@@ -45,7 +46,9 @@ class _UserAppBarState extends State<UserAppBar> {
               ),
               child: Column(
                 children: [
-                  if (!widget.scroll && end && auth.userData.uid.isNotEmpty)
+                  if (!widget.scroll &&
+                      end &&
+                      auth.userData.address!.isNotEmpty)
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

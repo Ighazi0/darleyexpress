@@ -1,3 +1,5 @@
+import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/views/screens/address_details.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
@@ -15,45 +17,111 @@ class _AddressScreenState extends State<AddressScreen> {
     return Scaffold(
       appBar: AppBarCustom(
         title: 'Address',
-        action: {'icon': Icons.add, 'function': () {}},
+        action: {
+          'icon': Icons.add,
+          'function': () async {
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AddressDetails(
+                    address: {'name': 'New Address'},
+                    index: 0,
+                  ),
+                ));
+            setState(() {});
+          }
+        },
       ),
-      body: ListView.builder(
-          itemCount: auth.userData.address!.length,
-          itemBuilder: (context, index) {
-            var e = auth.userData.address![index];
-            return Container(
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text(e['label']),
-                      if (index == 0) Text('Default')
-                    ],
-                  ),
-                  Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('name'),
-                      Text(e['name']),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Address'),
-                      Text(e['address']),
-                    ],
-                  )
-                ],
-              ),
-            );
-          }),
+      body: RefreshIndicator(
+        color: primaryColor,
+        onRefresh: () async {
+          await auth.getUserData();
+          setState(() {});
+        },
+        child: auth.userData.address!.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/empty_data.png',
+                      height: 150,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      'No saved address',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    )
+                  ],
+                ),
+              )
+            : ListView.builder(
+                itemCount: auth.userData.address!.length,
+                itemBuilder: (context, index) {
+                  var e = auth.userData.address![index];
+                  return GestureDetector(
+                    onTap: () async {
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddressDetails(
+                              address: e,
+                              index: index,
+                            ),
+                          ));
+                      setState(() {});
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: primaryColor),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(e['label'] == 'home'
+                                  ? Icons.home
+                                  : Icons.work),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(e['name']),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              if (index == 0)
+                                Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2, horizontal: 5),
+                                    decoration: BoxDecoration(
+                                        color: primaryColor,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: const Text(
+                                      'Default',
+                                      style: TextStyle(fontSize: 10),
+                                    ))
+                            ],
+                          ),
+                          const Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Address'),
+                              Text(e['address']),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+      ),
     );
   }
 }

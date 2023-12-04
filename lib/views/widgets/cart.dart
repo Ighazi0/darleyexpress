@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/models/cart_model.dart';
+import 'package:darleyexpress/views/screens/product_details.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:darleyexpress/views/widgets/remove_cart.dart';
@@ -23,6 +24,7 @@ class _CartState extends State<Cart> {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         return Scaffold(
+            backgroundColor: Colors.white,
             bottomNavigationBar: userCubit.cartList.isEmpty
                 ? null
                 : AnimatedContainer(
@@ -40,7 +42,7 @@ class _CartState extends State<Cart> {
                     },
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     duration: const Duration(milliseconds: 250),
-                    height: showBottom ? 160 : 85,
+                    height: showBottom ? 135 : 85,
                     decoration: const BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -87,17 +89,6 @@ class _CartState extends State<Cart> {
                                 )
                               ],
                             ),
-                          if (showBottom && end)
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Discount'),
-                                Text(
-                                  'AED 10',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                )
-                              ],
-                            ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10),
                             child: MaterialButton(
@@ -124,7 +115,7 @@ class _CartState extends State<Cart> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                      'AED ${(userCubit.totalCartPrice() + 25.0 - 10).toStringAsFixed(2)}'),
+                                      'AED ${(userCubit.totalCartPrice() + 25.0).toStringAsFixed(2)}'),
                                   const Text('CHECKOUT'),
                                 ],
                               ),
@@ -191,6 +182,14 @@ class _CartState extends State<Cart> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10),
                                 child: ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ProductDetails(
+                                              product: cart.productData!),
+                                        ));
+                                  },
                                   leading: ClipRRect(
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(10)),

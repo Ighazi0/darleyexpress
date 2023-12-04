@@ -25,7 +25,7 @@ class _BannnerDetailsState extends State<BannnerDetails> {
   TextEditingController ar = TextEditingController(),
       en = TextEditingController();
 
-  updateData() async {
+  submit() async {
     if (!key.currentState!.validate()) {
       return;
     }
@@ -98,7 +98,7 @@ class _BannnerDetailsState extends State<BannnerDetails> {
       appBar: AppBarCustom(
         title: widget.banner.titleEn,
         action: {
-          'function': updateData,
+          'function': submit,
           'icon': widget.banner.id.isEmpty ? Icons.edit : Icons.add
         },
         loading: loading,
@@ -147,7 +147,7 @@ class _BannnerDetailsState extends State<BannnerDetails> {
               height: 10,
             ),
             EditText(
-              function: updateData,
+              function: submit,
               controller: en,
               validator: (p0) {
                 if (p0!.isEmpty) {
@@ -162,7 +162,7 @@ class _BannnerDetailsState extends State<BannnerDetails> {
               height: 10,
             ),
             EditText(
-              function: updateData,
+              function: submit,
               controller: ar,
               validator: (p0) {
                 if (p0!.isEmpty) {

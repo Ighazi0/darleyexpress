@@ -74,7 +74,7 @@ class _HomeState extends State<Home> {
                                     height: 10,
                                   ),
                                   const Text(
-                                    'No favorite products yet',
+                                    'No products found',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w500),
                                   )

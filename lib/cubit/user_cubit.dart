@@ -55,6 +55,11 @@ class UserCubit extends Cubit<UserState> {
     emit(UserLoaded());
   }
 
+  clearCart() {
+    cartList.clear();
+    emit(UserLoaded());
+  }
+
   favoriteStatus(ProductModel product) async {
     if (firebaseAuth.currentUser!.isAnonymous) {
       navigatorKey.currentState?.pushReplacementNamed('register');

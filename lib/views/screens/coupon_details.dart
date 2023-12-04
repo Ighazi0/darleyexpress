@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/coupon_model.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
