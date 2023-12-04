@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/models/user_model.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/services.dart';
 
 class AddressDetails extends StatefulWidget {
   const AddressDetails({super.key, required this.address, required this.index});
-  final Map address;
+  final AddressModel address;
   final int index;
   @override
   State<AddressDetails> createState() => _AddressDetailsState();
@@ -20,6 +21,7 @@ class _AddressDetailsState extends State<AddressDetails> {
   bool loading = false;
   GlobalKey<FormState> key = GlobalKey();
   TextEditingController name = TextEditingController(),
+      phone = TextEditingController(),
       address = TextEditingController();
 
   submit(delete) async {
@@ -37,30 +39,48 @@ class _AddressDetailsState extends State<AddressDetails> {
           .update({
         'address': FieldValue.arrayRemove([
           {
-            'name': widget.address['name'],
-            'address': widget.address['address'],
-            'label': widget.address['label']
+            'name': widget.address.name,
+            'phone': widget.address.phone,
+            'address': widget.address.address,
+            'label': widget.address.label
           }
         ])
       });
     } else {
       var e = auth.userData.address;
-      if (widget.address.containsKey('label')) {
+      if (widget.address.label.isNotEmpty) {
         e!.removeAt(widget.index);
-        e.insert(widget.index,
-            {'name': name.text, 'address': address.text, 'label': label});
+        e.insert(
+            widget.index,
+            AddressModel(
+                name: name.text,
+                address: address.text,
+                label: label,
+                phone: phone.text));
 
         await firestore
             .collection('users')
             .doc(firebaseAuth.currentUser!.uid)
-            .update({'address': e});
+            .update({
+          'address': e.map((e) => {
+                'name': e.name,
+                'address': e.address,
+                'label': e.label,
+                'phone': e.phone,
+              })
+        });
       } else {
         await firestore
             .collection('users')
             .doc(firebaseAuth.currentUser!.uid)
             .update({
           'address': FieldValue.arrayUnion([
-            {'name': name.text, 'address': address.text, 'label': label}
+            {
+              'name': name.text,
+              'address': address.text,
+              'label': label,
+              'phone': widget.address.phone,
+            }
           ])
         });
       }
@@ -74,10 +94,11 @@ class _AddressDetailsState extends State<AddressDetails> {
 
   @override
   void initState() {
-    if (widget.address.containsKey('label')) {
-      label = widget.address['label'];
-      address.text = widget.address['address'];
-      name.text = widget.address['name'];
+    if (widget.address.label.isNotEmpty) {
+      label = widget.address.label;
+      address.text = widget.address.address;
+      phone.text = widget.address.phone;
+      name.text = widget.address.name;
     }
     super.initState();
   }
@@ -86,10 +107,9 @@ class _AddressDetailsState extends State<AddressDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarCustom(
-          title: widget.address['name'],
+          title: widget.address.name,
           action: {
-            'icon':
-                widget.address.containsKey('label') ? Icons.edit : Icons.add,
+            'icon': widget.address.label.isNotEmpty ? Icons.edit : Icons.add,
             'function': () {
               submit(false);
             },
@@ -161,7 +181,19 @@ class _AddressDetailsState extends State<AddressDetails> {
                 },
                 hint: '',
                 title: 'Address'),
-            if (widget.address.containsKey('label') && !loading)
+            EditText(
+                function: () {},
+                number: true,
+                controller: phone,
+                validator: (p) {
+                  if (p!.isEmpty) {
+                    return 'Please enter your phone number';
+                  }
+                  return null;
+                },
+                hint: '009',
+                title: 'Phone'),
+            if (widget.address.label.isNotEmpty && !loading)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -174,16 +206,25 @@ class _AddressDetailsState extends State<AddressDetails> {
                           var e = auth.userData.address;
 
                           e!.removeAt(widget.index);
-                          e.insert(0, {
-                            'name': widget.address['name'],
-                            'address': widget.address['address'],
-                            'label': widget.address['label']
-                          });
+                          e.insert(
+                              0,
+                              AddressModel(
+                                  name: widget.address.name,
+                                  address: widget.address.address,
+                                  label: widget.address.label,
+                                  phone: widget.address.phone));
 
                           await firestore
                               .collection('users')
                               .doc(firebaseAuth.currentUser!.uid)
-                              .update({'address': e});
+                              .update({
+                            'address': e.map((e) => {
+                                  'name': e.name,
+                                  'address': e.address,
+                                  'label': e.label,
+                                  'phone': e.phone,
+                                })
+                          });
                           await auth.getUserData();
 
                           Navigator.pop(context);

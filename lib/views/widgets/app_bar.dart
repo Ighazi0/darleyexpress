@@ -36,6 +36,8 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(100))),
                     child: InkWell(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(100)),
                       onTap: () async {
                         action['function']();
                       },
@@ -56,6 +58,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
               border: Border.all(width: 0.5),
               borderRadius: const BorderRadius.all(Radius.circular(100))),
           child: InkWell(
+            borderRadius: const BorderRadius.all(Radius.circular(100)),
             onTap: () async {
               Navigator.pop(context);
             },

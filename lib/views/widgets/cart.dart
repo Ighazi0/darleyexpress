@@ -24,7 +24,6 @@ class _CartState extends State<Cart> {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         return Scaffold(
-            backgroundColor: Colors.white,
             bottomNavigationBar: userCubit.cartList.isEmpty
                 ? null
                 : AnimatedContainer(

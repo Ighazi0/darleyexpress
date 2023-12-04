@@ -45,10 +45,11 @@ class ProductModel {
         category: json['category'] ?? '',
         mainCategory: json['mainCategory'] ?? '',
         media: json['media'] ?? [],
-        discount: json['discount'] ?? 0.0,
+        // discount: double.parse(
+        //     json['discount'] == null ? '' : json['discount'].toString()),
         stock: json['stock'] ?? 0,
         seller: json['seller'] ?? 0,
-        price: json['price'] ?? 0.0,
+        price: double.parse(json['price'].toString()),
         descriptionAr: json['descriptionAr'] ?? '',
         descriptionEn: json['descriptionEn'] ?? '',
         favorites: json['favorites'] ?? []);

@@ -1,4 +1,5 @@
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/models/user_model.dart';
 import 'package:darleyexpress/views/screens/address_details.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
@@ -23,8 +24,8 @@ class _AddressScreenState extends State<AddressScreen> {
             await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddressDetails(
-                    address: {'name': 'New Address'},
+                  builder: (context) => AddressDetails(
+                    address: AddressModel(name: 'New Address'),
                     index: 0,
                   ),
                 ));
@@ -81,16 +82,15 @@ class _AddressScreenState extends State<AddressScreen> {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10))),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              Icon(e['label'] == 'home'
-                                  ? Icons.home
-                                  : Icons.work),
+                              Icon(e.label == 'home' ? Icons.home : Icons.work),
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text(e['name']),
+                              Text(e.name),
                               const SizedBox(
                                 width: 10,
                               ),
@@ -108,12 +108,16 @@ class _AddressScreenState extends State<AddressScreen> {
                                     ))
                             ],
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(e.phone),
                           const Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text('Address'),
-                              Text(e['address']),
+                              Text(e.address),
                             ],
                           )
                         ],

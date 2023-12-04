@@ -16,11 +16,14 @@ class Profile extends StatelessWidget {
           ListTile(
             title: Text(auth.userData.name),
           ),
-          const ListTile(
-            title: Text(
-              'Last orders',
+          ListTile(
+            title: const Text(
+              'Past orders',
             ),
-            leading: Icon(Icons.content_paste),
+            onTap: () {
+              Navigator.pushNamed(context, 'orders');
+            },
+            leading: const Icon(Icons.content_paste),
           ),
           ListTile(
             leading: const Icon(

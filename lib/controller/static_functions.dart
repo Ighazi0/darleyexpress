@@ -1,19 +1,14 @@
 import 'dart:convert';
 import 'package:darleyexpress/controller/my_app.dart';
-import 'package:darleyexpress/models/order_model.dart';
-import 'package:darleyexpress/views/screens/order_details.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
-import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
 
 class StaticFunctions {
   Map<String, dynamic>? paymentIntent;
 
-  Future<void> makePayment(double total) async {
+  Future<void> makePayment(double total, ordering) async {
     String price = total.toStringAsFixed(2).replaceAll('.', '');
 
     paymentIntent = await createPaymentIntent(price, 'AED');
@@ -24,19 +19,13 @@ class StaticFunctions {
             merchantDisplayName: auth.userData.name,
             customerId: firebaseAuth.currentUser!.uid));
 
-    displayPaymentSheet();
+    displayPaymentSheet(ordering);
   }
 
-  displayPaymentSheet() async {
+  displayPaymentSheet(ordering) async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) {
-        userCubit.clearCart();
-        Fluttertoast.showToast(msg: 'Order placed');
-        var id = DateTime.now().millisecondsSinceEpoch.toString();
-        firestore.collection('orders').doc(id).set({id: '', 'timestamp': ''});
-        navigatorKey.currentState?.pushReplacement(MaterialPageRoute(
-          builder: (context) => OrderDetails(order: OrderModel()),
-        ));
+        ordering();
       });
     } catch (e) {
       throw 'cancel';

@@ -9,7 +9,7 @@ class UserModel {
   final DateTime? timestamp;
   final String link;
   final List? wallet;
-  final List? address;
+  final List<AddressModel>? address;
   bool verified;
   bool blocked;
   double coins;
@@ -31,6 +31,8 @@ class UserModel {
       this.verified = false});
 
   factory UserModel.fromJson(Map json) {
+    List d = json['address'];
+
     return UserModel(
       name: json['name'] ?? '',
       pic: json['pic'] ?? '',
@@ -43,9 +45,31 @@ class UserModel {
       verified: json['verified'] ?? false,
       blocked: json['blocked'] ?? false,
       coins: double.parse(json['coins'].toString()),
-      wallet: json['wallet'] ?? [],
-      address: json['address'] ?? [],
       link: json['link'] ?? '',
+      wallet: json['wallet'] ?? [],
+      address: d.map((e) => AddressModel.fromJson(e as Map)).toList(),
+    );
+  }
+}
+
+class AddressModel {
+  final String name;
+  final String label;
+  final String address;
+  final String phone;
+
+  AddressModel({
+    this.name = '',
+    this.label = '',
+    this.address = '',
+    this.phone = '',
+  });
+  factory AddressModel.fromJson(Map json) {
+    return AddressModel(
+      name: json['name'] ?? '',
+      phone: json['phone'] ?? '',
+      label: json['label'] ?? '',
+      address: json['address'] ?? '',
     );
   }
 }

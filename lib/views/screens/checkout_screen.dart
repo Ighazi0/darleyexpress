@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/models/coupon_model.dart';
+import 'package:darleyexpress/models/order_model.dart';
+import 'package:darleyexpress/views/screens/order_details.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
@@ -19,10 +21,51 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   bool makeOrder = false, loading = false;
   CouponModel couponData = CouponModel();
   TextEditingController code = TextEditingController();
+
+  ordering() async {
+    Fluttertoast.showToast(msg: 'Order placed');
+    var id = DateTime.now().millisecondsSinceEpoch.toString(), numbbers = 0;
+    await firestore.collection('orders').get().then((value) {
+      numbbers = value.size;
+    });
+
+    var data = {
+      'number': numbbers + 1,
+      'uid': firebaseAuth.currentUser!.uid,
+      'total': userCubit.totalCartPrice(),
+      'discount': couponData.discount,
+      'delivery': 25,
+      'status': 'inProgress',
+      'name': auth.userData.name,
+      'timestamp': DateTime.now().toIso8601String(),
+      'addressData': {
+        'address': auth.userData.address!.first.address,
+        'phone': auth.userData.address!.first.phone,
+        'label': auth.userData.address!.first.label,
+        'name': auth.userData.address!.first.name,
+      },
+      'orderList': userCubit.cartList.entries
+          .map((e) => {
+                'id': e.key,
+                'titleEn': e.value.productData!.titleEn,
+                'titleAr': e.value.productData!.titleAr,
+                'price': e.value.productData!.price,
+                'media': [e.value.productData!.media!.first],
+                'count': e.value.count,
+              })
+          .toList()
+    };
+    firestore.collection('orders').doc(id).set(data);
+    navigatorKey.currentState?.pushReplacement(MaterialPageRoute(
+      builder: (context) => OrderDetails(order: OrderModel.fromJson(data)),
+    ));
+    userCubit.clearCart();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      
       bottomNavigationBar: SafeArea(
         child: Container(
             height: 80,
@@ -47,19 +90,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     children: [
                       Text(
                         'Total: '
-                        'AED ${(userCubit.totalCartPrice() + 25.0).toStringAsFixed(2)}',
+                        'AED ${(userCubit.totalCartPrice()).toStringAsFixed(2)}',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             decoration: couponData.id.isNotEmpty
                                 ? TextDecoration.lineThrough
                                 : null),
                       ),
-                      Text(
-                        'AED ${(userCubit.totalCartPrice() - ((userCubit.totalCartPrice() * couponData.discount) / 100) + 25.0).toStringAsFixed(2)} ',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                      if (couponData.id.isNotEmpty)
+                        Text(
+                          'AED ${(userCubit.totalCartPrice() - ((userCubit.totalCartPrice() * (couponData.discount / 100)) > couponData.max ? couponData.max : (userCubit.totalCartPrice() * (couponData.discount / 100)))).toStringAsFixed(2)} ',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                   makeOrder
@@ -71,13 +115,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               makeOrder = true;
                             });
                             await staticFunctions.makePayment(
-                                (userCubit.totalCartPrice() + 25.0));
+                                (userCubit.totalCartPrice() + 25.0), ordering);
+
                             setState(() {
                               makeOrder = false;
                             });
                           },
                           height: 45,
-                          minWidth: 150,
+                          minWidth: 100,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
@@ -124,8 +169,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       Icons.location_on,
                       color: primaryColor,
                     ),
-                    title: Text(auth.userData.address!.first['name']),
-                    subtitle: Text(auth.userData.address!.first['address']),
+                    title: Text(auth.userData.address!.first.name),
+                    subtitle: Text(auth.userData.address!.first.address),
                     trailing: MaterialButton(
                       minWidth: 0,
                       height: 25,

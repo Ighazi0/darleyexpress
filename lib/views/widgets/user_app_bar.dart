@@ -71,7 +71,7 @@ class _UserAppBarState extends State<UserAppBar> {
                                   const Icon(Icons.location_on,
                                       color: Colors.white),
                                   Text(
-                                    auth.userData.address!.first['address'],
+                                    auth.userData.address!.first.address,
                                     style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),

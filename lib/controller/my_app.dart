@@ -14,6 +14,7 @@ import 'package:darleyexpress/views/screens/admin_screen.dart';
 import 'package:darleyexpress/views/screens/checkout_screen.dart';
 import 'package:darleyexpress/views/screens/forgot_password.dart';
 import 'package:darleyexpress/views/screens/notification_screen.dart';
+import 'package:darleyexpress/views/screens/orders_screen.dart';
 import 'package:darleyexpress/views/screens/register_screen.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
             scaffoldMessengerKey: snackbarKey,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
+                scaffoldBackgroundColor: Colors.white,
                 primaryColor: primaryColor,
                 appBarTheme: AppBarTheme(backgroundColor: primaryColor)),
             supportedLocales: const [Locale('en'), Locale('ar')],
@@ -94,6 +96,7 @@ class MyApp extends StatelessWidget {
             routes: {
               'register': (context) => const RegisterScreen(),
               'user': (context) => const UserScreen(),
+              'orders': (context) => const OrdersScreen(),
               'admin': (context) => const AdminScreen(),
               'adminP': (context) => const AdminProducts(),
               'adminB': (context) => const AdminBanners(),
