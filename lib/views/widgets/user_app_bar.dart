@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const UserAppBar({super.key});
+  const UserAppBar({super.key, this.scroll = false});
+  final bool scroll;
 
   @override
   State<UserAppBar> createState() => _UserAppBarState();
@@ -17,22 +18,37 @@ class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _UserAppBarState extends State<UserAppBar> {
+  bool end = true;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         return PreferredSize(
-            preferredSize: Size(dWidth, 135),
+            preferredSize: Size(dWidth, 130),
             child: AnimatedContainer(
-              height: auth.userData.address!.isEmpty ? 80 : 135,
-              duration: const Duration(milliseconds: 250),
+              height:
+                  auth.userData.address!.isEmpty || widget.scroll ? 80 : 130,
+              onEnd: () {
+                if (!widget.scroll) {
+                  setState(() {
+                    end = true;
+                  });
+                } else {
+                  setState(() {
+                    end = false;
+                  });
+                }
+              },
+              duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               decoration: BoxDecoration(
                 color: primaryColor,
               ),
               child: Column(
                 children: [
-                  if (auth.userData.address!.isNotEmpty)
+                  if (auth.userData.address!.isNotEmpty &&
+                      !widget.scroll &&
+                      end)
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -50,19 +66,25 @@ class _UserAppBarState extends State<UserAppBar> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Row(
-                                children: [
-                                  const Icon(Icons.location_on,
-                                      color: Colors.white),
-                                  Text(
-                                    auth.userData.address!.first.address,
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const Icon(Icons.keyboard_arrow_down,
-                                      color: Colors.white)
-                                ],
+                              SizedBox(
+                                width: dWidth / 1.5,
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.location_on,
+                                        color: Colors.white),
+                                    Expanded(
+                                      child: Text(
+                                        auth.userData.address!.first.address,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    const Icon(Icons.keyboard_arrow_down,
+                                        color: Colors.white)
+                                  ],
+                                ),
                               )
                             ],
                           ),
@@ -90,7 +112,7 @@ class _UserAppBarState extends State<UserAppBar> {
                       ],
                     ),
                   const SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   TextField(
                     controller: userCubit.search,

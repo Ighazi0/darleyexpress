@@ -5,7 +5,6 @@ import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/forgot_bottom_sheet.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
 
@@ -115,12 +114,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               staticWidgets.showBottom(
                                   context, const BottomSheetForgot(), 0.4, 0.5);
                             },
-                            child: Text(
-                              'forgot'.tr(context),
-                              style: TextStyle(
+                            child: Text('forgot'.tr(context),
+                                style: TextStyle(
                                   color: primaryColor,
-                                  decoration: TextDecoration.underline),
-                            )),
+                                ))),
                       ),
                     if (!signIn)
                       Container(
@@ -143,8 +140,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               TextButton(
                                   style: ButtonStyle(
                                       overlayColor: MaterialStateProperty.all(
-                                          Colors.red.shade100)),
-                                  onPressed: () {},
+                                          Colors.amber.shade100)),
+                                  onPressed: () {
+                                    staticFunctions.urlLauncher(Uri.parse(''));
+                                  },
                                   child: Text(
                                     'term'.tr(context),
                                     style: TextStyle(
@@ -156,9 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           )),
                     Align(
                       child: state is LoadingState
-                          ? CircularProgressIndicator(
-                              color: primaryColor,
-                            )
+                          ? const CircularProgressIndicator()
                           : MaterialButton(
                               minWidth: dWidth,
                               height: 50,
@@ -249,7 +246,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ],
                       ),
                     const SizedBox(
-                      height: 25,
+                      height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -281,8 +278,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 key: ValueKey<String>(
                                     signIn ? 'signUp' : 'signIn'),
                                 style: TextStyle(
-                                    color: primaryColor,
-                                    decoration: TextDecoration.underline)),
+                                  color: primaryColor,
+                                )),
                           ),
                         ),
                       ],

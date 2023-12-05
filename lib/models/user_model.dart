@@ -5,6 +5,7 @@ class UserModel {
   final String email;
   final String phone;
   final String gender;
+  final String token;
   final DateTime? birth;
   final DateTime? timestamp;
   final String link;
@@ -22,6 +23,7 @@ class UserModel {
       this.phone = '',
       this.birth,
       this.gender = '',
+      this.token = '',
       this.timestamp,
       this.coins = 0.0,
       this.link = '',
@@ -36,6 +38,7 @@ class UserModel {
     return UserModel(
       name: json['name'] ?? '',
       pic: json['pic'] ?? '',
+      token: json['token'] ?? '',
       uid: json['uid'] ?? '',
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',

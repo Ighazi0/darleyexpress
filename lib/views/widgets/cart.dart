@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/models/cart_model.dart';
@@ -69,22 +70,23 @@ class _CartState extends State<Cart> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                    'Subtotal (${userCubit.totalCartCount()} items)'),
+                                    '${'subtotal'.tr(context)}${' (${userCubit.totalCartCount()} ' 'items'.tr(context)})'),
                                 Text(
-                                  'AED ${userCubit.totalCartPrice().toStringAsFixed(2)}',
+                                  '${'AED'.tr(context)} ${userCubit.totalCartPrice().toStringAsFixed(2)}',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600),
                                 )
                               ],
                             ),
                           if (showBottom && end)
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Delivery Fee'),
+                                Text('deliveryFee'.tr(context)),
                                 Text(
-                                  'AED 25',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                  '${'AED'.tr(context)} 25 ',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600),
                                 )
                               ],
                             ),
@@ -98,7 +100,7 @@ class _CartState extends State<Cart> {
                                   navigatorKey.currentState
                                       ?.pushReplacementNamed('register');
                                   Fluttertoast.showToast(
-                                      msg: 'Please sign in first');
+                                      msg: 'pleaseFirst'.tr(context));
                                 } else {
                                   Navigator.pushNamed(context, 'checkout');
                                 }
@@ -114,8 +116,8 @@ class _CartState extends State<Cart> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                      'AED ${(userCubit.totalCartPrice() + 25.0).toStringAsFixed(2)}'),
-                                  const Text('CHECKOUT'),
+                                      '${'AED'.tr(context)} ${(userCubit.totalCartPrice() + 25.0).toStringAsFixed(2)}'),
+                                  Text('CHECKOUT'.tr(context)),
                                 ],
                               ),
                             ),
@@ -138,9 +140,10 @@ class _CartState extends State<Cart> {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Text(
-                              'Your cart is empty',
-                              style: TextStyle(fontWeight: FontWeight.w500),
+                            Text(
+                              'emptyCart'.tr(context),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w500),
                             )
                           ],
                         )
@@ -200,7 +203,9 @@ class _CartState extends State<Cart> {
                                     ),
                                   ),
                                   title: Text(
-                                    cart.productData!.titleEn,
+                                    locale.locale == 'ar'
+                                        ? cart.productData!.titleAr
+                                        : cart.productData!.titleEn,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   visualDensity:
@@ -210,7 +215,7 @@ class _CartState extends State<Cart> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'AED ${cart.productData!.price}',
+                                        '${'AED'.tr(context)} ${cart.productData!.price}',
                                         style: const TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w500),

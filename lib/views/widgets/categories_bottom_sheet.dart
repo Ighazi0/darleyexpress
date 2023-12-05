@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/views/screens/category_screen.dart';
@@ -19,10 +20,10 @@ class _BottomSheetCategoriesState extends State<BottomSheetCategories> {
         const SizedBox(
           height: 20,
         ),
-        const Center(
+        Center(
           child: Text(
-            'Categories',
-            style: TextStyle(fontSize: 25),
+            'categories'.tr(context),
+            style: const TextStyle(fontSize: 25),
           ),
         ),
         FutureBuilder(
@@ -83,7 +84,9 @@ class _BottomSheetCategoriesState extends State<BottomSheetCategories> {
                                 margin: const EdgeInsets.only(top: 5),
                                 height: 20,
                                 child: Text(
-                                  category.titleEn,
+                                  locale.locale == 'ar'
+                                      ? category.titleAr
+                                      : category.titleEn,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               )

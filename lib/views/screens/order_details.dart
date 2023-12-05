@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:darleyexpress/controller/app_localization.dart';
+import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/order_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
+import 'package:darleyexpress/views/widgets/review_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
@@ -15,14 +18,45 @@ class OrderDetails extends StatefulWidget {
 }
 
 class _OrderDetailsState extends State<OrderDetails> {
+  OrderModel order = OrderModel();
+
+  fetch() async {
+    await firestore
+        .collection('orders')
+        .doc(order.timestamp!.millisecondsSinceEpoch.toString())
+        .get()
+        .then((value) {
+      order = OrderModel.fromJson(value.data() as Map);
+      setState(() {});
+    });
+  }
+
+  @override
+  void initState() {
+    order = widget.order;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarCustom(
-        action: !widget.order.rated && widget.order.status == 'completed'
-            ? {'icon': Icons.star, 'function': () {}}
+        action: !order.rated && order.status == 'complete'
+            ? {
+                'icon': Icons.star,
+                'function': () async {
+                  await staticWidgets.showBottom(
+                      context,
+                      BottomSheetReview(
+                        id: order.timestamp!.millisecondsSinceEpoch.toString(),
+                      ),
+                      0.5,
+                      0.75);
+                  fetch();
+                }
+              }
             : {},
-        title: '#${widget.order.numbder}',
+        title: '#${order.number}',
       ),
       bottomNavigationBar: SafeArea(
         child: Container(
@@ -46,9 +80,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Sub total:'),
+                    Text('${'subtotal'.tr(context)}:'),
                     Text(
-                      'AED ${widget.order.total.toStringAsFixed(2)}',
+                      '${'AED'.tr(context)} ${order.total.toStringAsFixed(2)}',
                     ),
                   ],
                 ),
@@ -58,9 +92,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Delivery fee:'),
+                    Text('${'deliveryFee'.tr(context)}:'),
                     Text(
-                      'AED ${widget.order.delivery}',
+                      '${'AED'.tr(context)} ${order.delivery}',
                     ),
                   ],
                 ),
@@ -70,9 +104,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Discount:'),
+                    Text('${'discount'.tr(context)}:'),
                     Text(
-                      '${widget.order.discount}%',
+                      '${order.discount}%',
                     ),
                   ],
                 ),
@@ -85,9 +119,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Total:'),
+                    Text('${'total'.tr(context)}:'),
                     Text(
-                      'AED ${(widget.order.total - (widget.order.total * (widget.order.discount / 100)) + widget.order.delivery).toStringAsFixed(2)}',
+                      '${'AED'.tr(context)} ${(order.total - (order.total * (order.discount / 100)) + order.delivery).toStringAsFixed(2)}',
                     ),
                   ],
                 ),
@@ -100,72 +134,79 @@ class _OrderDetailsState extends State<OrderDetails> {
           left: 15,
           right: 15,
         ),
-        child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Order Number'),
-              Text(widget.order.numbder.toString())
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [const Text('Name'), Text(widget.order.name)],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Phone'),
-              Text(widget.order.addressData!.phone)
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Address'),
-              Text(widget.order.addressData!.address)
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Order time & date'),
-              Text(DateFormat('dd/MM/yyyy hh:mm a')
-                  .format(widget.order.timestamp!))
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [const Text('Status'), Text(widget.order.status)],
-          ),
-          const Divider(
-            color: Colors.grey,
-          ),
-          const Text(
-            'Order list',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-          ),
-          Expanded(
-            child: ListView.separated(
+        child: RefreshIndicator(
+          color: primaryColor,
+          onRefresh: () async {
+            fetch();
+          },
+          child: ListView(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('orderNumber'.tr(context)),
+                Text(order.number.toString())
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [Text('name'.tr(context)), Text(order.name)],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('phone'.tr(context)),
+                Text(order.addressData!.phone)
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('address'.tr(context)),
+                Text(order.addressData!.address)
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('orderT&D'.tr(context)),
+                Text(DateFormat('dd/MM/yyyy hh:mm a').format(order.timestamp!))
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('status'.tr(context)),
+                Text(order.status.tr(context))
+              ],
+            ),
+            const Divider(
+              color: Colors.grey,
+            ),
+            Text(
+              'orderList'.tr(context),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+            ListView.separated(
+              shrinkWrap: true,
               separatorBuilder: (context, index) => const Divider(),
-              itemCount: widget.order.orderList!.length,
+              itemCount: order.orderList!.length,
               itemBuilder: (context, index) {
-                ProductModel orderList = widget.order.orderList![index];
+                ProductModel orderList = order.orderList![index];
                 return ListTile(
                   leading: ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -177,20 +218,22 @@ class _OrderDetailsState extends State<OrderDetails> {
                     ),
                   ),
                   title: Text(
-                    orderList.titleEn,
+                    locale.locale == 'ar'
+                        ? orderList.titleAr
+                        : orderList.titleEn,
                     overflow: TextOverflow.ellipsis,
                   ),
                   visualDensity: const VisualDensity(vertical: 4),
                   subtitle: Text(
-                    'AED ${orderList.price}',
+                    '${'AED'.tr(context)} ${orderList.price}',
                     style: const TextStyle(
                         color: Colors.black, fontWeight: FontWeight.w500),
                   ),
                 );
               },
             ),
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }

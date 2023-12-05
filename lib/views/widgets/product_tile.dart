@@ -1,3 +1,4 @@
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/models/product_model.dart';
@@ -153,7 +154,9 @@ class _ProductTileState extends State<ProductTile> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 5),
                 child: Text(
-                  widget.product.titleEn,
+                  locale.locale == 'ar'
+                      ? widget.product.titleAr
+                      : widget.product.titleEn,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontWeight: FontWeight.w500),
@@ -164,7 +167,7 @@ class _ProductTileState extends State<ProductTile> {
                 child: Row(
                   children: [
                     Text(
-                      'AED ${widget.product.price.toStringAsFixed(2)}',
+                      '${'AED'.tr(context)} ${widget.product.price.toStringAsFixed(2)}',
                       style: TextStyle(
                           decoration: widget.product.discount != 0
                               ? TextDecoration.lineThrough
@@ -172,7 +175,7 @@ class _ProductTileState extends State<ProductTile> {
                     ),
                     if (widget.product.discount != 0)
                       Text(
-                        'AED ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
+                        '${'AED'.tr(context)} ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
                       ),
                   ],
                 ),

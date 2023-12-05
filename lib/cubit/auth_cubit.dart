@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 part 'auth_state.dart';
 
@@ -21,8 +22,39 @@ class AuthCubit extends Cubit<AuthState> {
   TextEditingController email = TextEditingController(),
       password = TextEditingController(),
       name = TextEditingController();
-  UserModel userData = UserModel();
-  bool agree = false, signIn = true;
+  UserModel userData = UserModel(address: []);
+  bool agree = false, signIn = true, notification = false;
+
+  changeNotification(x) async {
+    final prefs = await SharedPreferences.getInstance();
+    notification = x;
+    prefs.setBool('notification', x);
+    if (x) {
+      requestPermission();
+    } else {
+      firebaseMessaging.deleteToken();
+    }
+    emit(AuthInitial());
+  }
+
+  requestPermission() async {
+    SharedPreferences.getInstance().then((value) {
+      notification = value.getBool('notification') ?? true;
+    });
+    await firebaseMessaging.requestPermission(
+        alert: true, badge: true, sound: true);
+
+    if (notification) {
+      firebaseMessaging.getToken().then((value) {
+        firestore
+            .collection('users')
+            .doc(firebaseAuth.currentUser!.uid)
+            .update({
+          'token': value,
+        });
+      });
+    }
+  }
 
   agreeTerm() {
     agree = !agree;
@@ -37,7 +69,7 @@ class AuthCubit extends Cubit<AuthState> {
   logOut() async {
     userCubit.selectedIndex = 0;
     _googleSignIn.signOut();
-    userData = UserModel();
+    userData = UserModel(address: []);
     await firebaseAuth.signOut();
     navigatorKey.currentState?.pushReplacementNamed('register');
   }
@@ -85,6 +117,7 @@ class AuthCubit extends Cubit<AuthState> {
       if (userData.uid.isEmpty) {
         navigatorKey.currentState?.pushReplacementNamed('register');
       } else {
+        requestPermission();
         navigatorKey.currentState?.pushReplacementNamed('user');
       }
     }
@@ -172,6 +205,7 @@ class AuthCubit extends Cubit<AuthState> {
       'verified': false,
       'blocked': false,
       'link': '',
+      'token': '',
       'timestamp': Timestamp.now(),
       'birth': Timestamp.now(),
       'phone': '',

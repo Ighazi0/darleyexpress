@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
@@ -13,6 +15,7 @@ import 'package:darleyexpress/views/widgets/product_tile.dart';
 import 'package:darleyexpress/views/widgets/shimmer.dart';
 import 'package:darleyexpress/views/widgets/user_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Home extends StatefulWidget {
@@ -24,16 +27,36 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   ScrollController scrollController = ScrollController();
+  Timer? _scrollingTimer;
+  bool scroll = false;
 
   @override
   void initState() {
     super.initState();
+
+    scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    _scrollingTimer?.cancel();
+    if (scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      scroll = false;
+    } else {
+      scroll = true;
+    }
+
+    _scrollingTimer = Timer(const Duration(milliseconds: 150), () {
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const UserAppBar(),
+        appBar: UserAppBar(
+          scroll: scroll,
+        ),
         body: BlocBuilder<UserCubit, UserState>(
           builder: (context, state) {
             return userCubit.search.text.isNotEmpty
@@ -65,10 +88,10 @@ class _HomeState extends State<Home> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  const Text(
-                                    'No products found',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w500),
+                                  Text(
+                                    'noProducts'.tr(context),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500),
                                   )
                                 ],
                               ),
@@ -126,6 +149,7 @@ class _HomeState extends State<Home> {
                               options: CarouselOptions(
                                   autoPlay: true,
                                   height: 175,
+                                  viewportFraction: 0.9,
                                   enlargeCenterPage: true,
                                   autoPlayInterval:
                                       const Duration(seconds: 30)),
@@ -152,9 +176,10 @@ class _HomeState extends State<Home> {
                           return CarouselSlider(
                             options: CarouselOptions(
                               height: 175,
+                              viewportFraction: 0.9,
                               enlargeCenterPage: true,
                             ),
-                            items: [1, 2].map((i) {
+                            items: [1].map((i) {
                               return Shimmers(
                                 child: Container(
                                   width: dWidth,
@@ -257,7 +282,9 @@ class _HomeState extends State<Home> {
                                                     top: 5),
                                                 height: 20,
                                                 child: Text(
-                                                  category.titleEn,
+                                                  locale.locale == 'ar'
+                                                      ? category.titleAr
+                                                      : category.titleEn,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),

@@ -1,3 +1,4 @@
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/models/product_model.dart';
@@ -49,9 +50,10 @@ class _WishListState extends State<WishList> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              const Text(
-                                'No favorite products yet',
-                                style: TextStyle(fontWeight: FontWeight.w500),
+                              Text(
+                                'noFavorites'.tr(context),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500),
                               )
                             ],
                           ),

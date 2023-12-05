@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
@@ -21,7 +22,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarCustom(
-        title: widget.category.titleEn,
+        title: locale.locale == 'ar'
+            ? widget.category.titleAr
+            : widget.category.titleEn,
         action: const {},
       ),
       body: RefreshIndicator(
@@ -94,7 +97,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                       margin: const EdgeInsets.only(top: 5),
                                       height: 20,
                                       child: Text(
-                                        category.titleEn,
+                                        locale.locale == 'ar'
+                                            ? category.titleAr
+                                            : category.titleEn,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     )
@@ -156,9 +161,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Text(
-                              'No products available',
-                              style: TextStyle(fontWeight: FontWeight.w500),
+                            Text(
+                              'noProducts'.tr(context),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w500),
                             )
                           ],
                         ),

@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/user_model.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
@@ -120,7 +121,7 @@ class _AddressDetailsState extends State<AddressDetails> {
         child: Form(
           key: key,
           child: Column(children: [
-            const Text('Address label'),
+            Text('label'.tr(context)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -133,8 +134,8 @@ class _AddressDetailsState extends State<AddressDetails> {
                   },
                   child: Chip(
                     side: const BorderSide(color: Colors.grey),
-                    label: const Text(
-                      'home',
+                    label: Text(
+                      'homes'.tr(context),
                     ),
                     backgroundColor:
                         label == 'home' ? Colors.amber.shade200 : Colors.white,
@@ -152,7 +153,7 @@ class _AddressDetailsState extends State<AddressDetails> {
                   },
                   child: Chip(
                     side: const BorderSide(color: Colors.grey),
-                    label: const Text('work'),
+                    label: Text('work'.tr(context)),
                     backgroundColor:
                         label == 'work' ? Colors.amber.shade200 : Colors.white,
                   ),
@@ -164,35 +165,35 @@ class _AddressDetailsState extends State<AddressDetails> {
                 controller: name,
                 validator: (p) {
                   if (p!.isEmpty) {
-                    return 'Please enter address name';
+                    return 'pleaseAddressName'.tr(context);
                   }
                   return null;
                 },
                 hint: 'My home',
-                title: 'Address name'),
+                title: 'addressName'),
             EditText(
                 function: () {},
                 controller: address,
                 validator: (p) {
                   if (p!.isEmpty) {
-                    return 'Please enter your address';
+                    return 'pleaseYourAddress'.tr(context);
                   }
                   return null;
                 },
                 hint: '',
-                title: 'Address'),
+                title: 'address'),
             EditText(
                 function: () {},
                 number: true,
                 controller: phone,
                 validator: (p) {
                   if (p!.isEmpty) {
-                    return 'Please enter your phone number';
+                    return 'pleasephone'.tr(context);
                   }
                   return null;
                 },
                 hint: '009',
-                title: 'Phone'),
+                title: 'phone'),
             if (widget.address.label.isNotEmpty && !loading)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -229,17 +230,17 @@ class _AddressDetailsState extends State<AddressDetails> {
 
                           Navigator.pop(context);
                         },
-                        child: const Text(
-                          'Make it default',
-                          style: TextStyle(color: Colors.black),
+                        child: Text(
+                          'makeDefualt'.tr(context),
+                          style: const TextStyle(color: Colors.black),
                         )),
                   TextButton(
                       onPressed: () {
                         submit(true);
                       },
-                      child: const Text(
-                        'Delete Address',
-                        style: TextStyle(color: Colors.red),
+                      child: Text(
+                        'deleteAddress'.tr(context),
+                        style: const TextStyle(color: Colors.red),
                       )),
                 ],
               ),

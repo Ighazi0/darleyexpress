@@ -1,3 +1,4 @@
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/order_model.dart';
 import 'package:darleyexpress/views/screens/order_details.dart';
@@ -17,9 +18,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarCustom(
-        action: {},
-        title: 'Past orders',
+      appBar: AppBarCustom(
+        action: const {},
+        title: 'myOrders'.tr(context),
       ),
       body: RefreshIndicator(
         color: primaryColor,
@@ -62,16 +63,18 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                     child: ListTile(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => OrderDetails(order: order),
                             ));
+                        setState(() {});
                       },
-                      title: Text('Order No#${order.numbder}'),
-                      subtitle: Text(DateFormat('dd/MM/yyyy hh:mm a')
-                          .format(order.timestamp!)),
+                      title: Text('${'orderNo'.tr(context)}#${order.number}'),
+                      subtitle: Text(
+                          DateFormat('dd/MM/yyyy hh:mm a', locale.locale)
+                              .format(order.timestamp!)),
                       trailing: Icon(
                         order.status == 'inProgress'
                             ? Icons.pending

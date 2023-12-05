@@ -1,3 +1,4 @@
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/user_model.dart';
 import 'package:darleyexpress/views/screens/address_details.dart';
@@ -17,7 +18,7 @@ class _AddressScreenState extends State<AddressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarCustom(
-        title: 'Address',
+        title: 'address'.tr(context),
         action: {
           'icon': Icons.add,
           'function': () async {
@@ -25,7 +26,7 @@ class _AddressScreenState extends State<AddressScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddressDetails(
-                    address: AddressModel(name: 'New Address'),
+                    address: AddressModel(name: 'newAddress'.tr(context)),
                     index: 0,
                   ),
                 ));
@@ -51,9 +52,9 @@ class _AddressScreenState extends State<AddressScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const Text(
-                      'No saved address',
-                      style: TextStyle(fontWeight: FontWeight.w500),
+                    Text(
+                      'noAddress'.tr(context),
+                      style: const TextStyle(fontWeight: FontWeight.w500),
                     )
                   ],
                 ),
@@ -102,9 +103,9 @@ class _AddressScreenState extends State<AddressScreen> {
                                         color: primaryColor,
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(10))),
-                                    child: const Text(
-                                      'Default',
-                                      style: TextStyle(fontSize: 10),
+                                    child: Text(
+                                      'default'.tr(context),
+                                      style: const TextStyle(fontSize: 10),
                                     ))
                             ],
                           ),
@@ -116,8 +117,16 @@ class _AddressScreenState extends State<AddressScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Address'),
-                              Text(e.address),
+                              Text('address'.tr(context)),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  e.address,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             ],
                           )
                         ],

@@ -20,6 +20,7 @@ import 'package:darleyexpress/views/screens/settings_screen.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,6 +35,7 @@ final GlobalKey<ScaffoldMessengerState> snackbarKey =
 FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
 final physical =
     WidgetsBinding.instance.platformDispatcher.views.first.physicalSize;
@@ -74,6 +76,8 @@ class MyApp extends StatelessWidget {
             scaffoldMessengerKey: snackbarKey,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
+                progressIndicatorTheme:
+                    ProgressIndicatorThemeData(color: primaryColor),
                 scaffoldBackgroundColor: Colors.white,
                 primaryColor: primaryColor,
                 appBarTheme: AppBarTheme(backgroundColor: primaryColor)),

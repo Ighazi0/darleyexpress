@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/models/coupon_model.dart';
@@ -23,8 +24,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   TextEditingController code = TextEditingController();
 
   ordering() async {
-    Fluttertoast.showToast(msg: 'Order placed');
-    var id = DateTime.now().millisecondsSinceEpoch.toString(), numbbers = 0;
+    Fluttertoast.showToast(msg: 'orderPlaced'.tr(context));
+    var id = DateTime.now(), numbbers = 0;
     await firestore.collection('orders').get().then((value) {
       numbbers = value.size;
     });
@@ -35,9 +36,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       'total': userCubit.totalCartPrice(),
       'discount': couponData.discount,
       'delivery': 25,
+      'rated': false,
       'status': 'inProgress',
       'name': auth.userData.name,
-      'timestamp': DateTime.now().toIso8601String(),
+      'timestamp': id.toIso8601String(),
       'addressData': {
         'address': auth.userData.address!.first.address,
         'phone': auth.userData.address!.first.phone,
@@ -55,7 +57,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               })
           .toList()
     };
-    firestore.collection('orders').doc(id).set(data);
+    firestore
+        .collection('orders')
+        .doc(id.millisecondsSinceEpoch.toString())
+        .set(data);
     navigatorKey.currentState?.pushReplacement(MaterialPageRoute(
       builder: (context) => OrderDetails(order: OrderModel.fromJson(data)),
     ));
@@ -88,8 +93,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Total: '
-                        'AED ${(userCubit.totalCartPrice()).toStringAsFixed(2)}',
+                        '${'total'.tr(context)}: ${'AED'.tr(context)}${(userCubit.totalCartPrice()).toStringAsFixed(2)}',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             decoration: couponData.id.isNotEmpty
@@ -98,7 +102,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                       if (couponData.id.isNotEmpty)
                         Text(
-                          'AED ${(userCubit.totalCartPrice() - ((userCubit.totalCartPrice() * (couponData.discount / 100)) > couponData.max ? couponData.max : (userCubit.totalCartPrice() * (couponData.discount / 100)))).toStringAsFixed(2)} ',
+                          '${'AED'.tr(context)} ${(userCubit.totalCartPrice() - ((userCubit.totalCartPrice() * (couponData.discount / 100)) > couponData.max ? couponData.max : (userCubit.totalCartPrice() * (couponData.discount / 100)))).toStringAsFixed(2)} ',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -117,13 +121,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               await staticFunctions.makePayment(
                                   (userCubit.totalCartPrice() + 25.0),
                                   ordering);
-
-                              setState(() {
-                                makeOrder = false;
-                              });
                             } else {
                               Fluttertoast.showToast(
-                                  msg: 'Please add an address first');
+                                  msg: 'pleaseAddress'.tr(context));
                             }
                           },
                           height: 45,
@@ -133,22 +133,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   BorderRadius.all(Radius.circular(20))),
                           color: primaryColor,
                           textColor: Colors.white,
-                          child: const Text('Place order'),
+                          child: Text('placeOrder'.tr(context)),
                         ),
                 ])),
       ),
-      appBar: const AppBarCustom(
-        title: 'CHECKOUT',
-        action: {},
+      appBar: AppBarCustom(
+        title: 'CHECKOUT'.tr(context),
+        action: const {},
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Shipping address',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            Text(
+              'shipping'.tr(context),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             auth.userData.address!.isEmpty
                 ? MaterialButton(
@@ -163,7 +163,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         side: BorderSide(),
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                     child: Text(
-                      'Add new address',
+                      'addNew'.tr(context),
                       style:
                           TextStyle(fontSize: 12, color: Colors.amber.shade700),
                     ),
@@ -188,7 +188,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           side: BorderSide(),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: Text(
-                        'Change',
+                        'change'.tr(context),
                         style: TextStyle(
                             fontSize: 12, color: Colors.amber.shade700),
                       ),
@@ -197,9 +197,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             const Divider(
               color: Colors.grey,
             ),
-            const Text(
-              'Do you have promo code?',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            Text(
+              'havePromo'.tr(context),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             const SizedBox(
               height: 10,
@@ -213,18 +213,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   Flexible(
                     child: TextField(
                       controller: code,
-                      decoration: const InputDecoration(
-                          hintText: 'Promo code',
-                          enabledBorder: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          hintText: 'promo'.tr(context),
+                          enabledBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.transparent),
                           ),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.transparent),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.transparent),
                           ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15)),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 15)),
                     ),
                   ),
                   Padding(
@@ -253,13 +254,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       if (couponData.endTime!
                                           .isBefore(DateTime.now())) {
                                         Fluttertoast.showToast(
-                                            msg: 'Promo code expired');
+                                            msg: 'expired'.tr(context));
                                         couponData = CouponModel();
                                       }
                                     } else {
                                       couponData = CouponModel();
                                       Fluttertoast.showToast(
-                                          msg: 'No code found');
+                                          msg: 'noCode'.tr(context));
                                     }
                                   });
                               setState(() {
@@ -271,7 +272,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(25))),
-                            child: const Text('Apply'),
+                            child: Text('apply'.tr(context)),
                           ),
                   )
                 ],
@@ -281,15 +282,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ListTile(
                 title: Text(couponData.titleEn),
                 trailing: Text('${couponData.discount}%'),
-                subtitle:
-                    Text(' up to ${couponData.max.toStringAsFixed(2)} AED'),
+                subtitle: Text(
+                    '${'upTo'.tr(context)} ${couponData.max.toStringAsFixed(2)} ${'AED'.tr(context)}'),
               ),
             const Divider(
               color: Colors.grey,
             ),
-            const Text(
-              'Order list',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            Text(
+              'orderList'.tr(context),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             Expanded(
               child: ListView.builder(
@@ -312,7 +313,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                     visualDensity: const VisualDensity(vertical: 4),
                     subtitle: Text(
-                      'AED ${cart.productData!.price}',
+                      '${'AED'.tr(context)} ${cart.productData!.price}',
                       style: const TextStyle(
                           color: Colors.black, fontWeight: FontWeight.w500),
                     ),

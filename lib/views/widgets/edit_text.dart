@@ -1,3 +1,4 @@
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ class _EditTextState extends State<EditText> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
           child: Text(
-            widget.title,
+            widget.title.tr(context),
           ),
         ),
         TextFormField(

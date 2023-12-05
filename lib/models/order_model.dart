@@ -2,7 +2,7 @@ import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/models/user_model.dart';
 
 class OrderModel {
-  final int numbder;
+  final int number;
   final String name;
   final String uid;
   final String status;
@@ -15,7 +15,7 @@ class OrderModel {
   final List<ProductModel>? orderList;
 
   OrderModel(
-      {this.numbder = 0,
+      {this.number = 0,
       this.total = 0,
       this.discount = 0,
       this.delivery = 0,
@@ -30,7 +30,7 @@ class OrderModel {
   factory OrderModel.fromJson(Map data) {
     List d = data['orderList'];
     return OrderModel(
-        numbder: data['number'] ?? 0,
+        number: data['number'] ?? 0,
         name: data['name'],
         total: double.parse(data['total'].toString()),
         delivery: double.parse(data['delivery'].toString()),

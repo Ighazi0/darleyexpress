@@ -1,3 +1,4 @@
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
@@ -19,7 +20,9 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBarCustom(
-          title: widget.category.titleEn,
+          title: locale.locale == 'ar'
+              ? widget.category.titleAr
+              : widget.category.titleEn,
           action: const {},
         ),
         body: Padding(
@@ -43,9 +46,9 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        const Text(
-                          'No category available',
-                          style: TextStyle(fontWeight: FontWeight.w500),
+                        Text(
+                          'noProducts'.tr(context),
+                          style: const TextStyle(fontWeight: FontWeight.w500),
                         )
                       ],
                     ),
