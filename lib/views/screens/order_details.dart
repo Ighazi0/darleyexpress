@@ -19,7 +19,9 @@ class _OrderDetailsState extends State<OrderDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarCustom(
-        action: const {},
+        action: !widget.order.rated && widget.order.status == 'completed'
+            ? {'icon': Icons.star, 'function': () {}}
+            : {},
         title: '#${widget.order.numbder}',
       ),
       bottomNavigationBar: SafeArea(
@@ -93,7 +95,11 @@ class _OrderDetailsState extends State<OrderDetails> {
             )),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.only(
+          top: 15,
+          left: 15,
+          right: 15,
+        ),
         child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -183,7 +189,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 );
               },
             ),
-          )
+          ),
         ]),
       ),
     );

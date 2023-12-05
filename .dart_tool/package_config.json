@@ -345,19 +345,19 @@
     },
     {
       "name": "hl_image_picker",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/hl_image_picker-1.2.8",
+      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/hl_image_picker-1.2.10",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "hl_image_picker_android",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/hl_image_picker_android-1.2.3",
+      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/hl_image_picker_android-1.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "hl_image_picker_ios",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/hl_image_picker_ios-1.2.5",
+      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/hl_image_picker_ios-1.2.6",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -854,7 +854,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2023-12-04T21:34:52.035382Z",
+  "generated": "2023-12-05T11:13:03.301555Z",
   "generator": "pub",
   "generatorVersion": "3.1.4"
 }

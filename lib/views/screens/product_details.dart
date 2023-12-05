@@ -178,7 +178,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                             color: Colors.red,
                             size: 18,
                           ),
-                          onPressed: () async {},
+                          onPressed: () async {
+                            await userCubit.favoriteStatus(widget.product);
+                          },
                         );
                       }),
                 ),
@@ -252,24 +254,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                 children: [
                   Text(
                     'AED ${widget.product.price.toStringAsFixed(2)}',
-                    style: const TextStyle(fontSize: 18),
+                    style: TextStyle(
+                        fontSize: 18,
+                        decoration: widget.product.discount != 0
+                            ? TextDecoration.lineThrough
+                            : null),
                   ),
-                  const Row(
-                    children: [
-                      Icon(
-                        Icons.star,
-                        size: 20,
-                        color: Colors.amber,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        '5.0',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
+                  if (widget.product.discount != 0)
+                    Text(
+                      'AED ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
+                      style: const TextStyle(fontSize: 18),
+                    ),
                 ],
               ),
               const SizedBox(
@@ -280,6 +275,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                   'Description',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+              const SizedBox(
+                height: 10,
+              ),
               Text(
                 widget.product.descriptionEn,
                 style: const TextStyle(fontSize: 16),

@@ -23,25 +23,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool scroll = false;
   ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    scrollController.addListener(() {
-      setState(() {
-        scroll = scrollController.position.pixels > 150;
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: UserAppBar(
-          scroll: scroll,
-        ),
+        appBar: const UserAppBar(),
         body: BlocBuilder<UserCubit, UserState>(
           builder: (context, state) {
             return userCubit.search.text.isNotEmpty
@@ -115,6 +107,7 @@ class _HomeState extends State<Home> {
                     ),
                   )
                 : RefreshIndicator(
+                    color: primaryColor,
                     onRefresh: () async {
                       setState(() {});
                     },

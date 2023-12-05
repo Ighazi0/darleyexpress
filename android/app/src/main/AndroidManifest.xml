@@ -5,7 +5,7 @@
      <uses-permission android:name="android.permission.CAMERA"/>
      <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <queries>
+       <queries>
     <intent>
   <action android:name="android.intent.action.VIEW" />
   <category android:name="android.intent.category.BROWSABLE" />
@@ -24,6 +24,11 @@
         android:label="Darley Express"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+         <activity
+    android:name="com.yalantis.ucrop.UCropActivity"
+    android:screenOrientation="portrait"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -45,13 +50,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <activity
-    android:name="com.yalantis.ucrop.UCropActivity"
-    android:screenOrientation="portrait"
-    android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+          
         </activity>
-        <!-- Don't delete the meta-data below.
-             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

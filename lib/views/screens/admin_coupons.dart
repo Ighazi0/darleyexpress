@@ -34,6 +34,7 @@ class _AdminCouponsState extends State<AdminCoupons> {
         }
       }),
       body: RefreshIndicator(
+        color: primaryColor,
         onRefresh: () async {
           setState(() {});
         },

@@ -163,17 +163,17 @@ class _ProductTileState extends State<ProductTile> {
                 padding: const EdgeInsets.symmetric(horizontal: 3),
                 child: Row(
                   children: [
-                    Text('AED ${widget.product.price.toStringAsFixed(2)}'),
-                    const Spacer(),
-                    const Icon(
-                      Icons.star,
-                      size: 16,
-                      color: Colors.amber,
+                    Text(
+                      'AED ${widget.product.price.toStringAsFixed(2)}',
+                      style: TextStyle(
+                          decoration: widget.product.discount != 0
+                              ? TextDecoration.lineThrough
+                              : null),
                     ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    const Text('5.0'),
+                    if (widget.product.discount != 0)
+                      Text(
+                        'AED ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
+                      ),
                   ],
                 ),
               )

@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const UserAppBar({super.key, this.scroll = false});
-  final bool scroll;
+  const UserAppBar({super.key});
 
   @override
   State<UserAppBar> createState() => _UserAppBarState();
@@ -18,37 +17,22 @@ class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _UserAppBarState extends State<UserAppBar> {
-  bool end = true;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         return PreferredSize(
-            preferredSize: Size(dWidth, 140),
+            preferredSize: Size(dWidth, 135),
             child: AnimatedContainer(
-              height:
-                  widget.scroll || auth.userData.address!.isEmpty ? 80 : 140,
-              onEnd: () {
-                if (!widget.scroll) {
-                  setState(() {
-                    end = true;
-                  });
-                } else {
-                  setState(() {
-                    end = false;
-                  });
-                }
-              },
+              height: auth.userData.address!.isEmpty ? 80 : 135,
               duration: const Duration(milliseconds: 250),
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               decoration: BoxDecoration(
                 color: primaryColor,
               ),
               child: Column(
                 children: [
-                  if (!widget.scroll &&
-                      end &&
-                      auth.userData.address!.isNotEmpty)
+                  if (auth.userData.address!.isNotEmpty)
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

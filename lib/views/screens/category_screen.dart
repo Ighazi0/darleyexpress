@@ -25,6 +25,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         action: const {},
       ),
       body: RefreshIndicator(
+        color: primaryColor,
         onRefresh: () async {
           setState(() {});
         },
@@ -45,21 +46,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       .map((doc) => CategoryModel.fromJson(doc.data()))
                       .toList();
                   if (data.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/images/empty_pro.png'),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text(
-                            'No products available',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          )
-                        ],
-                      ),
-                    );
+                    return const SizedBox();
                   }
                   return SizedBox(
                     height: 100,
@@ -162,7 +149,20 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         .map((doc) => ProductModel.fromJson(doc.data()))
                         .toList();
                     if (data.isEmpty) {
-                      return const SizedBox();
+                      return Center(
+                        child: Column(
+                          children: [
+                            Image.asset('assets/images/empty_pro.png'),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              'No products available',
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                      );
                     }
                     return GridView.builder(
                         physics: const NeverScrollableScrollPhysics(),

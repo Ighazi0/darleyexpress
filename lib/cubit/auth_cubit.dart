@@ -179,7 +179,7 @@ class AuthCubit extends Cubit<AuthState> {
       'wallet': [],
       'email': email.trim(),
       'name': name.trim(),
-      'address': {},
+      'address': [],
       'gender': '',
     };
 

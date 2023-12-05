@@ -35,6 +35,7 @@ class _AdminCategoriesState extends State<AdminCategories> {
         }
       }),
       body: RefreshIndicator(
+        color: primaryColor,
         onRefresh: () async {
           setState(() {});
         },

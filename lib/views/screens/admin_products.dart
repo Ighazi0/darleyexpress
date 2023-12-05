@@ -33,6 +33,7 @@ class _AdminProductsState extends State<AdminProducts> {
         }
       }),
       body: RefreshIndicator(
+        color: primaryColor,
         onRefresh: () async {
           setState(() {});
         },

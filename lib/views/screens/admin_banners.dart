@@ -37,6 +37,7 @@ class _AdminBannersState extends State<AdminBanners> {
         },
       ),
       body: RefreshIndicator(
+        color: primaryColor,
         onRefresh: () async {
           setState(() {});
         },

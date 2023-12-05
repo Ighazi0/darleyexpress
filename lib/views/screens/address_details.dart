@@ -79,7 +79,7 @@ class _AddressDetailsState extends State<AddressDetails> {
               'name': name.text,
               'address': address.text,
               'label': label,
-              'phone': widget.address.phone,
+              'phone': phone.text,
             }
           ])
         });

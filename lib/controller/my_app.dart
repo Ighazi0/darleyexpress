@@ -16,6 +16,7 @@ import 'package:darleyexpress/views/screens/forgot_password.dart';
 import 'package:darleyexpress/views/screens/notification_screen.dart';
 import 'package:darleyexpress/views/screens/orders_screen.dart';
 import 'package:darleyexpress/views/screens/register_screen.dart';
+import 'package:darleyexpress/views/screens/settings_screen.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -97,6 +98,7 @@ class MyApp extends StatelessWidget {
               'register': (context) => const RegisterScreen(),
               'user': (context) => const UserScreen(),
               'orders': (context) => const OrdersScreen(),
+              'settings': (context) => const SettingsScreen(),
               'admin': (context) => const AdminScreen(),
               'adminP': (context) => const AdminProducts(),
               'adminB': (context) => const AdminBanners(),

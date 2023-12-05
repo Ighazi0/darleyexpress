@@ -4,6 +4,7 @@ import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StaticFunctions {
   Map<String, dynamic>? paymentIntent;
@@ -53,6 +54,10 @@ class StaticFunctions {
 
   shareData(link) {
     Share.share(link);
+  }
+
+  urlLauncher(Uri uri) async {
+    await launchUrl(uri);
   }
 
   Future<String> generateLink(String id, String route) async {

@@ -72,7 +72,22 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       title: Text('Order No#${order.numbder}'),
                       subtitle: Text(DateFormat('dd/MM/yyyy hh:mm a')
                           .format(order.timestamp!)),
-                      trailing: const Icon(Icons.abc),
+                      trailing: Icon(
+                        order.status == 'inProgress'
+                            ? Icons.pending
+                            : order.status == 'cancel'
+                                ? Icons.cancel
+                                : order.status == 'inDelivery'
+                                    ? Icons.delivery_dining
+                                    : Icons.check_circle,
+                        color: order.status == 'inProgress'
+                            ? null
+                            : order.status == 'cancel'
+                                ? Colors.red
+                                : order.status == 'inDelivery'
+                                    ? Colors.amber
+                                    : Colors.green,
+                      ),
                     ),
                   );
                 },

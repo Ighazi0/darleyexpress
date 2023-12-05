@@ -9,6 +9,7 @@ class OrderModel {
   final double total;
   final double discount;
   final double delivery;
+  final bool rated;
   final DateTime? timestamp;
   final AddressModel? addressData;
   final List<ProductModel>? orderList;
@@ -22,6 +23,7 @@ class OrderModel {
       this.name = '',
       this.uid = '',
       this.status = '',
+      this.rated = false,
       this.orderList,
       this.addressData});
 
@@ -34,6 +36,7 @@ class OrderModel {
         delivery: double.parse(data['delivery'].toString()),
         discount: double.parse(data['discount'].toString()),
         uid: data['uid'] ?? '',
+        rated: data['rated'] ?? false,
         status: data['status'],
         timestamp: DateTime.parse(
             data['timestamp'] ?? DateTime.now().toIso8601String()),

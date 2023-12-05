@@ -65,11 +65,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       bottomNavigationBar: SafeArea(
         child: Container(
-            height: 80,
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            height: 70,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -111,15 +110,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       : MaterialButton(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           onPressed: () async {
-                            setState(() {
-                              makeOrder = true;
-                            });
-                            await staticFunctions.makePayment(
-                                (userCubit.totalCartPrice() + 25.0), ordering);
+                            if (auth.userData.address!.isNotEmpty) {
+                              setState(() {
+                                makeOrder = true;
+                              });
+                              await staticFunctions.makePayment(
+                                  (userCubit.totalCartPrice() + 25.0),
+                                  ordering);
 
-                            setState(() {
-                              makeOrder = false;
-                            });
+                              setState(() {
+                                makeOrder = false;
+                              });
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Please add an address first');
+                            }
                           },
                           height: 45,
                           minWidth: 100,
@@ -137,7 +142,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         action: {},
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
