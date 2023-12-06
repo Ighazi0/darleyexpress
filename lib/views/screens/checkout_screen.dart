@@ -93,7 +93,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '${'total'.tr(context)}: ${'AED'.tr(context)}${(userCubit.totalCartPrice()).toStringAsFixed(2)}',
+                        '${'total'.tr(context)}: ${'AED'.tr(context)} ${(userCubit.totalCartPrice() + 25).toStringAsFixed(2)}',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             decoration: couponData.id.isNotEmpty
@@ -118,9 +118,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               setState(() {
                                 makeOrder = true;
                               });
-                              await staticFunctions.makePayment(
-                                  (userCubit.totalCartPrice() + 25.0),
-                                  ordering);
+                              // await staticFunctions.makePayment(
+                              //     (userCubit.totalCartPrice() -
+                              //         ((userCubit.totalCartPrice() *
+                              //             (couponData.discount / 100))) +
+                              //         25.0),
+                              //     ordering);
                             } else {
                               Fluttertoast.showToast(
                                   msg: 'pleaseAddress'.tr(context));
