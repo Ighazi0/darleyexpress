@@ -24,6 +24,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
         if (action.isNotEmpty)
           Container(
             width: 70,
+            height: 100,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
             child: loading
                 ? const Center(

@@ -9,7 +9,7 @@ class UserModel {
   final DateTime? birth;
   final DateTime? timestamp;
   final String link;
-  final List? wallet;
+  final List<WalletModel>? wallet;
   final List<AddressModel>? address;
   bool verified;
   bool blocked;
@@ -33,8 +33,8 @@ class UserModel {
       this.verified = false});
 
   factory UserModel.fromJson(Map json) {
-    List d = json['address'];
-
+    List a = json['address'];
+    List w = json['wallet'];
     return UserModel(
       name: json['name'] ?? '',
       pic: json['pic'] ?? '',
@@ -49,8 +49,8 @@ class UserModel {
       blocked: json['blocked'] ?? false,
       coins: double.parse(json['coins'].toString()),
       link: json['link'] ?? '',
-      wallet: json['wallet'] ?? [],
-      address: d.map((e) => AddressModel.fromJson(e as Map)).toList(),
+      wallet: w.map((e) => WalletModel.fromJson(e as Map)).toList(),
+      address: a.map((e) => AddressModel.fromJson(e as Map)).toList(),
     );
   }
 }
@@ -73,6 +73,25 @@ class AddressModel {
       phone: json['phone'] ?? '',
       label: json['label'] ?? '',
       address: json['address'] ?? '',
+    );
+  }
+}
+
+class WalletModel {
+  final String name;
+  final String number;
+  final String date;
+
+  WalletModel({
+    this.name = '',
+    this.number = '',
+    this.date = '',
+  });
+  factory WalletModel.fromJson(Map json) {
+    return WalletModel(
+      name: json['name'] ?? '',
+      date: json['date'] ?? '',
+      number: json['number'] ?? '',
     );
   }
 }

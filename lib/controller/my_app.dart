@@ -15,6 +15,7 @@ import 'package:darleyexpress/views/screens/checkout_screen.dart';
 import 'package:darleyexpress/views/screens/forgot_password.dart';
 import 'package:darleyexpress/views/screens/notification_screen.dart';
 import 'package:darleyexpress/views/screens/orders_screen.dart';
+import 'package:darleyexpress/views/screens/payment_screen.dart';
 import 'package:darleyexpress/views/screens/register_screen.dart';
 import 'package:darleyexpress/views/screens/settings_screen.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
@@ -101,6 +102,7 @@ class MyApp extends StatelessWidget {
             routes: {
               'register': (context) => const RegisterScreen(),
               'user': (context) => const UserScreen(),
+              'payment': (context) => const PaymentScreen(),
               'orders': (context) => const OrdersScreen(),
               'settings': (context) => const SettingsScreen(),
               'admin': (context) => const AdminScreen(),

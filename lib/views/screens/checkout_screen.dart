@@ -8,6 +8,7 @@ import 'package:darleyexpress/views/screens/order_details.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
+import 'package:darleyexpress/views/widgets/payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -115,15 +116,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           onPressed: () async {
                             if (auth.userData.address!.isNotEmpty) {
-                              setState(() {
-                                makeOrder = true;
-                              });
+                              // setState(() {
+                              //   makeOrder = true;
+                              // });
+
                               // await staticFunctions.makePayment(
                               //     (userCubit.totalCartPrice() -
                               //         ((userCubit.totalCartPrice() *
                               //             (couponData.discount / 100))) +
                               //         25.0),
                               //     ordering);
+
+                              staticWidgets.showBottom(context,
+                                  const BottomSheetPayment(), 0.85, 0.9);
                             } else {
                               Fluttertoast.showToast(
                                   msg: 'pleaseAddress'.tr(context));

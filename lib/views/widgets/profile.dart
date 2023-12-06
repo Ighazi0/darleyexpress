@@ -41,6 +41,16 @@ class Profile extends StatelessWidget {
               },
               leading: const Icon(Icons.map),
             ),
+          if (auth.userData.uid.isNotEmpty)
+            ListTile(
+              title: Text(
+                'paymentMethod'.tr(context),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, 'payment');
+              },
+              leading: const Icon(Icons.wallet),
+            ),
           ListTile(
             title: Text(
               'settings'.tr(context),

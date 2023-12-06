@@ -92,27 +92,8 @@
        "reviewSent":"Review sent",
        "reviewOrder":"Review order",
        "message":"Message",
-       "veryGood":"Very good"
-
-       
-
-  
-
-
-      
-      
-
-       
-       
-
-      
-
-       
-
-       
-
-       
-       
-       
+       "veryGood":"Very good",
+       "noPayment":"No saved payment methods",
+       "paymentMethod":"Payment methods"     
 }
 
