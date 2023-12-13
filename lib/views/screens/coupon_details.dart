@@ -27,7 +27,7 @@ class _CouponDetailsState extends State<CouponDetails> {
       discount = TextEditingController();
   DateTime endDate = DateTime.now();
 
-  update() async {
+  submit() async {
     if (!key.currentState!.validate()) {
       return;
     }
@@ -89,7 +89,7 @@ class _CouponDetailsState extends State<CouponDetails> {
       appBar: AppBarCustom(
         title: widget.coupon.code,
         action: {
-          'function': update,
+          'function': submit,
           'icon': widget.coupon.id.isEmpty ? Icons.add : Icons.edit
         },
         loading: loading,
@@ -109,7 +109,7 @@ class _CouponDetailsState extends State<CouponDetails> {
                   return null;
                 },
                 hint: 'New year discount',
-                title: 'Title in English'),
+                title: 'titleEn'),
             EditText(
                 function: () {},
                 controller: titleAr,
@@ -120,7 +120,7 @@ class _CouponDetailsState extends State<CouponDetails> {
                   return null;
                 },
                 hint: 'خصم بمناسبة السنة الجديدة',
-                title: 'Title in Arabic'),
+                title: 'titleAr'),
             PickDate(
               function: (c) {
                 setState(() {
@@ -139,7 +139,7 @@ class _CouponDetailsState extends State<CouponDetails> {
                   return null;
                 },
                 hint: '50',
-                title: 'Discount percent'),
+                title: 'discountP'),
             EditText(
                 function: () {},
                 controller: max,
@@ -150,7 +150,7 @@ class _CouponDetailsState extends State<CouponDetails> {
                   return null;
                 },
                 hint: '100',
-                title: 'Max dicount'),
+                title: 'max'),
             EditText(
                 function: () {},
                 controller: code,
@@ -161,7 +161,7 @@ class _CouponDetailsState extends State<CouponDetails> {
                   return null;
                 },
                 hint: 'NEWYEAR',
-                title: 'Coupon code'),
+                title: 'code'),
             EditText(
                 function: () {},
                 controller: descriptionEn,
@@ -172,7 +172,7 @@ class _CouponDetailsState extends State<CouponDetails> {
                   return null;
                 },
                 hint: '',
-                title: 'Description in English'),
+                title: 'descriptionEn'),
             EditText(
                 function: () {},
                 controller: descriptionAr,
@@ -183,7 +183,7 @@ class _CouponDetailsState extends State<CouponDetails> {
                   return null;
                 },
                 hint: '',
-                title: 'Description in Arabic'),
+                title: 'descriptionAr'),
             if (widget.coupon.id.isNotEmpty && !loading)
               Padding(
                 padding: const EdgeInsets.all(20),

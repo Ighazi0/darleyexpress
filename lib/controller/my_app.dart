@@ -9,10 +9,11 @@ import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/views/screens/address_screen.dart';
 import 'package:darleyexpress/views/screens/admin_banners.dart';
 import 'package:darleyexpress/views/screens/admin_coupons.dart';
+import 'package:darleyexpress/views/screens/admin_orders.dart';
 import 'package:darleyexpress/views/screens/admin_products.dart';
+import 'package:darleyexpress/views/screens/admin_reviews.dart';
 import 'package:darleyexpress/views/screens/admin_screen.dart';
 import 'package:darleyexpress/views/screens/checkout_screen.dart';
-import 'package:darleyexpress/views/screens/forgot_password.dart';
 import 'package:darleyexpress/views/screens/notification_screen.dart';
 import 'package:darleyexpress/views/screens/orders_screen.dart';
 import 'package:darleyexpress/views/screens/payment_screen.dart';
@@ -77,6 +78,7 @@ class MyApp extends StatelessWidget {
             scaffoldMessengerKey: snackbarKey,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
+                useMaterial3: false,
                 progressIndicatorTheme:
                     ProgressIndicatorThemeData(color: primaryColor),
                 scaffoldBackgroundColor: Colors.white,
@@ -100,6 +102,8 @@ class MyApp extends StatelessWidget {
               return supportedLocales.first;
             },
             routes: {
+              'adminOrders': (context) => const AdminOrders(),
+              'adminReviews': (context) => const AdminReviews(),
               'register': (context) => const RegisterScreen(),
               'user': (context) => const UserScreen(),
               'payment': (context) => const PaymentScreen(),
@@ -112,7 +116,6 @@ class MyApp extends StatelessWidget {
               'coupons': (context) => const AdminCoupons(),
               'checkout': (context) => const CheckoutScreen(),
               'notification': (context) => const NotificationScreen(),
-              'forgot': (context) => const ForgotPasswordScreen()
             },
             home: const SplashScreen(),
           );

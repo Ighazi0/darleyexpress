@@ -1,14 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:io';
-import 'package:darleyexpress/views/widgets/edit_text.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/banner_model.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
+import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:darleyexpress/views/widgets/shimmer.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hl_image_picker/hl_image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_pickers/image_pickers.dart';
 
 class BannnerDetails extends StatefulWidget {
   const BannnerDetails({super.key, required this.banner});
@@ -20,7 +21,7 @@ class BannnerDetails extends StatefulWidget {
 
 class _BannnerDetailsState extends State<BannnerDetails> {
   GlobalKey<FormState> key = GlobalKey();
-  final List<HLPickerItem> imageFile = [];
+  String imageFile = '';
   bool loading = false;
   TextEditingController ar = TextEditingController(),
       en = TextEditingController();
@@ -36,21 +37,25 @@ class _BannnerDetailsState extends State<BannnerDetails> {
     if (imageFile.isNotEmpty) {
       final ref = await firebaseStorage
           .ref('banners/${widget.banner.id.isEmpty ? id : widget.banner.id}')
-          .putFile(File(imageFile.first.path),
-              SettableMetadata(contentType: 'image/png'));
+          .putFile(File(imageFile), SettableMetadata(contentType: 'image/png'));
 
       url = await ref.ref.getDownloadURL();
     }
+
     if (widget.banner.id.isEmpty) {
-      final link = await staticFunctions.generateLink(id, 'banner');
-      await firestore.collection('banners').doc(id).set({
-        'id': id,
-        'timestamp': DateTime.now().toIso8601String(),
-        'link': link,
-        'titleAr': ar.text,
-        'titleEn': en.text,
-        'url': url.isEmpty ? widget.banner.url : url
-      });
+      if (imageFile.isNotEmpty) {
+        final link = await staticFunctions.generateLink(id, 'banner');
+        await firestore.collection('banners').doc(id).set({
+          'id': id,
+          'timestamp': DateTime.now().toIso8601String(),
+          'link': link,
+          'titleAr': ar.text,
+          'titleEn': en.text,
+          'url': url.isEmpty ? widget.banner.url : url
+        });
+      } else {
+        Fluttertoast.showToast(msg: 'Please add image');
+      }
     } else {
       await firestore.collection('banners').doc(widget.banner.id).update({
         'titleAr': ar.text,
@@ -58,6 +63,7 @@ class _BannnerDetailsState extends State<BannnerDetails> {
         'url': url.isEmpty ? widget.banner.url : url
       });
     }
+
     setState(() {
       loading = false;
     });
@@ -65,22 +71,17 @@ class _BannnerDetailsState extends State<BannnerDetails> {
   }
 
   _openPicker() async {
-    try {
-      final images = await HLImagePicker().openPicker(
-        selectedIds: imageFile.map((e) => e.id).toList(),
-        pickerOptions: const HLPickerOptions(
-          mediaType: MediaType.image,
-          compressFormat: CompressFormat.png,
-          maxSelectedAssets: 1,
-        ),
-      );
+    List<Media> listImagePaths = await ImagePickers.pickerPaths(
+      galleryMode: GalleryMode.image,
+      showGif: false,
+      showCamera: true,
+      compressSize: 0,
+      uiConfig: UIConfig(uiThemeColor: primaryColor),
+    );
 
-      setState(() {
-        imageFile.add(images.first);
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-    }
+    setState(() {
+      imageFile = listImagePaths.first.path.toString();
+    });
   }
 
   @override
@@ -138,13 +139,13 @@ class _BannnerDetailsState extends State<BannnerDetails> {
                                 )),
                               )
                         : Image.file(
-                            File(imageFile.first.path),
+                            File(imageFile),
                             fit: BoxFit.fitWidth,
                           )),
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             EditText(
               function: submit,
@@ -156,10 +157,10 @@ class _BannnerDetailsState extends State<BannnerDetails> {
                 return null;
               },
               hint: 'Offers',
-              title: 'Title in English',
+              title: 'titleEn',
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             EditText(
               function: submit,
@@ -171,7 +172,7 @@ class _BannnerDetailsState extends State<BannnerDetails> {
                 return null;
               },
               hint: 'عروض',
-              title: 'Title in Arabic',
+              title: 'titleAr',
             ),
             if (widget.banner.id.isNotEmpty && !loading)
               Padding(

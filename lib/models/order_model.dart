@@ -3,6 +3,7 @@ import 'package:darleyexpress/models/user_model.dart';
 
 class OrderModel {
   final int number;
+  final String id;
   final String name;
   final String uid;
   final String status;
@@ -12,6 +13,7 @@ class OrderModel {
   final bool rated;
   final DateTime? timestamp;
   final AddressModel? addressData;
+  final WalletModel? walletData;
   final List<ProductModel>? orderList;
 
   OrderModel(
@@ -21,16 +23,19 @@ class OrderModel {
       this.delivery = 0,
       this.timestamp,
       this.name = '',
+      this.id = '',
       this.uid = '',
       this.status = '',
       this.rated = false,
       this.orderList,
+      this.walletData,
       this.addressData});
 
-  factory OrderModel.fromJson(Map data) {
+  factory OrderModel.fromJson(Map data, String id) {
     List d = data['orderList'];
     return OrderModel(
-        number: data['number'] ?? 0,
+        id: id,
+        number: data['number'],
         name: data['name'],
         total: double.parse(data['total'].toString()),
         delivery: double.parse(data['delivery'].toString()),
@@ -41,6 +46,7 @@ class OrderModel {
         timestamp: DateTime.parse(
             data['timestamp'] ?? DateTime.now().toIso8601String()),
         addressData: AddressModel.fromJson(data['addressData'] as Map),
+        walletData: WalletModel.fromJson(data['walletData'] as Map),
         orderList: d.map((e) => ProductModel.fromJson(e as Map)).toList());
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
@@ -48,12 +49,12 @@ class _ProductDetailsState extends State<ProductDetails> {
             children: [
               Column(
                 children: [
-                  const Text('Total price'),
+                  Text('total'.tr(context)),
                   const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    'AED ${(count * widget.product.price).toStringAsFixed(2)}',
+                    '${'AED'.tr(context)} ${(count * widget.product.price).toStringAsFixed(2)}',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -68,9 +69,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                     },
                     other: () {},
                     add: () {
-                      setState(() {
-                        count++;
-                      });
+                      if (count < widget.product.stock) {
+                        setState(() {
+                          count++;
+                        });
+                      }
                     },
                     count: count,
                   ),
@@ -253,7 +256,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'AED ${widget.product.price.toStringAsFixed(2)}',
+                    '${'AED'.tr(context)} ${widget.product.price.toStringAsFixed(2)}',
                     style: TextStyle(
                         fontSize: 18,
                         decoration: widget.product.discount != 0
@@ -262,7 +265,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                   if (widget.product.discount != 0)
                     Text(
-                      'AED ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
+                      '${'AED'.tr(context)} ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
                       style: const TextStyle(fontSize: 18),
                     ),
                 ],

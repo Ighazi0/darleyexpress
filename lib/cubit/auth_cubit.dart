@@ -152,7 +152,7 @@ class AuthCubit extends Cubit<AuthState> {
       password.clear();
     } catch (e) {
       emit(AuthInitial());
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: 'Error');
     }
     emit(AuthInitial());
   }

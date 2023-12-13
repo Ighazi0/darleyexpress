@@ -3,7 +3,9 @@ import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/order_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
+import 'package:darleyexpress/views/screens/product_details.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
+import 'package:darleyexpress/views/widgets/bottom_sheet_status.dart';
 import 'package:darleyexpress/views/widgets/review_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
@@ -21,12 +23,8 @@ class _OrderDetailsState extends State<OrderDetails> {
   OrderModel order = OrderModel();
 
   fetch() async {
-    await firestore
-        .collection('orders')
-        .doc(order.timestamp!.millisecondsSinceEpoch.toString())
-        .get()
-        .then((value) {
-      order = OrderModel.fromJson(value.data() as Map);
+    await firestore.collection('orders').doc(order.id).get().then((value) {
+      order = OrderModel.fromJson(value.data() as Map, order.id);
       setState(() {});
     });
   }
@@ -41,26 +39,39 @@ class _OrderDetailsState extends State<OrderDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarCustom(
-        action: !order.rated && order.status == 'complete'
+        action: order.status != 'complete' &&
+                firebaseAuth.currentUser!.uid == staticData.adminUID
             ? {
-                'icon': Icons.star,
+                'icon': Icons.edit,
                 'function': () async {
                   await staticWidgets.showBottom(
-                      context,
-                      BottomSheetReview(
-                        id: order.timestamp!.millisecondsSinceEpoch.toString(),
-                      ),
-                      0.5,
-                      0.75);
+                      context, BottomSheetStatus(order: order), 0.4, 0.5);
                   fetch();
                 }
               }
-            : {},
+            : !order.rated &&
+                    order.status == 'complete' &&
+                    firebaseAuth.currentUser!.uid != staticData.adminUID
+                ? {
+                    'icon': Icons.star,
+                    'function': () async {
+                      await staticWidgets.showBottom(
+                          context,
+                          BottomSheetReview(
+                            id: order.timestamp!.millisecondsSinceEpoch
+                                .toString(),
+                          ),
+                          0.5,
+                          0.75);
+                      fetch();
+                    }
+                  }
+                : {},
         title: '#${order.number}',
       ),
       bottomNavigationBar: SafeArea(
         child: Container(
-            height: 130,
+            height: 135,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -217,6 +228,23 @@ class _OrderDetailsState extends State<OrderDetails> {
                       fit: BoxFit.cover,
                     ),
                   ),
+                  onTap: () async {
+                    await firestore
+                        .collection('products')
+                        .doc(orderList.id)
+                        .get()
+                        .then((value) {
+                      if (value.exists) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetails(
+                                  product: ProductModel.fromJson(
+                                      value.data() as Map)),
+                            ));
+                      }
+                    });
+                  },
                   title: Text(
                     locale.locale == 'ar'
                         ? orderList.titleAr
@@ -224,10 +252,29 @@ class _OrderDetailsState extends State<OrderDetails> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   visualDensity: const VisualDensity(vertical: 4),
-                  subtitle: Text(
-                    '${'AED'.tr(context)} ${orderList.price}',
-                    style: const TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w500),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      Text(
+                        '${'AED'.tr(context)} ${orderList.price}',
+                        style: TextStyle(
+                            decoration: orderList.discount != 0
+                                ? TextDecoration.lineThrough
+                                : null,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      if (orderList.discount != 0)
+                        Text(
+                          '${'AED'.tr(context)} ${(orderList.price - (orderList.price * (orderList.discount / 100))).toStringAsFixed(2)}',
+                        ),
+                    ],
                   ),
                 );
               },

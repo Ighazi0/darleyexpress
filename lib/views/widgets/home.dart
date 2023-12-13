@@ -149,7 +149,7 @@ class _HomeState extends State<Home> {
                               options: CarouselOptions(
                                   autoPlay: true,
                                   height: 175,
-                                  viewportFraction: 0.9,
+                                  viewportFraction: 0.95,
                                   enlargeCenterPage: true,
                                   autoPlayInterval:
                                       const Duration(seconds: 30)),
@@ -176,7 +176,7 @@ class _HomeState extends State<Home> {
                           return CarouselSlider(
                             options: CarouselOptions(
                               height: 175,
-                              viewportFraction: 0.9,
+                              viewportFraction: 0.95,
                               enlargeCenterPage: true,
                             ),
                             items: [1].map((i) {

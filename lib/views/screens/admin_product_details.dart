@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darleyexpress/controller/my_app.dart';
@@ -8,9 +9,8 @@ import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:darleyexpress/views/widgets/category_picker_bottom_sheet.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:hl_image_picker/hl_image_picker.dart';
+import 'package:image_pickers/image_pickers.dart';
 
 class AdminProductDetails extends StatefulWidget {
   const AdminProductDetails({super.key, required this.product});
@@ -23,13 +23,15 @@ class AdminProductDetails extends StatefulWidget {
 class _AdminProductDetailsState extends State<AdminProductDetails> {
   bool loading = false;
   GlobalKey<FormState> key = GlobalKey();
-  final List<HLPickerItem> selectedImages = [];
+
+  List url = [], selectedImages = [];
   String cat = '', mainCat = '';
   TextEditingController tar = TextEditingController(),
       ten = TextEditingController(),
       dar = TextEditingController(),
       den = TextEditingController(),
       stock = TextEditingController(),
+      discount = TextEditingController(text: '0'),
       price = TextEditingController();
 
   Future<List<CategoryModel>> fetchCategories() async {
@@ -85,45 +87,47 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
     return results;
   }
 
-  update() async {
+  submit() async {
     if (!key.currentState!.validate()) {
       return;
     }
     setState(() {
       loading = true;
     });
-    var id = DateTime.now().millisecondsSinceEpoch.toString();
-    List media = widget.product.media ?? [];
+    var id = DateTime.now();
 
     for (var e in selectedImages) {
-      if (!media.contains(e.id)) {
+      if (!e.toString().startsWith('http')) {
         var id2 = DateTime.now().millisecondsSinceEpoch.toString();
-        final ref = await firebaseStorage
-            .ref('products/$id2')
-            .putFile(File(e.path), SettableMetadata(contentType: 'image/png'));
+        final ref = await firebaseStorage.ref('products/$id2').putFile(File(e));
 
-        media.add(await ref.ref.getDownloadURL());
+        url.add(await ref.ref.getDownloadURL());
       }
     }
 
     if (widget.product.id.isEmpty) {
-      final link = await staticFunctions.generateLink(id, 'product');
-      await firestore.collection('products').doc(id).set({
+      final link = await staticFunctions.generateLink(
+          id.millisecondsSinceEpoch.toString(), 'product');
+      await firestore
+          .collection('products')
+          .doc(id.millisecondsSinceEpoch.toString())
+          .set({
         'id': id,
-        'timestamp': DateTime.now().toIso8601String(),
+        'timestamp': id,
         'link': link,
         'titleAr': tar.text,
         'titleEn': ten.text,
         'descriptionAr': dar.text,
         'descriptionEn': den.text,
         'favorites': [],
-        'category': cat.split('%')[1],
-        'mainCategory': mainCat.split('%')[1],
-        'dicount': 0,
+        'category': cat.isEmpty ? '' : cat.split('%')[1],
+        'mainCategory': mainCat.isEmpty ? '' : mainCat.split('%')[1],
         'seller': 0,
-        'media': media,
+        'media': url,
         'extra': [],
+        'rate': [],
         'price': double.parse(price.text),
+        'discount': double.parse(discount.text),
         'stock': int.parse(stock.text)
       });
     } else {
@@ -132,11 +136,12 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
         'titleEn': ten.text,
         'descriptionAr': dar.text,
         'descriptionEn': den.text,
-        'media': media,
-        'category': cat.split('%')[1],
-        'mainCategory': mainCat.split('%')[1],
+        'media': url,
+        'category': cat.isEmpty ? '' : cat.split('%')[1],
+        'mainCategory': mainCat.isEmpty ? '' : mainCat.split('%')[1],
         'price': double.parse(price.text),
-        'stock': int.parse(stock.text)
+        'discount': double.parse(discount.text),
+        'stock': int.parse(stock.text),
       });
     }
 
@@ -144,22 +149,18 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
   }
 
   _openPicker() async {
-    try {
-      final images = await HLImagePicker().openPicker(
-        selectedIds: selectedImages.map((e) => e.id).toList(),
-        pickerOptions: const HLPickerOptions(
-          mediaType: MediaType.image,
-          compressFormat: CompressFormat.png,
-          maxSelectedAssets: 5,
-        ),
-      );
-      for (var element in images) {
-        setState(() {
-          selectedImages.add(element);
-        });
-      }
-    } catch (e) {
-      debugPrint(e.toString());
+    List<Media> listImagePaths = await ImagePickers.pickerPaths(
+      galleryMode: GalleryMode.image,
+      showGif: false,
+      showCamera: true,
+      selectCount: 5 - selectedImages.length,
+      uiConfig: UIConfig(uiThemeColor: primaryColor),
+    );
+
+    for (var element in listImagePaths) {
+      setState(() {
+        selectedImages.add(element.path.toString());
+      });
     }
   }
 
@@ -167,21 +168,14 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
   void initState() {
     if (widget.product.id.isNotEmpty) {
       for (var e in widget.product.media!) {
-        selectedImages.add(HLPickerItem(
-            id: e,
-            path: e,
-            name: e,
-            mimeType: 'image',
-            size: 0,
-            width: 100,
-            height: 100,
-            type: 'image'));
+        selectedImages.add(e);
+        url.add(e);
       }
-
       tar.text = widget.product.titleAr;
       ten.text = widget.product.titleEn;
       dar.text = widget.product.descriptionAr;
       den.text = widget.product.descriptionEn;
+      discount.text = widget.product.discount.toStringAsFixed(2);
       price.text = widget.product.price.toStringAsFixed(2);
       stock.text = widget.product.stock.toString();
     }
@@ -197,7 +191,7 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
           loading: loading,
           action: {
             'icon': widget.product.id.isEmpty ? Icons.add : Icons.edit,
-            'function': update
+            'function': submit
           }),
       body: Padding(
           padding: const EdgeInsets.all(10),
@@ -218,7 +212,7 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                   ),
                   itemBuilder: (context, index) {
                     String imageFile = index != selectedImages.length
-                        ? selectedImages[index].path
+                        ? selectedImages[index].toString()
                         : '';
 
                     return GestureDetector(
@@ -237,9 +231,7 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                                 ClipRRect(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(20)),
-                                  child: imageFile.startsWith(
-                                    'https',
-                                  )
+                                  child: imageFile.startsWith('https')
                                       ? CachedNetworkImage(
                                           imageUrl: imageFile,
                                           height: 125,
@@ -258,6 +250,9 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                                       setState(() {
                                         selectedImages.removeAt(index);
                                       });
+                                      if (imageFile.startsWith('https')) {
+                                        url.removeAt(index);
+                                      }
                                     },
                                     icon: const Icon(
                                       Icons.delete,
@@ -281,7 +276,10 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                       return null;
                     },
                     hint: 'Iphone',
-                    title: 'Product title in English'),
+                    title: 'titleEn'),
+                const SizedBox(
+                  height: 20,
+                ),
                 EditText(
                     function: () {},
                     controller: tar,
@@ -292,9 +290,9 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                       return null;
                     },
                     hint: 'ايفون',
-                    title: 'Product title in Arabic'),
+                    title: 'titleAr'),
                 const Padding(
-                  padding: EdgeInsets.only(left: 5, top: 10),
+                  padding: EdgeInsets.only(left: 5, top: 20),
                   child: Text('Main category'),
                 ),
                 FutureBuilder(
@@ -316,7 +314,7 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                                       });
                                     }),
                                 0.5,
-                                0.75);
+                                0.9);
                           },
                           child: Container(
                             width: dWidth,
@@ -354,7 +352,7 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                                       });
                                     }),
                                 0.5,
-                                0.75);
+                                0.9);
                           },
                           child: Container(
                             width: dWidth,
@@ -370,28 +368,31 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                       }
                       return const Text('Loading...');
                     }),
+                const SizedBox(
+                  height: 20,
+                ),
                 EditText(
                     function: () {},
                     controller: den,
                     validator: (p0) {
-                      if (p0!.isEmpty) {
-                        return 'Please enter product descrition in English';
-                      }
                       return null;
                     },
                     hint: 'storage 64',
-                    title: 'Product descrition in English'),
+                    title: 'descriptionEn'),
+                const SizedBox(
+                  height: 20,
+                ),
                 EditText(
                     function: () {},
                     controller: dar,
                     validator: (p0) {
-                      if (p0!.isEmpty) {
-                        return 'Please enter product descrition in Arabic';
-                      }
                       return null;
                     },
                     hint: 'مساحة ٦٤',
-                    title: 'Product descrition in Arabic'),
+                    title: 'descriptionAr'),
+                const SizedBox(
+                  height: 20,
+                ),
                 EditText(
                     function: () {},
                     controller: price,
@@ -403,7 +404,25 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                     },
                     hint: '100',
                     number: true,
-                    title: 'Product price'),
+                    title: 'price'),
+                const SizedBox(
+                  height: 20,
+                ),
+                EditText(
+                    function: () {},
+                    controller: discount,
+                    validator: (p0) {
+                      if (p0!.isEmpty) {
+                        return 'Please enter product discount percent';
+                      }
+                      return null;
+                    },
+                    hint: '50',
+                    number: true,
+                    title: 'discountP'),
+                const SizedBox(
+                  height: 20,
+                ),
                 EditText(
                     function: () {},
                     controller: stock,
@@ -415,7 +434,7 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                       return null;
                     },
                     hint: '5',
-                    title: 'Product stock'),
+                    title: 'stock'),
                 if (widget.product.id.isNotEmpty && !loading)
                   Padding(
                     padding: const EdgeInsets.all(20),

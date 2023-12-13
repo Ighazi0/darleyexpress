@@ -210,36 +210,59 @@ class _CartState extends State<Cart> {
                                   ),
                                   visualDensity:
                                       const VisualDensity(vertical: 4),
-                                  subtitle: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        '${'AED'.tr(context)} ${cart.productData!.price}',
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
+                                      if (cart.productData!.discount != 0)
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '${'AED'.tr(context)} ${cart.productData!.price}',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                decoration: cart.productData!
+                                                            .discount !=
+                                                        0
+                                                    ? TextDecoration.lineThrough
+                                                    : null,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          Counter(
+                                            remove: () {
+                                              userCubit.addToCart(
+                                                  cart.productData!, -1);
+                                            },
+                                            add: () {
+                                              userCubit.addToCart(
+                                                  cart.productData!, 1);
+                                            },
+                                            other: () {
+                                              staticWidgets.showBottom(
+                                                  context,
+                                                  BottomSheetRemoveCart(
+                                                    index: index,
+                                                  ),
+                                                  0.4,
+                                                  0.5);
+                                            },
+                                            count: cart.count,
+                                          )
+                                        ],
                                       ),
-                                      Counter(
-                                        remove: () {
-                                          userCubit.addToCart(
-                                              cart.productData!, -1);
-                                        },
-                                        add: () {
-                                          userCubit.addToCart(
-                                              cart.productData!, 1);
-                                        },
-                                        other: () {
-                                          staticWidgets.showBottom(
-                                              context,
-                                              BottomSheetRemoveCart(
-                                                index: index,
-                                              ),
-                                              0.4,
-                                              0.5);
-                                        },
-                                        count: cart.count,
-                                      )
+                                      if (cart.productData!.discount != 0)
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 3),
+                                          child: Text(
+                                            '${'AED'.tr(context)} ${(cart.productData!.price - (cart.productData!.price * (cart.productData!.discount / 100))).toStringAsFixed(2)}',
+                                          ),
+                                        ),
                                     ],
                                   ),
                                 ),

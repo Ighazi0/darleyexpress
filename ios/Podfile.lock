@@ -5,12 +5,46 @@ PODS:
   - AppAuth/Core (1.6.2)
   - AppAuth/ExternalUserAgent (1.6.2):
     - AppAuth/Core
-  - cloud_firestore (4.13.3):
+  - cloud_firestore (4.13.5):
     - Firebase/Firestore (= 10.18.0)
     - firebase_core
     - Flutter
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - CropViewController (2.6.1)
+  - DKImagePickerController/Core (4.3.4):
+    - DKImagePickerController/ImageDataManager
+    - DKImagePickerController/Resource
+  - DKImagePickerController/ImageDataManager (4.3.4)
+  - DKImagePickerController/PhotoGallery (4.3.4):
+    - DKImagePickerController/Core
+    - DKPhotoGallery
+  - DKImagePickerController/Resource (4.3.4)
+  - DKPhotoGallery (0.0.17):
+    - DKPhotoGallery/Core (= 0.0.17)
+    - DKPhotoGallery/Model (= 0.0.17)
+    - DKPhotoGallery/Preview (= 0.0.17)
+    - DKPhotoGallery/Resource (= 0.0.17)
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Core (0.0.17):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Preview
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Model (0.0.17):
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Preview (0.0.17):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Resource
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Resource (0.0.17):
+    - SDWebImage
+    - SwiftyGif
+  - file_picker (0.0.1):
+    - DKImagePickerController/PhotoGallery
+    - Flutter
   - Firebase/Auth (10.18.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 10.18.0)
@@ -28,22 +62,22 @@ PODS:
   - Firebase/Storage (10.18.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 10.18.0)
-  - firebase_auth (4.15.0):
+  - firebase_auth (4.15.2):
     - Firebase/Auth (= 10.18.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.24.0):
+  - firebase_core (2.24.2):
     - Firebase/CoreOnly (= 10.18.0)
     - Flutter
-  - firebase_dynamic_links (5.4.6):
+  - firebase_dynamic_links (5.4.8):
     - Firebase/DynamicLinks (= 10.18.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (14.7.6):
+  - firebase_messaging (14.7.8):
     - Firebase/Messaging (= 10.18.0)
     - firebase_core
     - Flutter
-  - firebase_storage (11.5.3):
+  - firebase_storage (11.5.5):
     - Firebase/Storage (= 10.18.0)
     - firebase_core
     - Flutter
@@ -105,6 +139,7 @@ PODS:
   - FMDB/standard (2.7.5)
   - google_sign_in_ios (0.0.1):
     - Flutter
+    - FlutterMacOS
     - GoogleSignIn (~> 7.0)
   - GoogleDataTransport (9.3.0):
     - GoogleUtilities/Environment (~> 7.7)
@@ -149,6 +184,9 @@ PODS:
     - FlutterMacOS
   - PromisesObjC (2.3.1)
   - RecaptchaInterop (100.0.0)
+  - SDWebImage (5.18.6):
+    - SDWebImage/Core (= 5.18.6)
+  - SDWebImage/Core (5.18.6)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -195,6 +233,7 @@ PODS:
     - StripeUICore (= 23.18.3)
   - StripeUICore (23.18.3):
     - StripeCore (= 23.18.3)
+  - SwiftyGif (5.4.4)
   - TLPhotoPicker (2.1.9)
   - Toast (4.0.0)
   - url_launcher_ios (0.0.1):
@@ -202,6 +241,7 @@ PODS:
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
@@ -211,7 +251,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_credit_card (from `.symlinks/plugins/flutter_credit_card/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
+  - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - hl_image_picker_ios (from `.symlinks/plugins/hl_image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
@@ -225,6 +265,8 @@ SPEC REPOS:
   trunk:
     - AppAuth
     - CropViewController
+    - DKImagePickerController
+    - DKPhotoGallery
     - Firebase
     - FirebaseAppCheckInterop
     - FirebaseAuth
@@ -245,6 +287,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - RecaptchaInterop
+    - SDWebImage
     - Stripe
     - StripeApplePay
     - StripeCore
@@ -253,12 +296,15 @@ SPEC REPOS:
     - StripePaymentSheet
     - StripePaymentsUI
     - StripeUICore
+    - SwiftyGif
     - TLPhotoPicker
     - Toast
 
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  file_picker:
+    :path: ".symlinks/plugins/file_picker/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -279,7 +325,7 @@ EXTERNAL SOURCES:
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   google_sign_in_ios:
-    :path: ".symlinks/plugins/google_sign_in_ios/ios"
+    :path: ".symlinks/plugins/google_sign_in_ios/darwin"
   hl_image_picker_ios:
     :path: ".symlinks/plugins/hl_image_picker_ios/ios"
   path_provider_foundation:
@@ -304,14 +350,17 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
-  cloud_firestore: 9b25b77371a845d07a48e5146799f6d4552f5940
+  cloud_firestore: d2707a9ead952efd2a89e82347e46dc4b9c32e8d
   CropViewController: 58fb440f30dac788b129d2a1f24cffdcb102669c
+  DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
+  DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
+  file_picker: 15fd9539e4eb735dc54bae8c0534a7a9511a03de
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
-  firebase_auth: 02d1a6340f81020cc302fb8fea8518908c546cec
-  firebase_core: f802c5c1f6caff9b8d38b591a36e7b25f8878936
-  firebase_dynamic_links: 212953c972f7e952c853f69896dc4da0fa5cb06e
-  firebase_messaging: ca2fc59ddd52ef032d80f1a717d12eae8fa0e994
-  firebase_storage: 95b470ab32351049dfd3d97b595460ce7a189971
+  firebase_auth: 0099901926d85bda1688f6e451755b413c16154d
+  firebase_core: 0af4a2b24f62071f9bf283691c0ee41556dcb3f5
+  firebase_dynamic_links: b626a11f5eb02033981ae377377c3f297eb4c1b0
+  firebase_messaging: d4e4603f091c7b716b3f6c55550b2fa5dbf62ffd
+  firebase_storage: 3f15388480a9459b76522a2e9348a0fab0760aa3
   FirebaseAppCheckInterop: 37884781f3e16a1ba47e7ec80a1e805f987788e3
   FirebaseAuth: 12314b438fa76048540c8fb86d6cfc9e08595176
   FirebaseAuthInterop: f90d6820bf6ecf44753b9f13ba941902d00b525a
@@ -327,7 +376,7 @@ SPEC CHECKSUMS:
   flutter_credit_card: 48fb35065294868bc6a3e7f18a42f28929b84f48
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  google_sign_in_ios: 8115e3fbe097e6509beb819ed602d47369d9011f
+  google_sign_in_ios: ede92ec558c3a73ec07cb180f31820152fb8ca89
   GoogleDataTransport: 57c22343ab29bc686febbf7cbb13bad167c2d8fe
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
@@ -338,6 +387,7 @@ SPEC CHECKSUMS:
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
+  SDWebImage: 3d8caa2430f3d674dbb3e515df4a100a2105af5f
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
@@ -351,6 +401,7 @@ SPEC CHECKSUMS:
   StripePaymentSheet: c8d25d4133476c6238d3cc932fb8219bb5ea49c0
   StripePaymentsUI: c12de264eda974d91e43a769f53a6c6afc9a1715
   StripeUICore: 090c4fe916d039616ce8f8de30392f4aeb33dd16
+  SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   TLPhotoPicker: 939c40eaad130b69f9571e61e021e8120fa76329
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b

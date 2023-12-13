@@ -35,7 +35,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List<OrderModel> data = snapshot.data!.docs
-                  .map((e) => OrderModel.fromJson(e.data()))
+                  .map((e) => OrderModel.fromJson(e.data(), e.id))
                   .toList();
 
               if (data.isEmpty) {

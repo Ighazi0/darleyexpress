@@ -32,6 +32,7 @@ class _ProductTileState extends State<ProductTile> {
                 ));
           },
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -115,7 +116,11 @@ class _ProductTileState extends State<ProductTile> {
                                     userCubit.addToCart(widget.product, -1);
                                   },
                                   add: () {
-                                    userCubit.addToCart(widget.product, 1);
+                                    if (userCubit.cartList[widget.product.id]!
+                                            .count <
+                                        widget.product.stock) {
+                                      userCubit.addToCart(widget.product, 1);
+                                    }
                                   },
                                   other: () {
                                     userCubit.removeFromCart(widget.product.id);
@@ -173,13 +178,16 @@ class _ProductTileState extends State<ProductTile> {
                               ? TextDecoration.lineThrough
                               : null),
                     ),
-                    if (widget.product.discount != 0)
-                      Text(
-                        '${'AED'.tr(context)} ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
-                      ),
                   ],
                 ),
-              )
+              ),
+              if (widget.product.discount != 0)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: Text(
+                    '${'AED'.tr(context)} ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
+                  ),
+                ),
             ],
           ),
         );

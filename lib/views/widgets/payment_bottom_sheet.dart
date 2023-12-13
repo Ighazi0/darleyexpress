@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cryptlib_2_0/cryptlib_2_0.dart';
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
@@ -29,16 +30,21 @@ class _BottomSheetPaymentState extends State<BottomSheetPayment> {
     setState(() {
       loading = true;
     });
-
+    final ccvv = CryptLib.instance.encryptPlainTextWithRandomIV(cvvCode, "cvv");
+    final cnumber =
+        CryptLib.instance.encryptPlainTextWithRandomIV(cardNumber, "number");
+    final cdate =
+        CryptLib.instance.encryptPlainTextWithRandomIV(expiryDate, "date");
     await firestore
         .collection('users')
         .doc(firebaseAuth.currentUser!.uid)
         .update({
       'wallet': FieldValue.arrayUnion([
         {
+          'cvv': ccvv,
           'name': cardHolderName,
-          'number': cardNumber,
-          'date': expiryDate,
+          'number': cnumber,
+          'date': cdate,
         }
       ])
     });

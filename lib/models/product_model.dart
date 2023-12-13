@@ -45,8 +45,7 @@ class ProductModel {
         category: json['category'] ?? '',
         mainCategory: json['mainCategory'] ?? '',
         media: json['media'] ?? [],
-        // discount: double.parse(
-        //     json['discount'] == null ? '' : json['discount'].toString()),
+        discount: double.parse(json['discount'].toString()),
         stock: json['stock'] ?? 0,
         seller: json['seller'] ?? 0,
         price: double.parse(json['price'].toString()),

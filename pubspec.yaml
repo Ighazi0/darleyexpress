@@ -36,9 +36,12 @@ dependencies:
   icons_plus: ^4.0.0
   carousel_slider: ^4.2.1
   flutter_stripe: ^9.6.0
-  hl_image_picker: ^1.2.8
   ticket_widget: ^1.0.2
   flutter_credit_card: ^4.0.1
+  cryptlib_2_0: ^0.0.3
+  image_pickers: ^2.0.4+7
+  file_picker: ^6.1.1
+  csv: ^5.1.1
 
 dev_dependencies:
   flutter_test:
