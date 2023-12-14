@@ -167,6 +167,7 @@ class _HomeState extends State<Home> {
                                       child: NImage(
                                         url: i.url,
                                         h: 175,
+                                        w: dWidth,
                                         fit: BoxFit.fitWidth,
                                       )),
                                 );
@@ -274,6 +275,7 @@ class _HomeState extends State<Home> {
                                                                 100)),
                                                     child: NImage(
                                                       url: category.url,
+                                                      w: dWidth,
                                                       h: 75,
                                                     )),
                                               ),

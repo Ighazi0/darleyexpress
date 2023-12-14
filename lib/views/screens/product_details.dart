@@ -1,9 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/product_model.dart';
+import 'package:darleyexpress/views/screens/full_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/counter.dart';
+import 'package:darleyexpress/views/widgets/network_image.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -44,68 +45,79 @@ class _ProductDetailsState extends State<ProductDetails> {
               ],
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(20))),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Text('total'.tr(context)),
-                  const SizedBox(
-                    height: 5,
+          child: widget.product.stock == 0
+              ? Align(
+                  child: Text(
+                    'out'.tr(context),
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w500),
                   ),
-                  Text(
-                    '${'AED'.tr(context)} ${(count * widget.product.price).toStringAsFixed(2)}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Counter(
-                    remove: () {
-                      setState(() {
-                        count--;
-                      });
-                    },
-                    other: () {},
-                    add: () {
-                      if (count < widget.product.stock) {
-                        setState(() {
-                          count++;
-                        });
-                      }
-                    },
-                    count: count,
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      userCubit.addToCart(widget.product, count);
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: primaryColor,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
-                      child: const Icon(
-                        Icons.add_shopping_cart,
-                        color: Colors.white,
-                      ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Text('total'.tr(context)),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          '${'AED'.tr(context)} ${(count * widget.product.price).toStringAsFixed(2)}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                    Row(
+                      children: [
+                        Counter(
+                          remove: () {
+                            setState(() {
+                              count--;
+                            });
+                          },
+                          other: () {},
+                          add: () {
+                            if (count < widget.product.stock) {
+                              setState(() {
+                                count++;
+                              });
+                            }
+                          },
+                          count: count,
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            userCubit.addToCart(widget.product, count);
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10))),
+                            child: const Icon(
+                              Icons.add_shopping_cart,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
         ),
       ),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            backgroundColor: Colors.white,
             toolbarHeight: 50,
             leading: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -195,20 +207,30 @@ class _ProductDetailsState extends State<ProductDetails> {
                   child: Stack(
                 children: [
                   PageView.builder(
-                    controller: _pageController,
-                    onPageChanged: (int page) {
-                      setState(() {
-                        _activePage = page;
-                      });
-                    },
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.product.media!.length,
-                    itemBuilder: (context, index) => CachedNetworkImage(
-                      imageUrl: widget.product.media![index],
-                      width: dWidth,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                      controller: _pageController,
+                      onPageChanged: (int page) {
+                        setState(() {
+                          _activePage = page;
+                        });
+                      },
+                      scrollDirection: Axis.horizontal,
+                      itemCount: widget.product.media!.length,
+                      itemBuilder: (context, index) => GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FullScreen(
+                                        url: widget.product.media![index]),
+                                  ));
+                            },
+                            child: NImage(
+                              url: widget.product.media![index],
+                              h: 250,
+                              fit: BoxFit.none,
+                              w: dWidth,
+                            ),
+                          )),
                   Positioned(
                     bottom: 10,
                     left: 0,
@@ -253,7 +275,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                 height: 20,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     '${'AED'.tr(context)} ${widget.product.price.toStringAsFixed(2)}',
@@ -262,6 +283,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                         decoration: widget.product.discount != 0
                             ? TextDecoration.lineThrough
                             : null),
+                  ),
+                  const SizedBox(
+                    width: 10,
                   ),
                   if (widget.product.discount != 0)
                     Text(

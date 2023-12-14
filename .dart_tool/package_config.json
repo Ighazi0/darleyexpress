@@ -308,12 +308,6 @@
       "languageVersion": "2.19"
     },
     {
-      "name": "flutter_stripe",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/flutter_stripe-9.6.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.17"
-    },
-    {
       "name": "flutter_svg",
       "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/flutter_svg-2.0.9",
       "packageUri": "lib/",
@@ -336,12 +330,6 @@
       "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/fluttertoast-8.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
-    },
-    {
-      "name": "freezed_annotation",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/freezed_annotation-2.4.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.17"
     },
     {
       "name": "glob",
@@ -381,7 +369,7 @@
     },
     {
       "name": "google_sign_in_web",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/google_sign_in_web-0.12.3",
+      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/google_sign_in_web-0.12.3+1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -405,7 +393,7 @@
     },
     {
       "name": "image_pickers",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/image_pickers-2.0.4+7",
+      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/image_pickers-2.0.4+8",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -418,12 +406,6 @@
     {
       "name": "js",
       "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/js-0.6.7",
-      "packageUri": "lib/",
-      "languageVersion": "2.19"
-    },
-    {
-      "name": "json_annotation",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/json_annotation-4.8.1",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -698,24 +680,6 @@
       "languageVersion": "2.18"
     },
     {
-      "name": "stripe_android",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/stripe_android-9.6.0+2",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "stripe_ios",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/stripe_ios-9.6.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "stripe_platform_interface",
-      "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/stripe_platform_interface-9.6.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.17"
-    },
-    {
       "name": "syncfusion_flutter_charts",
       "rootUri": "file:///Users/gh0zi0/.pub-cache/hosted/pub.dev/syncfusion_flutter_charts-23.2.7",
       "packageUri": "lib/",
@@ -878,7 +842,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2023-12-13T21:34:05.565682Z",
+  "generated": "2023-12-14T10:23:59.862360Z",
   "generator": "pub",
   "generatorVersion": "3.2.3"
 }

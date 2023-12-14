@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/auth_cubit.dart';
@@ -205,25 +207,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          InkWell(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(100)),
-                              onTap: () {
-                                auth.appleSignIn();
-                              },
-                              child: Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(color: Colors.grey),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(100))),
-                                  child: Logo(
-                                    Logos.apple,
-                                    size: 30,
-                                  ))),
+                          if (Platform.isIOS)
+                            InkWell(
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(100)),
+                                onTap: () {
+                                  auth.appleSignIn();
+                                },
+                                child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(100))),
+                                    child: Logo(
+                                      Logos.apple,
+                                      size: 30,
+                                    ))),
                           InkWell(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(100)),
@@ -287,7 +290,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Align(
                       child: TextButton(
                         onPressed: () async {
-                          await firebaseAuth.signInAnonymously();
                           navigatorKey.currentState
                               ?.pushReplacementNamed('user');
                         },

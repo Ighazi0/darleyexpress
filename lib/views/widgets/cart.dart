@@ -4,6 +4,7 @@ import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/views/screens/product_details.dart';
+import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:darleyexpress/views/widgets/remove_cart.dart';
@@ -96,7 +97,7 @@ class _CartState extends State<Cart> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
                               onPressed: () {
-                                if (firebaseAuth.currentUser!.isAnonymous) {
+                                if (auth.userData.uid.isEmpty) {
                                   navigatorKey.currentState
                                       ?.pushReplacementNamed('register');
                                   Fluttertoast.showToast(
@@ -239,8 +240,11 @@ class _CartState extends State<Cart> {
                                                   cart.productData!, -1);
                                             },
                                             add: () {
-                                              userCubit.addToCart(
-                                                  cart.productData!, 1);
+                                              if (cart.count <
+                                                  cart.productData!.stock) {
+                                                userCubit.addToCart(
+                                                    cart.productData!, 1);
+                                              }
                                             },
                                             other: () {
                                               staticWidgets.showBottom(

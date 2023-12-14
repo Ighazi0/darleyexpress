@@ -3,6 +3,7 @@ import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/product_details.dart';
+import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:darleyexpress/views/widgets/network_image.dart';
@@ -51,38 +52,53 @@ class _ProductTileState extends State<ProductTile> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(100))),
                         margin: const EdgeInsets.all(5),
-                        child: widget.product.id.isNotEmpty
-                            ? StreamBuilder(
-                                stream: firestore
-                                    .collection('products')
-                                    .doc(widget.product.id)
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    ProductModel product =
-                                        ProductModel.fromJson(
-                                            snapshot.data!.data() as Map);
-                                    return IconButton(
-                                      icon: Icon(
-                                        product.favorites!.contains(
-                                                firebaseAuth.currentUser!.uid)
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        color: Colors.red,
-                                        size: 18,
-                                      ),
-                                      onPressed: () async {
-                                        await userCubit.favoriteStatus(product);
-                                      },
-                                    );
-                                  }
+                        child: auth.userData.uid.isNotEmpty
+                            ? widget.product.id.isNotEmpty
+                                ? StreamBuilder(
+                                    stream: firestore
+                                        .collection('products')
+                                        .doc(widget.product.id)
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        ProductModel product =
+                                            ProductModel.fromJson(
+                                                snapshot.data!.data() as Map);
+                                        return IconButton(
+                                          icon: Icon(
+                                            product.favorites!.contains(
+                                                    firebaseAuth
+                                                        .currentUser!.uid)
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: Colors.red,
+                                            size: 18,
+                                          ),
+                                          onPressed: () async {
+                                            await userCubit
+                                                .favoriteStatus(product);
+                                          },
+                                        );
+                                      }
 
-                                  return IconButton(
-                                    icon: Icon(
-                                      widget.product.favorites!.contains(
-                                              firebaseAuth.currentUser!.uid)
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
+                                      return IconButton(
+                                        icon: Icon(
+                                          widget.product.favorites!.contains(
+                                                  firebaseAuth.currentUser!.uid)
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: Colors.red,
+                                          size: 18,
+                                        ),
+                                        onPressed: () async {
+                                          await userCubit
+                                              .favoriteStatus(widget.product);
+                                        },
+                                      );
+                                    })
+                                : IconButton(
+                                    icon: const Icon(
+                                      Icons.favorite_border,
                                       color: Colors.red,
                                       size: 18,
                                     ),
@@ -90,57 +106,74 @@ class _ProductTileState extends State<ProductTile> {
                                       await userCubit
                                           .favoriteStatus(widget.product);
                                     },
-                                  );
-                                })
-                            : const SizedBox(),
-                      ),
-                    ),
-                    footer: Align(
-                      alignment: Alignment.centerRight,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        width: userCubit.cartList.containsKey(widget.product.id)
-                            ? 100
-                            : 35,
-                        height: 35,
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(100))),
-                        margin: const EdgeInsets.all(5),
-                        child: userCubit.cartList.containsKey(widget.product.id)
-                            ? FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Counter(
-                                  remove: () {
-                                    userCubit.addToCart(widget.product, -1);
-                                  },
-                                  add: () {
-                                    if (userCubit.cartList[widget.product.id]!
-                                            .count <
-                                        widget.product.stock) {
-                                      userCubit.addToCart(widget.product, 1);
-                                    }
-                                  },
-                                  other: () {
-                                    userCubit.removeFromCart(widget.product.id);
-                                  },
-                                  count: userCubit
-                                      .cartList[widget.product.id]!.count,
-                                ),
-                              )
+                                  )
                             : IconButton(
                                 icon: const Icon(
-                                  BoxIcons.bx_cart_add,
-                                  color: Colors.amber,
-                                  size: 20,
+                                  Icons.favorite_border,
+                                  color: Colors.red,
+                                  size: 18,
                                 ),
-                                onPressed: () {
-                                  userCubit.addToCart(widget.product, 1);
+                                onPressed: () async {
+                                  await userCubit
+                                      .favoriteStatus(widget.product);
                                 },
                               ),
                       ),
                     ),
+                    footer: widget.product.stock == 0
+                        ? const SizedBox()
+                        : Align(
+                            alignment: Alignment.centerRight,
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 250),
+                              width: userCubit.cartList
+                                      .containsKey(widget.product.id)
+                                  ? 100
+                                  : 35,
+                              height: 35,
+                              decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(100))),
+                              margin: const EdgeInsets.all(5),
+                              child: userCubit.cartList
+                                      .containsKey(widget.product.id)
+                                  ? FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Counter(
+                                        remove: () {
+                                          userCubit.addToCart(
+                                              widget.product, -1);
+                                        },
+                                        add: () {
+                                          if (userCubit
+                                                  .cartList[widget.product.id]!
+                                                  .count <
+                                              widget.product.stock) {
+                                            userCubit.addToCart(
+                                                widget.product, 1);
+                                          }
+                                        },
+                                        other: () {
+                                          userCubit.removeFromCart(
+                                              widget.product.id);
+                                        },
+                                        count: userCubit
+                                            .cartList[widget.product.id]!.count,
+                                      ),
+                                    )
+                                  : IconButton(
+                                      icon: const Icon(
+                                        BoxIcons.bx_cart_add,
+                                        color: Colors.amber,
+                                        size: 20,
+                                      ),
+                                      onPressed: () {
+                                        userCubit.addToCart(widget.product, 1);
+                                      },
+                                    ),
+                            ),
+                          ),
                     child: Container(
                       decoration: const BoxDecoration(
                           color: Colors.amber,
@@ -151,8 +184,11 @@ class _ProductTileState extends State<ProductTile> {
                           ? ClipRRect(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(20)),
-                              child:
-                                  NImage(url: widget.product.media![0], h: 100))
+                              child: NImage(
+                                url: widget.product.media![0],
+                                h: 100,
+                                w: dWidth,
+                              ))
                           : const SizedBox(),
                     )),
               ),
