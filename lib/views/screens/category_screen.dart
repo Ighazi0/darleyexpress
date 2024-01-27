@@ -151,7 +151,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     List<ProductModel> data = snapshot.data!.docs
-                        .map((doc) => ProductModel.fromJson(doc.data()))
+                        .map((doc) => ProductModel.fromJson(
+                              doc.data(),
+                            ))
                         .toList();
                     if (data.isEmpty) {
                       return Center(

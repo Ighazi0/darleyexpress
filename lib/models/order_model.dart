@@ -46,7 +46,7 @@ class OrderModel {
         timestamp: DateTime.parse(
             data['timestamp'] ?? DateTime.now().toIso8601String()),
         addressData: AddressModel.fromJson(data['addressData'] as Map),
-        walletData: WalletModel.fromJson(data['walletData'] as Map),
+        // walletData: WalletModel.fromJson(data['walletData'] as Map),
         orderList: d.map((e) => ProductModel.fromJson(e as Map)).toList());
   }
 }

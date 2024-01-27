@@ -123,7 +123,7 @@ class _AdminScreenState extends State<AdminScreen> {
                             Card(
                                 child: ListTile(
                               title: Text(
-                                'Total amount: ${orders.map((e) => e.total - e.discount).join()}',
+                                'Total amount: ${staticFunctions.totalAmount(orders)}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                             )),

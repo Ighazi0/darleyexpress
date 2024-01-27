@@ -38,14 +38,16 @@ class ProductModel {
     return ProductModel(
         titleEn: json['titleEn'] ?? '',
         titleAr: json['titleAr'] ?? '',
-        id: json['id'] ?? '',
-        timestamp: DateTime.parse(
-            json['timestamp'] ?? DateTime.now().toIso8601String()),
+        id: json['id'],
+        timestamp: json['timestamp'] == null
+            ? DateTime.now().millisecondsSinceEpoch
+            : json['timestamp'].toDate(),
         link: json['link'] ?? '',
         category: json['category'] ?? '',
         mainCategory: json['mainCategory'] ?? '',
         media: json['media'] ?? [],
-        discount: double.parse(json['discount'].toString()),
+        discount: double.parse(
+            json['discount'] == null ? '0' : json['discount'].toString()),
         stock: json['stock'] ?? 0,
         seller: json['seller'] ?? 0,
         price: double.parse(json['price'].toString()),

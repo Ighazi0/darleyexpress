@@ -20,7 +20,6 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
-  bool showBottom = true, end = true;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
@@ -28,22 +27,10 @@ class _CartState extends State<Cart> {
         return Scaffold(
             bottomNavigationBar: userCubit.cartList.isEmpty
                 ? null
-                : AnimatedContainer(
+                : Container(
                     width: dWidth,
-                    onEnd: () {
-                      if (showBottom) {
-                        setState(() {
-                          end = true;
-                        });
-                      } else {
-                        setState(() {
-                          end = false;
-                        });
-                      }
-                    },
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    duration: const Duration(milliseconds: 250),
-                    height: showBottom ? 135 : 85,
+                    height: 65,
                     decoration: const BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -55,42 +42,8 @@ class _CartState extends State<Cart> {
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(20))),
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          InkWell(
-                              onTap: () {
-                                setState(() {
-                                  showBottom = !showBottom;
-                                });
-                              },
-                              child: Icon(showBottom
-                                  ? Icons.expand_more
-                                  : Icons.expand_less)),
-                          if (showBottom && end)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                    '${'subtotal'.tr(context)}${' (${userCubit.totalCartCount()} ' 'items'.tr(context)})'),
-                                Text(
-                                  '${'AED'.tr(context)} ${userCubit.totalCartPrice().toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600),
-                                )
-                              ],
-                            ),
-                          if (showBottom && end)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('deliveryFee'.tr(context)),
-                                Text(
-                                  '${'AED'.tr(context)} 25 ',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600),
-                                )
-                              ],
-                            ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10),
                             child: MaterialButton(
@@ -117,7 +70,7 @@ class _CartState extends State<Cart> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                      '${'AED'.tr(context)} ${(userCubit.totalCartPrice() + 25.0).toStringAsFixed(2)}'),
+                                      '${'AED'.tr(context)} ${(userCubit.totalCartPrice()).toStringAsFixed(2)}'),
                                   Text('CHECKOUT'.tr(context)),
                                 ],
                               ),

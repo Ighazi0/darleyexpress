@@ -66,9 +66,8 @@ class _ProductTileState extends State<ProductTile> {
                                                 snapshot.data!.data() as Map);
                                         return IconButton(
                                           icon: Icon(
-                                            product.favorites!.contains(
-                                                    firebaseAuth
-                                                        .currentUser!.uid)
+                                            product.favorites!
+                                                    .contains(auth.userData.uid)
                                                 ? Icons.favorite
                                                 : Icons.favorite_border,
                                             color: Colors.red,
@@ -83,8 +82,8 @@ class _ProductTileState extends State<ProductTile> {
 
                                       return IconButton(
                                         icon: Icon(
-                                          widget.product.favorites!.contains(
-                                                  firebaseAuth.currentUser!.uid)
+                                          widget.product.favorites!
+                                                  .contains(auth.userData.uid)
                                               ? Icons.favorite
                                               : Icons.favorite_border,
                                           color: Colors.red,
