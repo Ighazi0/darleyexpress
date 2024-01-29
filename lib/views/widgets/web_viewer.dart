@@ -1,3 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -13,7 +18,17 @@ class WebViewer extends StatefulWidget {
 class _WebViewerState extends State<WebViewer> {
   late final WebViewController controller;
 
-  bool loading = true, c = false;
+  bool loading = true;
+  Timer? time;
+
+  @override
+  void dispose() {
+    if (time != null) {
+      time!.cancel();
+    }
+
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -26,13 +41,25 @@ class _WebViewerState extends State<WebViewer> {
               loading = false;
             });
           },
-          onNavigationRequest: (NavigationRequest request) {
-            debugPrint('allowing navigation to ${request.url}');
-            if (request.url
-                .contains('https://ipg.comtrust.ae/e/nvoice/Receipt?n=')) {
-              Navigator.pop(context);
+          onUrlChange: (UrlChange change) async {
+            // print('object2' + change.url.toString());
+            if (change.url!
+                .startsWith('https://ipg.comtrust.ae/e/nvoice/Receipt?n=')) {
+              time = Timer.periodic(const Duration(seconds: 1), (timer) {
+                Future future = controller
+                    .runJavaScriptReturningResult("document.body.innerText");
+                future.then((data) {
+                  String text = Platform.isIOS
+                      ? data.toString()
+                      : jsonDecode(data).toString();
+                  if (text.contains('Invoice ID')) {
+                    userCubit.changeDone(text.contains('Successful'));
+
+                    Navigator.pop(context);
+                  }
+                });
+              });
             }
-            return NavigationDecision.navigate;
           },
         ),
       )

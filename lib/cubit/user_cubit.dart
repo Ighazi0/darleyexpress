@@ -14,6 +14,11 @@ class UserCubit extends Cubit<UserState> {
   TextEditingController search = TextEditingController();
   int selectedIndex = 0;
   Map<String, CartModel> cartList = {};
+  bool done = false;
+
+  changeDone(x) {
+    done = x;
+  }
 
   double totalCartPrice() {
     double t = 0;

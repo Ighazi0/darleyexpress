@@ -14,6 +14,7 @@ import 'package:darleyexpress/views/screens/admin_products.dart';
 import 'package:darleyexpress/views/screens/admin_reviews.dart';
 import 'package:darleyexpress/views/screens/admin_screen.dart';
 import 'package:darleyexpress/views/screens/checkout_screen.dart';
+import 'package:darleyexpress/views/screens/delete_account_screen.dart';
 import 'package:darleyexpress/views/screens/notification_screen.dart';
 import 'package:darleyexpress/views/screens/orders_screen.dart';
 import 'package:darleyexpress/views/screens/payment_screen.dart';
@@ -109,6 +110,7 @@ class MyApp extends StatelessWidget {
               'payment': (context) => const PaymentScreen(),
               'orders': (context) => const OrdersScreen(),
               'settings': (context) => const SettingsScreen(),
+              'delete': (context) => const DeleteAccountScreen(),
               'admin': (context) => const AdminScreen(),
               'adminP': (context) => const AdminProducts(),
               'adminB': (context) => const AdminBanners(),

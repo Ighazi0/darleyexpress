@@ -40,7 +40,7 @@ class ProductModel {
         titleAr: json['titleAr'] ?? '',
         id: json['id'],
         timestamp: json['timestamp'] == null
-            ? DateTime.now().millisecondsSinceEpoch
+            ? DateTime.now()
             : json['timestamp'].toDate(),
         link: json['link'] ?? '',
         category: json['category'] ?? '',

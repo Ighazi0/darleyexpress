@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/auth_cubit.dart';
@@ -8,7 +10,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  const SettingsScreen({
+    super.key,
+  });
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -80,7 +84,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'deleteAccount'.tr(context),
                 style: const TextStyle(color: Colors.red),
               ),
-              onTap: () {},
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(
+                        'deleteAccount'.tr(context),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text(
+                            'cancel'.tr(context),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: Text(
+                            'Delete'.tr(context),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            auth.logOut();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
               leading: const Icon(
                 Icons.person_remove,
                 color: Colors.red,

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/auth_cubit.dart';
@@ -19,6 +18,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool signIn = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -223,8 +223,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         border: Border.all(color: Colors.grey),
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(100))),
-                                    child: Logo(
-                                      Logos.apple,
+                                    child: const Icon(
+                                      AntDesign.apple_fill,
                                       size: 30,
                                     ))),
                           InkWell(
@@ -242,8 +242,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       border: Border.all(color: Colors.grey),
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(100))),
-                                  child: Logo(
-                                    Logos.google,
+                                  child: Brand(
+                                    Brands.google,
                                     size: 30,
                                   ))),
                         ],

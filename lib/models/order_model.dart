@@ -4,6 +4,7 @@ import 'package:darleyexpress/models/user_model.dart';
 class OrderModel {
   final int number;
   final String id;
+  final String invoice;
   final String name;
   final String uid;
   final String status;
@@ -23,6 +24,7 @@ class OrderModel {
       this.delivery = 0,
       this.timestamp,
       this.name = '',
+      this.invoice = '',
       this.id = '',
       this.uid = '',
       this.status = '',
@@ -36,6 +38,7 @@ class OrderModel {
     return OrderModel(
         id: id,
         number: data['number'],
+        invoice: data['invoice'] ?? '',
         name: data['name'],
         total: double.parse(data['total'].toString()),
         delivery: double.parse(data['delivery'].toString()),
