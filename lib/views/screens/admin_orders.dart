@@ -138,11 +138,17 @@ class _AdminOrdersState extends State<AdminOrders> {
                         Iterable<OrderModel> result = data.where((element) =>
                             element.name
                                 .toLowerCase()
-                                .contains(controller.text.toLowerCase()) ||
+                                .replaceAll(' ', '')
+                                .contains(controller.text
+                                    .toLowerCase()
+                                    .replaceAll(' ', '')) ||
                             element.number
                                 .toString()
                                 .toLowerCase()
-                                .contains(controller.text.toLowerCase()));
+                                .replaceAll(' ', '')
+                                .contains(controller.text
+                                    .toLowerCase()
+                                    .replaceAll(' ', '')));
 
                         if (result.isEmpty) {
                           return Column(
@@ -162,7 +168,7 @@ class _AdminOrdersState extends State<AdminOrders> {
                         return ListView.builder(
                           itemCount: result.length,
                           itemBuilder: (context, index) {
-                            OrderModel order = data[index];
+                            OrderModel order = result.toList()[index];
                             return Card(
                               shape: const RoundedRectangleBorder(
                                   borderRadius:

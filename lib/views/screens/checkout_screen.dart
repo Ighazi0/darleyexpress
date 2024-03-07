@@ -87,76 +87,80 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   ordering() async {
     var id = DateTime.now(), numbers = 0, done = false;
 
-    await firestore.collection('orders').get().then((value) {
-      numbers = value.size;
-    });
+    QuerySnapshot querySnapshot = await firestore
+        .collection('orders')
+        .orderBy('number', descending: true)
+        .limit(1)
+        .get();
 
-    done = await makePayment(numbers);
+    numbers = querySnapshot.docs.first.get('number') + 1;
+    print(numbers);
+    // done = await makePayment(numbers);
 
-    if (done) {
-      userCubit.changeDone(false);
-      Fluttertoast.showToast(msg: 'orderPlaced'.tr(context));
+    // if (done) {
+    //   userCubit.changeDone(false);
+    //   Fluttertoast.showToast(msg: 'orderPlaced'.tr(context));
 
-      for (int i = 0; i < userCubit.cartList.entries.length; i++) {
-        await firestore
-            .collection('products')
-            .doc(userCubit.cartList.entries.toList()[i].key)
-            .update({
-          'stock': FieldValue.increment(
-              -userCubit.cartList.entries.toList()[i].value.count),
-          'seller': FieldValue.increment(1)
-        });
-      }
+    //   for (int i = 0; i < userCubit.cartList.entries.length; i++) {
+    //     await firestore
+    //         .collection('products')
+    //         .doc(userCubit.cartList.entries.toList()[i].key)
+    //         .update({
+    //       'stock': FieldValue.increment(
+    //           -userCubit.cartList.entries.toList()[i].value.count),
+    //       'seller': FieldValue.increment(1)
+    //     });
+    //   }
 
-      var data = {
-        'number': numbers + 1,
-        'uid': firebaseAuth.currentUser!.uid,
-        'total': userCubit.totalCartPrice(),
-        'discount': couponData.discount,
-        'delivery': 25,
-        'rated': false,
-        'status': 'inProgress',
-        'name': auth.userData.name,
-        'invoice': invoiceID,
-        'timestamp': id.toIso8601String(),
-        'addressData': {
-          'address': auth.userData.address!.first.address,
-          'phone': auth.userData.address!.first.phone,
-          'label': auth.userData.address!.first.label,
-          'name': auth.userData.address!.first.name,
-        },
-        // 'walletData': {
-        //   'number': CryptLib.instance.encryptPlainTextWithRandomIV(
-        //       auth.userData.wallet!.first.number, "number"),
-        // },
-        'orderList': userCubit.cartList.entries
-            .map((e) => {
-                  'id': e.key,
-                  'titleEn': e.value.productData!.titleEn,
-                  'titleAr': e.value.productData!.titleAr,
-                  'price': e.value.productData!.price,
-                  'discount': e.value.productData!.discount,
-                  'media': [e.value.productData!.media!.first],
-                  'count': e.value.count,
-                })
-            .toList()
-      };
-      firestore
-          .collection('orders')
-          .doc(id.millisecondsSinceEpoch.toString())
-          .set(data);
-      navigatorKey.currentState?.pushReplacement(MaterialPageRoute(
-        builder: (context) => OrderDetails(
-            order: OrderModel.fromJson(
-                data, id.millisecondsSinceEpoch.toString())),
-      ));
-      userCubit.clearCart();
-    } else {
-      Fluttertoast.showToast(msg: 'Payment failed');
-      setState(() {
-        makeOrder = false;
-      });
-    }
+    //   var data = {
+    //     'number': numbers + 1,
+    //     'uid': firebaseAuth.currentUser!.uid,
+    //     'total': userCubit.totalCartPrice(),
+    //     'discount': couponData.discount,
+    //     'delivery': 25,
+    //     'rated': false,
+    //     'status': 'inProgress',
+    //     'name': auth.userData.name,
+    //     'invoice': invoiceID,
+    //     'timestamp': id.toIso8601String(),
+    //     'addressData': {
+    //       'address': auth.userData.address!.first.address,
+    //       'phone': auth.userData.address!.first.phone,
+    //       'label': auth.userData.address!.first.label,
+    //       'name': auth.userData.address!.first.name,
+    //     },
+    //     // 'walletData': {
+    //     //   'number': CryptLib.instance.encryptPlainTextWithRandomIV(
+    //     //       auth.userData.wallet!.first.number, "number"),
+    //     // },
+    //     'orderList': userCubit.cartList.entries
+    //         .map((e) => {
+    //               'id': e.key,
+    //               'titleEn': e.value.productData!.titleEn,
+    //               'titleAr': e.value.productData!.titleAr,
+    //               'price': e.value.productData!.price,
+    //               'discount': e.value.productData!.discount,
+    //               'media': [e.value.productData!.media!.first],
+    //               'count': e.value.count,
+    //             })
+    //         .toList()
+    //   };
+    //   firestore
+    //       .collection('orders')
+    //       .doc(id.millisecondsSinceEpoch.toString())
+    //       .set(data);
+    //   navigatorKey.currentState?.pushReplacement(MaterialPageRoute(
+    //     builder: (context) => OrderDetails(
+    //         order: OrderModel.fromJson(
+    //             data, id.millisecondsSinceEpoch.toString())),
+    //   ));
+    //   userCubit.clearCart();
+    // } else {
+    //   Fluttertoast.showToast(msg: 'Payment failed');
+    //   setState(() {
+    //     makeOrder = false;
+    //   });
+    // }
   }
 
   @override
