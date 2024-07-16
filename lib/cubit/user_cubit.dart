@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/route_manager.dart';
 
 part 'user_state.dart';
 
@@ -68,7 +69,8 @@ class UserCubit extends Cubit<UserState> {
 
   favoriteStatus(ProductModel product) async {
     if (auth.userData.uid.isEmpty) {
-      navigatorKey.currentState?.pushReplacementNamed('register');
+      Get.offNamed('register');
+
       Fluttertoast.showToast(msg: 'Please sign in first');
     } else {
       await firestore.collection('products').doc(product.id).update({

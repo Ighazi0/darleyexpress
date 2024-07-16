@@ -1,10 +1,10 @@
-import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
   const UserAppBar({super.key, this.scroll = false});
@@ -24,7 +24,7 @@ class _UserAppBarState extends State<UserAppBar> {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         return PreferredSize(
-            preferredSize: Size(dWidth, 130),
+            preferredSize: Size(Get.width, 130),
             child: AnimatedContainer(
               height:
                   auth.userData.address!.isEmpty || widget.scroll ? 80 : 130,
@@ -42,7 +42,7 @@ class _UserAppBarState extends State<UserAppBar> {
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               decoration: BoxDecoration(
-                color: primaryColor,
+                color: appConstant.primaryColor,
               ),
               child: Column(
                 children: [
@@ -60,14 +60,14 @@ class _UserAppBarState extends State<UserAppBar> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'deliverTO'.tr(context),
+                                'deliverTO'.tr,
                                 style: const TextStyle(color: Colors.white),
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
                               SizedBox(
-                                width: dWidth / 1.5,
+                                width: Get.width / 1.5,
                                 child: Row(
                                   children: [
                                     const Icon(Icons.location_on,
@@ -131,10 +131,10 @@ class _UserAppBarState extends State<UserAppBar> {
                                   color: Colors.black,
                                 ))
                             : null,
-                        hintText: 'search'.tr(context),
+                        hintText: 'search'.tr,
                         prefixIcon: Icon(
                           Icons.search,
-                          color: primaryColor,
+                          color: appConstant.primaryColor,
                         ),
                         filled: true,
                         fillColor: Colors.white,

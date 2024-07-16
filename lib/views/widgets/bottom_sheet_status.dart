@@ -1,8 +1,10 @@
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 class BottomSheetStatus extends StatefulWidget {
   const BottomSheetStatus({super.key, required this.order});
@@ -15,7 +17,7 @@ class BottomSheetStatus extends StatefulWidget {
 class _BottomSheetStatusState extends State<BottomSheetStatus> {
   update(x) async {
     firestore.collection('orders').doc(widget.order.id).update({'status': x});
-    Navigator.pop(context);
+    Get.back();
   }
 
   @override
@@ -72,7 +74,7 @@ class _BottomSheetStatusState extends State<BottomSheetStatus> {
                     },
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(25))),
-                    color: primaryColor,
+                    color: appConstant.primaryColor,
                     child: const Text(
                       'To delivery',
                       style: TextStyle(fontSize: 18, color: Colors.white),
@@ -109,7 +111,7 @@ class _BottomSheetStatusState extends State<BottomSheetStatus> {
                     },
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(25))),
-                    color: primaryColor,
+                    color: appConstant.primaryColor,
                     child: const Text(
                       'Complete',
                       style: TextStyle(fontSize: 18, color: Colors.white),
@@ -146,7 +148,7 @@ class _BottomSheetStatusState extends State<BottomSheetStatus> {
                     },
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(25))),
-                    color: primaryColor,
+                    color: appConstant.primaryColor,
                     child: const Text(
                       'Complete',
                       style: TextStyle(fontSize: 18, color: Colors.white),

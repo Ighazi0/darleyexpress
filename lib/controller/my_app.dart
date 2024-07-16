@@ -1,57 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:darleyexpress/controller/app_localization.dart';
+import 'package:darleyexpress/controller/language_controller.dart';
 import 'package:darleyexpress/controller/static_data.dart';
 import 'package:darleyexpress/controller/static_functions.dart';
 import 'package:darleyexpress/controller/static_widgets.dart';
 import 'package:darleyexpress/cubit/auth_cubit.dart';
-import 'package:darleyexpress/cubit/locale_cubit.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
-import 'package:darleyexpress/views/screens/address_screen.dart';
-import 'package:darleyexpress/views/screens/admin_banners.dart';
-import 'package:darleyexpress/views/screens/admin_coupons.dart';
-import 'package:darleyexpress/views/screens/admin_orders.dart';
-import 'package:darleyexpress/views/screens/admin_products.dart';
-import 'package:darleyexpress/views/screens/admin_reviews.dart';
-import 'package:darleyexpress/views/screens/admin_screen.dart';
-import 'package:darleyexpress/views/screens/checkout_screen.dart';
-import 'package:darleyexpress/views/screens/delete_account_screen.dart';
-import 'package:darleyexpress/views/screens/notification_screen.dart';
-import 'package:darleyexpress/views/screens/orders_screen.dart';
-import 'package:darleyexpress/views/screens/payment_screen.dart';
-import 'package:darleyexpress/views/screens/register_screen.dart';
-import 'package:darleyexpress/views/screens/settings_screen.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
-import 'package:darleyexpress/views/screens/user_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-
-LocaleCubit locale = LocaleCubit();
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<ScaffoldMessengerState> snackbarKey =
-    GlobalKey<ScaffoldMessengerState>();
-
-FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-FirebaseFirestore firestore = FirebaseFirestore.instance;
-FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-
-final physical =
-    WidgetsBinding.instance.platformDispatcher.views.first.physicalSize;
-final devicePixelRatio =
-    WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio;
-final double dHeight = physical.height / devicePixelRatio;
-final double dWidth = physical.width / devicePixelRatio;
+import 'package:get/get.dart';
 
 StaticData staticData = StaticData();
 StaticWidgets staticWidgets = StaticWidgets();
 StaticFunctions staticFunctions = StaticFunctions();
-
-Color primaryColor = const Color(0xfffcba03);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -59,70 +20,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => LocaleCubit()..getSavedLanguage(),
-        ),
-        BlocProvider(
-          create: (context) => AuthCubit(),
-        ),
-        BlocProvider(
-          create: (context) => UserCubit(),
-        ),
-      ],
-      child: BlocBuilder<LocaleCubit, ChangeLocaleState>(
-        builder: (context, state) {
-          locale = BlocProvider.of<LocaleCubit>(context);
-          return MaterialApp(
-            locale: state.locale,
-            navigatorKey: navigatorKey,
-            scaffoldMessengerKey: snackbarKey,
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-                useMaterial3: false,
-                progressIndicatorTheme:
-                    ProgressIndicatorThemeData(color: primaryColor),
-                scaffoldBackgroundColor: Colors.white,
-                primaryColor: primaryColor,
-                appBarTheme: AppBarTheme(backgroundColor: primaryColor)),
-            supportedLocales: const [Locale('en'), Locale('ar')],
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate
-            ],
-            localeResolutionCallback: (deviceLocale, supportedLocales) {
-              for (var locale in supportedLocales) {
-                if (deviceLocale != null &&
-                    deviceLocale.languageCode == locale.languageCode) {
-                  return deviceLocale;
-                }
-              }
-
-              return supportedLocales.first;
-            },
-            routes: {
-              'adminOrders': (context) => const AdminOrders(),
-              'adminReviews': (context) => const AdminReviews(),
-              'register': (context) => const RegisterScreen(),
-              'user': (context) => const UserScreen(),
-              'payment': (context) => const PaymentScreen(),
-              'orders': (context) => const OrdersScreen(),
-              'settings': (context) => const SettingsScreen(),
-              'delete': (context) => const DeleteAccountScreen(),
-              'admin': (context) => const AdminScreen(),
-              'adminP': (context) => const AdminProducts(),
-              'adminB': (context) => const AdminBanners(),
-              'address': (context) => const AddressScreen(),
-              'coupons': (context) => const AdminCoupons(),
-              'checkout': (context) => const CheckoutScreen(),
-              'notification': (context) => const NotificationScreen(),
-            },
-            home: const SplashScreen(),
-          );
-        },
-      ),
-    );
+        providers: [
+          BlocProvider(
+            create: (context) => AuthCubit(),
+          ),
+          BlocProvider(
+            create: (context) => UserCubit(),
+          ),
+        ],
+        child: GetMaterialApp(
+          locale: Locale(Get.find<LanguageController>().getSavedLanguage()),
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+              useMaterial3: false,
+              progressIndicatorTheme:
+                  ProgressIndicatorThemeData(color: appConstant.primaryColor),
+              scaffoldBackgroundColor: Colors.white,
+              primaryColor: appConstant.primaryColor,
+              appBarTheme:
+                  AppBarTheme(backgroundColor: appConstant.primaryColor)),
+          supportedLocales: const [Locale('en'), Locale('ar')],
+          routes: appConstant.routes,
+          home: const SplashScreen(),
+        ));
   }
 }

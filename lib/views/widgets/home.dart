@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/banner_model.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
@@ -17,6 +17,7 @@ import 'package:darleyexpress/views/widgets/user_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -89,7 +90,7 @@ class _HomeState extends State<Home> {
                                     height: 10,
                                   ),
                                   Text(
-                                    'noProducts'.tr(context),
+                                    'noProducts'.tr,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w500),
                                   )
@@ -130,7 +131,7 @@ class _HomeState extends State<Home> {
                     ),
                   )
                 : RefreshIndicator(
-                    color: primaryColor,
+                    color: appConstant.primaryColor,
                     onRefresh: () async {
                       setState(() {});
                     },
@@ -155,7 +156,7 @@ class _HomeState extends State<Home> {
                                       const Duration(seconds: 30)),
                               items: data.map((i) {
                                 return Container(
-                                  width: dWidth,
+                                  width: Get.width,
                                   margin:
                                       const EdgeInsets.symmetric(vertical: 10),
                                   decoration: const BoxDecoration(
@@ -167,7 +168,7 @@ class _HomeState extends State<Home> {
                                       child: NImage(
                                         url: i.url,
                                         h: 175,
-                                        w: dWidth,
+                                        w: Get.width,
                                         fit: BoxFit.fitWidth,
                                       )),
                                 );
@@ -183,7 +184,7 @@ class _HomeState extends State<Home> {
                             items: [1].map((i) {
                               return Shimmers(
                                 child: Container(
-                                  width: dWidth,
+                                  width: Get.width,
                                   margin:
                                       const EdgeInsets.symmetric(vertical: 10),
                                   decoration: const BoxDecoration(
@@ -201,7 +202,7 @@ class _HomeState extends State<Home> {
                         child: Row(
                           children: [
                             Text(
-                              'category'.tr(context),
+                              'category'.tr,
                               style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
@@ -212,11 +213,12 @@ class _HomeState extends State<Home> {
                                     const BottomSheetCategories(), 0.75, 0.9);
                               },
                               style: ButtonStyle(
-                                  overlayColor: MaterialStateProperty.all(
+                                  overlayColor: WidgetStateProperty.all(
                                       Colors.amber.shade50)),
-                              child: Text('seeAll'.tr(context),
+                              child: Text('seeAll'.tr,
                                   style: TextStyle(
-                                      color: primaryColor, fontSize: 12)),
+                                      color: appConstant.primaryColor,
+                                      fontSize: 12)),
                             ),
                           ],
                         ),
@@ -234,7 +236,7 @@ class _HomeState extends State<Home> {
                             }
                             return SizedBox(
                               height: 100,
-                              width: dWidth,
+                              width: Get.width,
                               child: ListView.builder(
                                   itemCount: data.length,
                                   scrollDirection: Axis.horizontal,
@@ -263,7 +265,8 @@ class _HomeState extends State<Home> {
                                                 width: 75,
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
-                                                      color: primaryColor),
+                                                      color: appConstant
+                                                          .primaryColor),
                                                   borderRadius:
                                                       const BorderRadius.all(
                                                           Radius.circular(100)),
@@ -275,7 +278,7 @@ class _HomeState extends State<Home> {
                                                                 100)),
                                                     child: NImage(
                                                       url: category.url,
-                                                      w: dWidth,
+                                                      w: Get.width,
                                                       h: 75,
                                                     )),
                                               ),
@@ -284,7 +287,8 @@ class _HomeState extends State<Home> {
                                                     top: 5),
                                                 height: 20,
                                                 child: Text(
-                                                  locale.locale == 'ar'
+                                                  Get.locale!.languageCode ==
+                                                          'ar'
                                                       ? category.titleAr
                                                       : category.titleEn,
                                                   overflow:
@@ -301,7 +305,7 @@ class _HomeState extends State<Home> {
                           }
                           return SizedBox(
                             height: 100,
-                            width: dWidth,
+                            width: Get.width,
                             child: ListView.builder(
                               itemCount: 5,
                               scrollDirection: Axis.horizontal,

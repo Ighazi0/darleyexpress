@@ -1,13 +1,13 @@
-// ignore_for_file: use_build_context_synchronously
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/user_model.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/route_manager.dart';
 
 class AddressDetails extends StatefulWidget {
   const AddressDetails({super.key, required this.address, required this.index});
@@ -90,7 +90,7 @@ class _AddressDetailsState extends State<AddressDetails> {
     setState(() {
       loading = false;
     });
-    Navigator.pop(context);
+    Get.back();
   }
 
   @override
@@ -228,7 +228,7 @@ class _AddressDetailsState extends State<AddressDetails> {
                           });
                           await auth.getUserData();
 
-                          Navigator.pop(context);
+                          Get.back();
                         },
                         child: Text(
                           'makeDefualt'.tr(context),

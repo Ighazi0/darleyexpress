@@ -37,11 +37,10 @@ class _CouponDetailsState extends State<CouponDetails> {
     var id = DateTime.now().millisecondsSinceEpoch.toString();
 
     if (widget.coupon.id.isEmpty) {
-      final link = await staticFunctions.generateLink(id, 'coupon');
       await firestore.collection('coupons').doc(id).set({
         'id': id,
         'timestamp': DateTime.now().toIso8601String(),
-        'link': link,
+        'link': '',
         'titleAr': titleAr.text,
         'titleEn': titleEn.text,
         'descriptionAr': descriptionAr.text,

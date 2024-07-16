@@ -42,24 +42,29 @@ class _WebViewerState extends State<WebViewer> {
             });
           },
           onUrlChange: (UrlChange change) async {
-            // print('object2' + change.url.toString());
-            if (change.url!
-                .startsWith('https://ipg.comtrust.ae/e/nvoice/Receipt?n=')) {
-              time = Timer.periodic(const Duration(seconds: 1), (timer) {
-                Future future = controller
-                    .runJavaScriptReturningResult("document.body.innerText");
-                future.then((data) {
-                  String text = Platform.isIOS
-                      ? data.toString()
-                      : jsonDecode(data).toString();
-                  if (text.contains('Invoice ID')) {
-                    userCubit.changeDone(text.contains('Successful'));
+            print(change.url);
+            // if (change.url!
+            //     .contains('https://uae.paymob.com/api/acceptance/post_pay')) {
 
-                    Navigator.pop(context);
-                  }
-                });
-              });
-            }
+            // time = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+            Future future = controller
+                .runJavaScriptReturningResult("document.body.innerText");
+            future.then((data) {
+              String text = Platform.isIOS
+                  ? data.toString()
+                  : jsonDecode(data).toString();
+              print(text);
+              if (text.contains('Successful')) {
+                print('object');
+                userCubit.changeDone(true);
+
+                Navigator.pop(context);
+              }
+            });
+            // });
+            // }
+            print(
+                '================================================================');
           },
         ),
       )

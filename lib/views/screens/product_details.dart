@@ -1,11 +1,12 @@
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/full_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:darleyexpress/views/widgets/network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({super.key, required this.product});
@@ -40,10 +41,10 @@ class _ProductDetailsState extends State<ProductDetails> {
           child: widget.product.stock == 0
               ? Align(
                   child: Text(
-                    'out'.tr(context),
+                    'out'.tr,
                     style: TextStyle(
                         fontSize: 20,
-                        color: primaryColor,
+                        color: appConstant.primaryColor,
                         fontWeight: FontWeight.w500),
                   ),
                 )
@@ -52,12 +53,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                   children: [
                     Column(
                       children: [
-                        Text('total'.tr(context)),
+                        Text('total'.tr),
                         const SizedBox(
                           height: 5,
                         ),
                         Text(
-                          '${'AED'.tr(context)} ${(count * widget.product.price).toStringAsFixed(2)}',
+                          '${'AED'.tr} ${(count * widget.product.price).toStringAsFixed(2)}',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -91,7 +92,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: primaryColor,
+                                color: appConstant.primaryColor,
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(10))),
                             child: const Icon(
@@ -121,7 +122,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   },
                   child: Icon(
                     Icons.arrow_back,
-                    color: primaryColor,
+                    color: appConstant.primaryColor,
                     size: 20,
                   ),
                 ),
@@ -141,7 +142,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     },
                     child: Icon(
                       Icons.ios_share,
-                      color: primaryColor,
+                      color: appConstant.primaryColor,
                       size: 20,
                     ),
                   ),
@@ -220,7 +221,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               url: widget.product.media![index],
                               h: 250,
                               fit: BoxFit.none,
-                              w: dWidth,
+                              w: Get.width,
                             ),
                           )),
                   Positioned(
@@ -269,7 +270,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               Row(
                 children: [
                   Text(
-                    '${'AED'.tr(context)} ${widget.product.price.toStringAsFixed(2)}',
+                    '${'AED'.tr} ${widget.product.price.toStringAsFixed(2)}',
                     style: TextStyle(
                         fontSize: 18,
                         decoration: widget.product.discount != 0
@@ -281,7 +282,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                   if (widget.product.discount != 0)
                     Text(
-                      '${'AED'.tr(context)} ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
+                      '${'AED'.tr} ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
                       style: const TextStyle(fontSize: 18),
                     ),
                 ],

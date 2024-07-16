@@ -1,6 +1,6 @@
-import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class EditText extends StatefulWidget {
   const EditText(
@@ -34,13 +34,13 @@ class _EditTextState extends State<EditText> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
           child: Text(
-            widget.title.tr(context),
+            widget.title.tr,
           ),
         ),
         TextFormField(
             keyboardType: widget.number ? TextInputType.number : null,
             obscureText: !showPass && widget.secure,
-            cursorColor: primaryColor,
+            cursorColor: appConstant.primaryColor,
             onFieldSubmitted: (value) => widget.function(),
             decoration: InputDecoration(
                 hintText: widget.hint,
@@ -53,7 +53,7 @@ class _EditTextState extends State<EditText> {
                         },
                         icon: Icon(
                           showPass ? Icons.visibility : Icons.visibility_off,
-                          color: primaryColor,
+                          color: appConstant.primaryColor,
                         ))
                     : null,
                 fillColor: Colors.grey.shade300,

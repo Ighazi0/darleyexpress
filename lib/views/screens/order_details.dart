@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/order_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/product_details.dart';
@@ -8,7 +8,7 @@ import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:darleyexpress/views/widgets/bottom_sheet_status.dart';
 import 'package:darleyexpress/views/widgets/review_bottom_sheet.dart';
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class OrderDetails extends StatefulWidget {
@@ -91,9 +91,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('${'subtotal'.tr(context)}:'),
+                    Text('${'subtotal'.tr}:'),
                     Text(
-                      '${'AED'.tr(context)} ${order.total.toStringAsFixed(2)}',
+                      '${'AED'.tr} ${order.total.toStringAsFixed(2)}',
                     ),
                   ],
                 ),
@@ -103,9 +103,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('${'deliveryFee'.tr(context)}:'),
+                    Text('${'deliveryFee'.tr}:'),
                     Text(
-                      '${'AED'.tr(context)} ${order.delivery}',
+                      '${'AED'.tr} ${order.delivery}',
                     ),
                   ],
                 ),
@@ -115,7 +115,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('${'discount'.tr(context)}:'),
+                    Text('${'discount'.tr}:'),
                     Text(
                       '${order.discount}%',
                     ),
@@ -130,9 +130,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('${'total'.tr(context)}:'),
+                    Text('${'total'.tr}:'),
                     Text(
-                      '${'AED'.tr(context)} ${(order.total - (order.total * (order.discount / 100)) + order.delivery).toStringAsFixed(2)}',
+                      '${'AED'.tr} ${(order.total - (order.total * (order.discount / 100)) + order.delivery).toStringAsFixed(2)}',
                     ),
                   ],
                 ),
@@ -146,44 +146,35 @@ class _OrderDetailsState extends State<OrderDetails> {
           right: 15,
         ),
         child: RefreshIndicator(
-          color: primaryColor,
+          color: appConstant.primaryColor,
           onRefresh: () async {
             fetch();
           },
           child: ListView(children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('orderNumber'.tr(context)),
-                Text(order.number.toString())
-              ],
+              children: [Text('orderNumber'.tr), Text(order.number.toString())],
             ),
             const SizedBox(
               height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text('name'.tr(context)), Text(order.name)],
+              children: [Text('name'.tr), Text(order.name)],
             ),
             const SizedBox(
               height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('phone'.tr(context)),
-                Text(order.addressData!.phone)
-              ],
+              children: [Text('phone'.tr), Text(order.addressData!.phone)],
             ),
             const SizedBox(
               height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('address'.tr(context)),
-                Text(order.addressData!.address)
-              ],
+              children: [Text('address'.tr), Text(order.addressData!.address)],
             ),
             const SizedBox(
               height: 10,
@@ -191,7 +182,7 @@ class _OrderDetailsState extends State<OrderDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('orderT&D'.tr(context)),
+                Text('orderT&D'.tr),
                 Text(DateFormat('dd/MM/yyyy hh:mm a').format(order.timestamp!))
               ],
             ),
@@ -200,16 +191,13 @@ class _OrderDetailsState extends State<OrderDetails> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('status'.tr(context)),
-                Text(order.status.tr(context))
-              ],
+              children: [Text('status'.tr), Text(order.status.tr)],
             ),
             const Divider(
               color: Colors.grey,
             ),
             Text(
-              'orderList'.tr(context),
+              'orderList'.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             ListView.separated(
@@ -246,7 +234,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     });
                   },
                   title: Text(
-                    locale.locale == 'ar'
+                    Get.locale!.languageCode == 'ar'
                         ? orderList.titleAr
                         : orderList.titleEn,
                     overflow: TextOverflow.ellipsis,
@@ -259,7 +247,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                         height: 3,
                       ),
                       Text(
-                        '${'AED'.tr(context)} ${orderList.price}',
+                        '${'AED'.tr} ${orderList.price}',
                         style: TextStyle(
                             decoration: orderList.discount != 0
                                 ? TextDecoration.lineThrough
@@ -272,7 +260,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ),
                       if (orderList.discount != 0)
                         Text(
-                          '${'AED'.tr(context)} ${(orderList.price - (orderList.price * (orderList.discount / 100))).toStringAsFixed(2)}',
+                          '${'AED'.tr} ${(orderList.price - (orderList.price * (orderList.discount / 100))).toStringAsFixed(2)}',
                         ),
                     ],
                   ),

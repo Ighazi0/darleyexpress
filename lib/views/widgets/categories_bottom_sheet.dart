@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/views/screens/category_screen.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,8 @@ class _BottomSheetCategoriesState extends State<BottomSheetCategories> {
                                 height: 75,
                                 width: 75,
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: primaryColor),
+                                  border: Border.all(
+                                      color: appConstant.primaryColor),
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(100)),
                                 ),

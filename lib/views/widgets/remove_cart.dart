@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/counter.dart';
@@ -122,7 +123,7 @@ class _BottomSheetRemoveCartState extends State<BottomSheetRemoveCart> {
                   },
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(25))),
-                  color: primaryColor,
+                  color: appConstant.primaryColor,
                   child: const Text(
                     'Remove',
                     style: TextStyle(fontSize: 18, color: Colors.white),

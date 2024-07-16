@@ -1,11 +1,12 @@
-import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/widgets/product_tile.dart';
 import 'package:darleyexpress/views/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:get/route_manager.dart';
 
 class WishList extends StatefulWidget {
   const WishList({super.key});
@@ -20,13 +21,13 @@ class _WishListState extends State<WishList> {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         return Container(
-            height: dHeight,
-            width: dWidth,
+            height: Get.height,
+            width: Get.width,
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
               child: RefreshIndicator(
-                color: primaryColor,
+                color: appConstant.primaryColor,
                 onRefresh: () async {
                   setState(() {});
                 },
@@ -53,7 +54,7 @@ class _WishListState extends State<WishList> {
                                 height: 10,
                               ),
                               Text(
-                                'noFavorites'.tr(context),
+                                'noFavorites'.tr,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w500),
                               )

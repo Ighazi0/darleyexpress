@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/views/screens/category_details.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
@@ -35,7 +35,7 @@ class _AdminCategoriesState extends State<AdminCategories> {
         }
       }),
       body: RefreshIndicator(
-        color: primaryColor,
+        color: appConstant.primaryColor,
         onRefresh: () async {
           setState(() {});
         },

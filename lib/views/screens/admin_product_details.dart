@@ -4,12 +4,14 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:darleyexpress/views/widgets/category_picker_bottom_sheet.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:image_pickers/image_pickers.dart';
 
 class AdminProductDetails extends StatefulWidget {
@@ -106,15 +108,13 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
     }
 
     if (widget.product.id.isEmpty) {
-      final link = await staticFunctions.generateLink(
-          id.millisecondsSinceEpoch.toString(), 'product');
       await firestore
           .collection('products')
           .doc(id.millisecondsSinceEpoch.toString())
           .set({
         'id': id.millisecondsSinceEpoch.toString(),
         'timestamp': id,
-        'link': link,
+        'link': '',
         'titleAr': tar.text,
         'titleEn': ten.text,
         'descriptionAr': dar.text,
@@ -154,7 +154,7 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
       showGif: false,
       showCamera: true,
       selectCount: 5 - selectedImages.length,
-      uiConfig: UIConfig(uiThemeColor: primaryColor),
+      uiConfig: UIConfig(uiThemeColor: appConstant.primaryColor),
     );
 
     for (var element in listImagePaths) {
@@ -317,7 +317,7 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                                 0.9);
                           },
                           child: Container(
-                            width: dWidth,
+                            width: Get.width,
                             margin: const EdgeInsets.only(top: 10),
                             padding: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
@@ -355,7 +355,7 @@ class _AdminProductDetailsState extends State<AdminProductDetails> {
                                 0.9);
                           },
                           child: Container(
-                            width: dWidth,
+                            width: Get.width,
                             margin: const EdgeInsets.only(top: 10),
                             padding: const EdgeInsets.all(15),
                             decoration: BoxDecoration(

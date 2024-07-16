@@ -1,10 +1,9 @@
-import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/order_model.dart';
 import 'package:darleyexpress/views/screens/order_details.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -20,10 +19,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
     return Scaffold(
       appBar: AppBarCustom(
         action: const {},
-        title: 'myOrders'.tr(context),
+        title: 'myOrders'.tr,
       ),
       body: RefreshIndicator(
-        color: primaryColor,
+        color: appConstant.primaryColor,
         onRefresh: () async {
           setState(() {});
         },
@@ -71,10 +70,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             ));
                         setState(() {});
                       },
-                      title: Text('${'orderNo'.tr(context)}#${order.number}'),
-                      subtitle: Text(
-                          DateFormat('dd/MM/yyyy hh:mm a', locale.locale)
-                              .format(order.timestamp!)),
+                      title: Text('${'orderNo'.tr}#${order.number}'),
+                      subtitle: Text(DateFormat(
+                              'dd/MM/yyyy hh:mm a', Get.locale!.languageCode)
+                          .format(order.timestamp!)),
                       trailing: Icon(
                         order.status == 'inProgress'
                             ? Icons.pending

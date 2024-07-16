@@ -1,11 +1,11 @@
-// ignore_for_file: use_build_context_synchronously
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 class BottomSheetForgot extends StatefulWidget {
   const BottomSheetForgot({super.key});
@@ -28,8 +28,8 @@ class _BottomSheetForgotState extends State<BottomSheetForgot> {
         loading = true;
       });
       await firebaseAuth.sendPasswordResetEmail(email: auth.email.text);
-      Navigator.of(context).pop();
-      Fluttertoast.showToast(msg: 'passwordSent'.tr(context));
+      Get.back();
+      Fluttertoast.showToast(msg: 'passwordSent'.tr);
     } on FirebaseAuthException catch (e) {
       setState(() {
         loading = false;
@@ -50,7 +50,7 @@ class _BottomSheetForgotState extends State<BottomSheetForgot> {
           ),
           Center(
             child: Text(
-              'resetPassword'.tr(context),
+              'resetPassword'.tr,
               style: const TextStyle(fontSize: 25),
             ),
           ),
@@ -63,7 +63,7 @@ class _BottomSheetForgotState extends State<BottomSheetForgot> {
                 controller: auth.email,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'pleaseEmail'.tr(context);
+                    return 'pleaseEmail'.tr;
                   }
                   return null;
                 },
@@ -80,9 +80,9 @@ class _BottomSheetForgotState extends State<BottomSheetForgot> {
                     },
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(25))),
-                    color: primaryColor,
+                    color: appConstant.primaryColor,
                     child: Text(
-                      'submit'.tr(context),
+                      'submit'.tr,
                       style: const TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),

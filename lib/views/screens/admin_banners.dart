@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/banner_model.dart';
 import 'package:darleyexpress/views/screens/banner_details.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:darleyexpress/views/widgets/shimmer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 class AdminBanners extends StatefulWidget {
   const AdminBanners({super.key});
@@ -37,7 +38,7 @@ class _AdminBannersState extends State<AdminBanners> {
         },
       ),
       body: RefreshIndicator(
-        color: primaryColor,
+        color: appConstant.primaryColor,
         onRefresh: () async {
           setState(() {});
         },
@@ -100,7 +101,7 @@ class _AdminBannersState extends State<AdminBanners> {
                                       children: [
                                         SizedBox(
                                           height: 200,
-                                          width: dWidth,
+                                          width: Get.width,
                                           child: ClipRRect(
                                             borderRadius:
                                                 const BorderRadius.all(
@@ -112,7 +113,7 @@ class _AdminBannersState extends State<AdminBanners> {
                                                   Shimmers(
                                                       child: Container(
                                                 height: 175,
-                                                width: dWidth,
+                                                width: Get.width,
                                                 color: Colors.orangeAccent,
                                               )),
                                             ),

@@ -1,8 +1,8 @@
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -10,8 +10,8 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: dWidth,
-      height: dHeight,
+      width: Get.width,
+      height: Get.height,
       color: Colors.white,
       child: Column(
         children: [
@@ -24,7 +24,7 @@ class Profile extends StatelessWidget {
           if (auth.userData.uid.isNotEmpty)
             ListTile(
               title: Text(
-                'myOrders'.tr(context),
+                'myOrders'.tr,
               ),
               onTap: () {
                 Navigator.pushNamed(context, 'orders');
@@ -34,7 +34,7 @@ class Profile extends StatelessWidget {
           if (auth.userData.uid.isNotEmpty)
             ListTile(
               title: Text(
-                'manageAdd'.tr(context),
+                'manageAdd'.tr,
               ),
               onTap: () {
                 Navigator.pushNamed(context, 'address');
@@ -44,7 +44,7 @@ class Profile extends StatelessWidget {
           if (auth.userData.uid.isNotEmpty)
             ListTile(
               title: Text(
-                'paymentMethod'.tr(context),
+                'paymentMethod'.tr,
               ),
               onTap: () {
                 Navigator.pushNamed(context, 'payment');
@@ -53,7 +53,7 @@ class Profile extends StatelessWidget {
             ),
           ListTile(
             title: Text(
-              'settings'.tr(context),
+              'settings'.tr,
             ),
             onTap: () {
               Navigator.pushNamed(context, 'settings');
@@ -64,7 +64,7 @@ class Profile extends StatelessWidget {
           ),
           ListTile(
             title: Text(
-              'help'.tr(context),
+              'help'.tr,
             ),
             onTap: () {
               HapticFeedback.lightImpact();
@@ -81,7 +81,7 @@ class Profile extends StatelessWidget {
           ),
           ListTile(
             title: Text(
-              'contactUs'.tr(context),
+              'contactUs'.tr,
             ),
             onTap: () {
               staticFunctions.urlLauncher(Uri.parse('tel:+1234567890'));
@@ -96,9 +96,7 @@ class Profile extends StatelessWidget {
               color: Colors.red,
             ),
             title: Text(
-              auth.userData.uid.isNotEmpty
-                  ? 'logOut'.tr(context)
-                  : 'signIn'.tr(context),
+              auth.userData.uid.isNotEmpty ? 'logOut'.tr : 'signIn'.tr,
               style: const TextStyle(color: Colors.red),
             ),
             onTap: () {

@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/sub_category_screen.dart';
@@ -8,6 +7,7 @@ import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:darleyexpress/views/widgets/product_tile.dart';
 import 'package:darleyexpress/views/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key, required this.category});
@@ -22,13 +22,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarCustom(
-        title: locale.locale == 'ar'
+        title: Get.locale!.languageCode == 'ar'
             ? widget.category.titleAr
             : widget.category.titleEn,
         action: const {},
       ),
       body: RefreshIndicator(
-        color: primaryColor,
+        color: appConstant.primaryColor,
         onRefresh: () async {
           setState(() {});
         },
@@ -53,7 +53,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   }
                   return SizedBox(
                     height: 100,
-                    width: dWidth,
+                    width: Get.width,
                     child: ListView.builder(
                         itemCount: data.length,
                         scrollDirection: Axis.horizontal,
@@ -80,7 +80,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                       height: 75,
                                       width: 75,
                                       decoration: BoxDecoration(
-                                        border: Border.all(color: primaryColor),
+                                        border: Border.all(
+                                            color: appConstant.primaryColor),
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(100)),
                                       ),
@@ -97,7 +98,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                       margin: const EdgeInsets.only(top: 5),
                                       height: 20,
                                       child: Text(
-                                        locale.locale == 'ar'
+                                        Get.locale!.languageCode == 'ar'
                                             ? category.titleAr
                                             : category.titleEn,
                                         overflow: TextOverflow.ellipsis,
@@ -113,7 +114,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 }
                 return SizedBox(
                   height: 100,
-                  width: dWidth,
+                  width: Get.width,
                   child: ListView.builder(
                     itemCount: 5,
                     scrollDirection: Axis.horizontal,
@@ -164,7 +165,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               height: 10,
                             ),
                             Text(
-                              'noProducts'.tr(context),
+                              'noProducts'.tr,
                               style:
                                   const TextStyle(fontWeight: FontWeight.w500),
                             )

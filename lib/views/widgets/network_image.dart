@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +27,7 @@ class NImage extends StatelessWidget {
         progressIndicatorBuilder: (context, url, progress) => Shimmers(
               child: Container(
                 height: h,
-                color: primaryColor,
+                color: appConstant.primaryColor,
               ),
             ));
   }

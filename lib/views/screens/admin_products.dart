@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:csv/csv.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/admin_product_details.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
@@ -43,8 +43,7 @@ class _AdminProductsState extends State<AdminProducts> {
         for (int i = 1; i < csvData.length; i++) {
           var data = csvData[i].join(', ');
           var id = DateTime.now();
-          final link = await staticFunctions.generateLink(
-              id.millisecondsSinceEpoch.toString(), 'product');
+
           try {
             await firestore
                 .collection('products')
@@ -52,7 +51,7 @@ class _AdminProductsState extends State<AdminProducts> {
                 .set({
               'id': id.millisecondsSinceEpoch.toString(),
               'timestamp': id.toIso8601String(),
-              'link': link,
+              'link': '',
               'titleEn': data.split(',')[0].trim(),
               'titleAr': data.split(',')[1].trim(),
               'price': double.parse(data.split(',')[2].trim()),
@@ -84,7 +83,7 @@ class _AdminProductsState extends State<AdminProducts> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: primaryColor,
+        backgroundColor: appConstant.primaryColor,
         onPressed: () {
           importExcel();
         },
@@ -105,7 +104,7 @@ class _AdminProductsState extends State<AdminProducts> {
         }
       }),
       body: RefreshIndicator(
-        color: primaryColor,
+        color: appConstant.primaryColor,
         onRefresh: () async {
           setState(() {});
         },

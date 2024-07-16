@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/views/screens/product_details.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
@@ -11,6 +11,7 @@ import 'package:darleyexpress/views/widgets/remove_cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -28,7 +29,7 @@ class _CartState extends State<Cart> {
             bottomNavigationBar: userCubit.cartList.isEmpty
                 ? null
                 : Container(
-                    width: dWidth,
+                    width: Get.width,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     height: 65,
                     decoration: const BoxDecoration(
@@ -51,10 +52,9 @@ class _CartState extends State<Cart> {
                                   const EdgeInsets.symmetric(horizontal: 20),
                               onPressed: () {
                                 if (auth.userData.uid.isEmpty) {
-                                  navigatorKey.currentState
-                                      ?.pushReplacementNamed('register');
-                                  Fluttertoast.showToast(
-                                      msg: 'pleaseFirst'.tr(context));
+                                  Get.offNamed('register');
+
+                                  Fluttertoast.showToast(msg: 'pleaseFirst'.tr);
                                 } else {
                                   Navigator.pushNamed(context, 'checkout');
                                 }
@@ -63,15 +63,15 @@ class _CartState extends State<Cart> {
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20))),
-                              color: primaryColor,
+                              color: appConstant.primaryColor,
                               textColor: Colors.white,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                      '${'AED'.tr(context)} ${(userCubit.totalCartPrice()).toStringAsFixed(2)}'),
-                                  Text('CHECKOUT'.tr(context)),
+                                      '${'AED'.tr} ${(userCubit.totalCartPrice()).toStringAsFixed(2)}'),
+                                  Text('CHECKOUT'.tr),
                                 ],
                               ),
                             ),
@@ -79,8 +79,8 @@ class _CartState extends State<Cart> {
                         ]),
                   ),
             body: Container(
-                width: dWidth,
-                height: dHeight,
+                width: Get.width,
+                height: Get.height,
                 color: Colors.white,
                 child: Center(
                   child: userCubit.cartList.isEmpty
@@ -95,7 +95,7 @@ class _CartState extends State<Cart> {
                               height: 10,
                             ),
                             Text(
-                              'emptyCart'.tr(context),
+                              'emptyCart'.tr,
                               style:
                                   const TextStyle(fontWeight: FontWeight.w500),
                             )
@@ -157,7 +157,7 @@ class _CartState extends State<Cart> {
                                     ),
                                   ),
                                   title: Text(
-                                    locale.locale == 'ar'
+                                    Get.locale!.languageCode == 'ar'
                                         ? cart.productData!.titleAr
                                         : cart.productData!.titleEn,
                                     overflow: TextOverflow.ellipsis,
@@ -177,7 +177,7 @@ class _CartState extends State<Cart> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            '${'AED'.tr(context)} ${cart.productData!.price}',
+                                            '${'AED'.tr} ${cart.productData!.price}',
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 decoration: cart.productData!
@@ -217,7 +217,7 @@ class _CartState extends State<Cart> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 3),
                                           child: Text(
-                                            '${'AED'.tr(context)} ${(cart.productData!.price - (cart.productData!.price * (cart.productData!.discount / 100))).toStringAsFixed(2)}',
+                                            '${'AED'.tr} ${(cart.productData!.price - (cart.productData!.price * (cart.productData!.discount / 100))).toStringAsFixed(2)}',
                                           ),
                                         ),
                                     ],

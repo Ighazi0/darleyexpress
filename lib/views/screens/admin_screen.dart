@@ -1,4 +1,5 @@
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/order_model.dart';
 import 'package:darleyexpress/views/widgets/admin_drawer.dart';
 import 'package:darleyexpress/views/widgets/shimmer.dart';
@@ -37,7 +38,7 @@ class _AdminScreenState extends State<AdminScreen> {
         body: Padding(
           padding: const EdgeInsets.all(20),
           child: RefreshIndicator(
-            color: primaryColor,
+            color: appConstant.primaryColor,
             onRefresh: () async {
               setState(() {});
             },

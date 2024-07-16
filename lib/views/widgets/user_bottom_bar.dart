@@ -1,10 +1,11 @@
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/icon_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 class UserBottomBar extends StatefulWidget {
   const UserBottomBar({super.key});
@@ -56,7 +57,7 @@ class _UserBottomBarState extends State<UserBottomBar> {
                                               bottomLeft: Radius.circular(200),
                                               bottomRight: Radius.circular(200),
                                             ),
-                                            color: primaryColor),
+                                            color: appConstant.primaryColor),
                                         width: 20,
                                         height: userCubit.selectedIndex == index
                                             ? 10
@@ -76,7 +77,7 @@ class _UserBottomBarState extends State<UserBottomBar> {
                                   Text(
                                     staticData.bottomBar[index].keys.first
                                         .toString()
-                                        .tr(context),
+                                        .tr,
                                     style: TextStyle(
                                       color: userCubit.selectedIndex == index
                                           ? Colors.orangeAccent

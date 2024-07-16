@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/user_model.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -71,7 +72,7 @@ class AuthCubit extends Cubit<AuthState> {
     _googleSignIn.signOut();
     userData = UserModel(address: []);
     await firebaseAuth.signOut();
-    navigatorKey.currentState?.pushReplacementNamed('register');
+    Get.toNamed('register');
   }
 
   checkUser() async {
@@ -111,13 +112,13 @@ class AuthCubit extends Cubit<AuthState> {
 
   navigator() async {
     if (firebaseAuth.currentUser?.uid == staticData.adminUID) {
-      navigatorKey.currentState?.pushReplacementNamed('admin');
+      Get.offNamed('admin');
     } else {
       if (userData.uid.isEmpty) {
-        navigatorKey.currentState?.pushReplacementNamed('register');
+        Get.offNamed('register');
       } else {
         requestPermission();
-        navigatorKey.currentState?.pushReplacementNamed('user');
+        Get.offNamed('user');
       }
     }
   }
@@ -223,12 +224,6 @@ class AuthCubit extends Cubit<AuthState> {
           .get()
           .then((value) async {
         if (!value.exists) {
-          var link = await staticFunctions.generateLink(
-              firebaseAuth.currentUser!.uid, 'profile');
-          data.update(
-            'link',
-            (v) => link,
-          );
           firestore
               .collection('users')
               .doc(firebaseAuth.currentUser!.uid)
@@ -239,12 +234,6 @@ class AuthCubit extends Cubit<AuthState> {
         }
       });
     } else {
-      var link = await staticFunctions.generateLink(
-          firebaseAuth.currentUser!.uid, 'profile');
-      data.update(
-        'link',
-        (v) => link,
-      );
       firestore
           .collection('users')
           .doc(firebaseAuth.currentUser!.uid)
@@ -269,9 +258,9 @@ class AuthCubit extends Cubit<AuthState> {
       password.clear();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        Fluttertoast.showToast(msg: e.code.tr(context));
+        Fluttertoast.showToast(msg: e.code.tr);
       }
-      Fluttertoast.showToast(msg: 'invalidCredentials'.tr(context));
+      Fluttertoast.showToast(msg: 'invalidCredentials'.tr);
     }
     emit(AuthInitial());
   }
@@ -283,18 +272,7 @@ class AuthCubit extends Cubit<AuthState> {
       await createUser(name.text, '', email.text.trim(), false);
       navigator();
     } else {
-      snackbarKey.currentState?.showSnackBar(const SnackBar(
-        width: 300,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        content: Center(
-            child: Text(
-          'Please read the Terms & Conditions and agree with it',
-          style: TextStyle(fontSize: 18),
-        )),
-        behavior: SnackBarBehavior.floating,
-      ));
+      Get.snackbar('', 'Please read the Terms & Conditions and agree with it');
     }
   }
 

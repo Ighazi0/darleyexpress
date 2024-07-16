@@ -1,5 +1,4 @@
 import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/product_details.dart';
@@ -9,6 +8,7 @@ import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:darleyexpress/views/widgets/network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 class ProductTile extends StatefulWidget {
@@ -40,7 +40,7 @@ class _ProductTileState extends State<ProductTile> {
                     border: Border.all(width: 0.5),
                     borderRadius: const BorderRadius.all(Radius.circular(20))),
                 margin: const EdgeInsets.only(bottom: 5),
-                height: 200,
+                height: 190,
                 child: GridTile(
                     header: Align(
                       alignment: Alignment.centerRight,
@@ -61,23 +61,27 @@ class _ProductTileState extends State<ProductTile> {
                                         .snapshots(),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
-                                        ProductModel product =
-                                            ProductModel.fromJson(
-                                                snapshot.data!.data() as Map);
-                                        return IconButton(
-                                          icon: Icon(
-                                            product.favorites!
-                                                    .contains(auth.userData.uid)
-                                                ? Icons.favorite
-                                                : Icons.favorite_border,
-                                            color: Colors.red,
-                                            size: 18,
-                                          ),
-                                          onPressed: () async {
-                                            await userCubit
-                                                .favoriteStatus(product);
-                                          },
-                                        );
+                                        if (snapshot.data!.exists) {
+                                          ProductModel product =
+                                              ProductModel.fromJson(
+                                                  snapshot.data!.data() as Map);
+                                          return IconButton(
+                                            icon: Icon(
+                                              product.favorites!.contains(
+                                                      auth.userData.uid)
+                                                  ? Icons.favorite
+                                                  : Icons.favorite_border,
+                                              color: Colors.red,
+                                              size: 18,
+                                            ),
+                                            onPressed: () async {
+                                              await userCubit
+                                                  .favoriteStatus(product);
+                                            },
+                                          );
+                                        } else {
+                                          return const SizedBox();
+                                        }
                                       }
 
                                       return IconButton(
@@ -186,7 +190,7 @@ class _ProductTileState extends State<ProductTile> {
                               child: NImage(
                                 url: widget.product.media![0],
                                 h: 100,
-                                w: dWidth,
+                                w: Get.width,
                               ))
                           : const SizedBox(),
                     )),
@@ -194,7 +198,7 @@ class _ProductTileState extends State<ProductTile> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 5),
                 child: Text(
-                  locale.locale == 'ar'
+                  Get.locale!.languageCode == 'ar'
                       ? widget.product.titleAr
                       : widget.product.titleEn,
                   maxLines: 1,

@@ -1,5 +1,5 @@
-import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/widgets/cart.dart';
 import 'package:darleyexpress/views/widgets/home.dart';
 import 'package:darleyexpress/views/widgets/profile.dart';
@@ -24,8 +24,9 @@ class _UserScreenState extends State<UserScreen> {
       builder: (context, state) {
         userCubit = BlocProvider.of<UserCubit>(context);
         return Scaffold(
-            backgroundColor:
-                userCubit.selectedIndex == 0 ? primaryColor : Colors.white,
+            backgroundColor: userCubit.selectedIndex == 0
+                ? appConstant.primaryColor
+                : Colors.white,
             bottomNavigationBar: const UserBottomBar(),
             body: SafeArea(
               child: IndexedStack(

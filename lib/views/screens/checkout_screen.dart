@@ -1,18 +1,20 @@
-// ignore_for_file: use_build_context_synchronously
+import 'dart:convert';
+import 'package:darleyexpress/get_initial.dart';
+import 'package:darleyexpress/models/order_model.dart';
+import 'package:darleyexpress/models/payment_model.dart';
+import 'package:darleyexpress/views/screens/order_details.dart';
+import 'package:darleyexpress/views/widgets/web_viewer.dart';
+import 'package:get/route_manager.dart';
+import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/models/coupon_model.dart';
-import 'package:darleyexpress/models/order_model.dart';
-import 'package:darleyexpress/views/screens/order_details.dart';
 import 'package:darleyexpress/views/screens/product_details.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
-import 'package:darleyexpress/views/widgets/web_viewer.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -29,59 +31,116 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   TextEditingController code = TextEditingController();
   String invoiceID = '';
 
-  Future<bool> makePayment(number) async {
-    String url = '';
-    var headers = {
-      'Accept': 'application/json, text/plain, */*',
-      'Accept-Language': 'en-US,en;q=0.9',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
-      'Cookie': 'ASP.NET_SessionId=lzepj3eheeitu2yz5azhfcb2',
-      'Origin': 'https://ipg.comtrust.ae',
-      'Pragma': 'no-cache',
-      'Referer': 'https://ipg.comtrust.ae/MerchantEx/eInvoice/Generate',
-      'Sec-Fetch-Dest': 'empty',
-      'Sec-Fetch-Mode': 'cors',
-      'Sec-Fetch-Site': 'same-origin',
-    };
-    var datax = FormData.fromMap({
-      'data':
-          '{"Customer":"DARLEYEXPRESSCOMMERC","Store":"0000","Terminal":"0000","OrderID":"${number.toString()}","OrderName":"${auth.userData.name}","OrderInfo":"","Amount":"${userCubit.totalCartPrice()}","PartialPaymentMinAmount":0,"AllowPartialPayment":false,"Currency":"AED","EffectiveStartDateTime":${DateTime.now().toUtc().toIso8601String()},"ExpiryDateTime":"${DateTime.now().add(const Duration(hours: 1)).toUtc().toIso8601String()}","MaxNumberOfInvoices":"","InvoiceType":"Once","CardHolderName":"","CardHolderEmail":"","CardHolderMobile":"","UserName":"DARLEY_Ismail","Password":"Darahaseeb@1991","BatchUploadData":"","MerchantMessage":"","CaptureData":"Auto","RegisterForRecurrence":""}',
-      'Uploadfile': 'undefined',
-      'forceProcess': 'false'
-    });
+  makePayment() async {
+    try {
+      var response = await http.post(
+          Uri.parse('https://uae.paymob.com/api/auth/tokens'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({"username": "522820783", "password": "Dara@1991"}));
 
-    var dio = Dio();
-    var response = await dio.request(
-      'https://ipg.comtrust.ae/MerchantEx/eInvoice/ProcessGenerateEInvoice',
-      options: Options(
-        method: 'POST',
-        headers: headers,
-      ),
-      data: datax,
-    );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var data = PaymentModel.fromMap(jsonDecode(response.body));
+        try {
+          var request = await http.post(
+              Uri.parse('https://uae.paymob.com/api/ecommerce/payment-links'),
+              headers: {
+                'Accept': 'application/json',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Authorization': 'Bearer ${data.token}',
+                'Connection': 'keep-alive',
+                'Cookie':
+                    'AMP_MKTG_af23be78b2=JTdCJTdE; _gid=GA1.2.2131766413.1721143897; _fbp=fb.1.1721143900133.95550378118316238; _clck=yntgz3%7C2%7Cfni%7C0%7C1658; _ga_01BZKJP1C9=GS1.1.1721144088.1.1.1721145052.0.0.0; _clsk=x3dvbe%7C1721145172079%7C2%7C1%7Cp.clarity.ms%2Fcollect; _ga_49H896WYTE=GS1.1.1721143901.1.1.1721145198.32.0.0; _gcl_au=1.1.2077339761.1721143897.1067892984.1721145323.1721145400; _ga_4KK5EDXW9S=GS1.1.1721143897.1.1.1721145405.60.0.0; _gat_gtag_UA_118965717_3=1; _gat_gtag_UA_118965717_6=1; _ga=GA1.1.1301856706.1721143897; _ga_GNFEWL2DL0=GS1.1.1721143900.1.1.1721145405.60.0.0; cto_bundle=J0grs18xNnhDJTJCVkxxcThLajBGJTJCJTJCTlE4eDhzQXBGZjN0WklzSHNibFVxNDhxVnhkUiUyQmpGMnlsNkklMkZxbXZCYVF6M1RoQko3Z0R2N3JYaUVhRlclMkYzTlQlMkZjbTlGa2ZFVWNybWRQU0dCZ01QRmFzaUQwNEdqZnp6aDl3T2xDeXByV09OaVBHRWtzMHpUQTZsS1VNRlhIN1JiNG9JbHY4U25KazR3MkJxNUxaOG85Y0RuZFklMkJta0xONUdJVmh6bHI3NGRudENDT3R1S3FkJTJCc2wxZ2dvSUZCU0JpUHVRJTNEJTNE; AMP_af23be78b2=JTdCJTIyZGV2aWNlSWQlMjIlM0ElMjJlMmFmZWM0Yi1kOTdkLTRiOWMtOGMzZS0xOTU1NjRiNzU2ZTAlMjIlMkMlMjJzZXNzaW9uSWQlMjIlM0ExNzIxMTQzODk3MTE3JTJDJTIyb3B0T3V0JTIyJTNBZmFsc2UlMkMlMjJsYXN0RXZlbnRUaW1lJTIyJTNBMTcyMTE0NTQyMjQzMSUyQyUyMmxhc3RFdmVudElkJTIyJTNBNTglMkMlMjJwYWdlQ291bnRlciUyMiUzQTIzJTdE; _ga_J0QEYYKMTC=GS1.1.1721143897.1.1.1721145422.24.0.0',
+                'Origin': 'https://uae.paymob.com',
+                'Referer': 'https://uae.paymob.com/portal2/en/new-payment-link',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'same-origin',
+                'User-Agent':
+                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+                'sec-ch-ua':
+                    '"Chromium";v="116", "Not)A;Brand";v="24", "Google Chrome";v="116"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"macOS"'
+              },
+              body: {
+                'amount_cents': '100',
+                // (userCubit.totalCartPrice() * 100).toStringAsFixed(2),
+                'full_name': auth.userData.name,
+                'email': auth.userData.email,
+                'phone_number': '+971',
+                'payment_methods': '22632',
+                'payment_link_image': '',
+                'save_selection': 'false',
+                'is_live': 'true'
+              });
 
-    if (response.statusCode == 200) {
-      setState(() {
-        url = response.data['InvoiceURL'];
-        invoiceID = response.data['InvoiceNumber'];
-      });
-
-      if (url.isNotEmpty) {
-        await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WebViewer(
-                url: url,
+          if (request.statusCode == 200 || request.statusCode == 201) {
+            var data2 = PaymentLink.fromJson(jsonDecode(request.body));
+            await Get.to(
+              () => WebViewer(
+                url: data2.clientUrl,
               ),
-            ));
-        return userCubit.done;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
+            );
+          } else {}
+        } catch (e) {
+          //
+        }
+      } else {}
+    } catch (e) {
+      //
     }
+
+    // var headers = {
+    //   'Accept': 'application/json, text/plain, */*',
+    //   'Accept-Language': 'en-US,en;q=0.9',
+    //   'Cache-Control': 'no-cache',
+    //   'Connection': 'keep-alive',
+    //   'Cookie': 'ASP.NET_SessionId=lzepj3eheeitu2yz5azhfcb2',
+    //   'Origin': 'https://ipg.comtrust.ae',
+    //   'Pragma': 'no-cache',
+    //   'Referer': 'https://ipg.comtrust.ae/MerchantEx/eInvoice/Generate',
+    //   'Sec-Fetch-Dest': 'empty',
+    //   'Sec-Fetch-Mode': 'cors',
+    //   'Sec-Fetch-Site': 'same-origin',
+    // };
+    // var datax = FormData.fromMap({
+    //   'data':
+    //       '{"Customer":"DARLEYEXPRESSCOMMERC","Store":"0000","Terminal":"0000","OrderID":"${number.toString()}","OrderName":"${auth.userData.name}","OrderInfo":"","Amount":"${userCubit.totalCartPrice()}","PartialPaymentMinAmount":0,"AllowPartialPayment":false,"Currency":"AED","EffectiveStartDateTime":${DateTime.now().toUtc().toIso8601String()},"ExpiryDateTime":"${DateTime.now().add(const Duration(hours: 1)).toUtc().toIso8601String()}","MaxNumberOfInvoices":"","InvoiceType":"Once","CardHolderName":"","CardHolderEmail":"","CardHolderMobile":"","UserName":"DARLEY_Ismail","Password":"Darahaseeb@1991","BatchUploadData":"","MerchantMessage":"","CaptureData":"Auto","RegisterForRecurrence":""}',
+    //   'Uploadfile': 'undefined',
+    //   'forceProcess': 'false'
+    // });
+
+    // var dio = Dio();
+    // var response = await dio.request(
+    //   'https://ipg.comtrust.ae/MerchantEx/eInvoice/ProcessGenerateEInvoice',
+    //   options: Options(
+    //     method: 'POST',
+    //     headers: headers,
+    //   ),
+    //   data: datax,
+    // );
+
+    // if (response.statusCode == 200) {
+    //   setState(() {
+    //     url = response.data['InvoiceURL'];
+    //     invoiceID = response.data['InvoiceNumber'];
+    //   });
+
+    //   if (url.isNotEmpty) {
+    //     await Navigator.push(
+    //         context,
+    //         MaterialPageRoute(
+    //           builder: (context) => WebViewer(
+    //             url: url,
+    //           ),
+    //         ));
+    //     return userCubit.done;
+    //   } else {
+    //     return false;
+    //   }
+    // } else {
+    //   return false;
+    // }
   }
 
   ordering() async {
@@ -94,73 +153,76 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         .get();
 
     numbers = querySnapshot.docs.first.get('number') + 1;
-    print(numbers);
-    // done = await makePayment(numbers);
 
-    // if (done) {
-    //   userCubit.changeDone(false);
-    //   Fluttertoast.showToast(msg: 'orderPlaced'.tr(context));
+    await makePayment();
 
-    //   for (int i = 0; i < userCubit.cartList.entries.length; i++) {
-    //     await firestore
-    //         .collection('products')
-    //         .doc(userCubit.cartList.entries.toList()[i].key)
-    //         .update({
-    //       'stock': FieldValue.increment(
-    //           -userCubit.cartList.entries.toList()[i].value.count),
-    //       'seller': FieldValue.increment(1)
-    //     });
-    //   }
+    done = userCubit.done;
 
-    //   var data = {
-    //     'number': numbers + 1,
-    //     'uid': firebaseAuth.currentUser!.uid,
-    //     'total': userCubit.totalCartPrice(),
-    //     'discount': couponData.discount,
-    //     'delivery': 25,
-    //     'rated': false,
-    //     'status': 'inProgress',
-    //     'name': auth.userData.name,
-    //     'invoice': invoiceID,
-    //     'timestamp': id.toIso8601String(),
-    //     'addressData': {
-    //       'address': auth.userData.address!.first.address,
-    //       'phone': auth.userData.address!.first.phone,
-    //       'label': auth.userData.address!.first.label,
-    //       'name': auth.userData.address!.first.name,
-    //     },
-    //     // 'walletData': {
-    //     //   'number': CryptLib.instance.encryptPlainTextWithRandomIV(
-    //     //       auth.userData.wallet!.first.number, "number"),
-    //     // },
-    //     'orderList': userCubit.cartList.entries
-    //         .map((e) => {
-    //               'id': e.key,
-    //               'titleEn': e.value.productData!.titleEn,
-    //               'titleAr': e.value.productData!.titleAr,
-    //               'price': e.value.productData!.price,
-    //               'discount': e.value.productData!.discount,
-    //               'media': [e.value.productData!.media!.first],
-    //               'count': e.value.count,
-    //             })
-    //         .toList()
-    //   };
-    //   firestore
-    //       .collection('orders')
-    //       .doc(id.millisecondsSinceEpoch.toString())
-    //       .set(data);
-    //   navigatorKey.currentState?.pushReplacement(MaterialPageRoute(
-    //     builder: (context) => OrderDetails(
-    //         order: OrderModel.fromJson(
-    //             data, id.millisecondsSinceEpoch.toString())),
-    //   ));
-    //   userCubit.clearCart();
-    // } else {
-    //   Fluttertoast.showToast(msg: 'Payment failed');
-    //   setState(() {
-    //     makeOrder = false;
-    //   });
-    // }
+    if (done) {
+      userCubit.changeDone(false);
+      Fluttertoast.showToast(msg: 'orderPlaced'.tr(context));
+
+      for (int i = 0; i < userCubit.cartList.entries.length; i++) {
+        await firestore
+            .collection('products')
+            .doc(userCubit.cartList.entries.toList()[i].key)
+            .update({
+          'stock': FieldValue.increment(
+              -userCubit.cartList.entries.toList()[i].value.count),
+          'seller': FieldValue.increment(1)
+        });
+      }
+
+      var data = {
+        'number': numbers + 1,
+        'uid': firebaseAuth.currentUser!.uid,
+        'total': userCubit.totalCartPrice(),
+        'discount': couponData.discount,
+        'delivery': 25,
+        'rated': false,
+        'status': 'inProgress',
+        'name': auth.userData.name,
+        'invoice': invoiceID,
+        'timestamp': id.toIso8601String(),
+        'addressData': {
+          'address': auth.userData.address!.first.address,
+          'phone': auth.userData.address!.first.phone,
+          'label': auth.userData.address!.first.label,
+          'name': auth.userData.address!.first.name,
+        },
+        // 'walletData': {
+        //   'number': CryptLib.instance.encryptPlainTextWithRandomIV(
+        //       auth.userData.wallet!.first.number, "number"),
+        // },
+        'orderList': userCubit.cartList.entries
+            .map((e) => {
+                  'id': e.key,
+                  'titleEn': e.value.productData!.titleEn,
+                  'titleAr': e.value.productData!.titleAr,
+                  'price': e.value.productData!.price,
+                  'discount': e.value.productData!.discount,
+                  'media': [e.value.productData!.media!.first],
+                  'count': e.value.count,
+                })
+            .toList()
+      };
+      firestore
+          .collection('orders')
+          .doc(id.millisecondsSinceEpoch.toString())
+          .set(data);
+      Get.off(() => MaterialPageRoute(
+            builder: (context) => OrderDetails(
+                order: OrderModel.fromJson(
+                    data, id.millisecondsSinceEpoch.toString())),
+          ));
+
+      userCubit.clearCart();
+    } else {
+      Fluttertoast.showToast(msg: 'Payment failed');
+      setState(() {
+        makeOrder = false;
+      });
+    }
   }
 
   @override
@@ -217,6 +279,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               });
 
                               await ordering();
+                              setState(() {
+                                makeOrder = false;
+                              });
                               // } else {
                               //   staticWidgets.showBottom(context,
                               //       const BottomSheetPayment(), 0.85, 0.9);
@@ -231,7 +296,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           shape: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
-                          color: primaryColor,
+                          color: appConstant.primaryColor,
                           textColor: Colors.white,
                           child: Text('placeOrder'.tr(context)),
                         ),
@@ -272,7 +337,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     contentPadding: EdgeInsets.zero,
                     leading: Icon(
                       Icons.location_on,
-                      color: primaryColor,
+                      color: appConstant.primaryColor,
                     ),
                     title: Text(auth.userData.address!.first.name),
                     subtitle: Text(auth.userData.address!.first.address),
@@ -367,7 +432,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 loading = false;
                               });
                             },
-                            color: primaryColor,
+                            color: appConstant.primaryColor,
                             height: 40,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:

@@ -1,13 +1,12 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/controller/language_controller.dart';
 import 'package:darleyexpress/cubit/auth_cubit.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
@@ -33,9 +32,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               builder: (context, state) {
                 return SwitchListTile(
                   value: auth.notification,
-                  activeColor: primaryColor,
+                  activeColor: appConstant.primaryColor,
                   title: Text(
-                    'notifications'.tr(context),
+                    'notifications'.tr,
                   ),
                   onChanged: (value) {
                     HapticFeedback.lightImpact();
@@ -50,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'password')
               ListTile(
                 title: Text(
-                  'changeEmail'.tr(context),
+                  'changeEmail'.tr,
                 ),
                 onTap: () {},
                 leading: const Icon(Icons.email),
@@ -60,20 +59,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'password')
               ListTile(
                 title: Text(
-                  'changePass'.tr(context),
+                  'changePass'.tr,
                 ),
                 onTap: () {},
                 leading: const Icon(Icons.password),
               ),
           ListTile(
             title: Text(
-              'changeLang'.tr(context),
+              'changeLang'.tr,
             ),
             onTap: () {
-              if (locale.locale == 'ar') {
-                locale.changeLanguage('en');
+              if (Get.locale!.languageCode == 'ar') {
+                Get.find<LanguageController>().changeLanguage('en');
               } else {
-                locale.changeLanguage('ar');
+                Get.find<LanguageController>().changeLanguage('ar');
               }
             },
             leading: const Icon(Icons.language),
@@ -81,7 +80,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           if (auth.userData.uid.isNotEmpty)
             ListTile(
               title: Text(
-                'deleteAccount'.tr(context),
+                'deleteAccount'.tr,
                 style: const TextStyle(color: Colors.red),
               ),
               onTap: () {
@@ -90,12 +89,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   builder: (context) {
                     return AlertDialog(
                       title: Text(
-                        'deleteAccount'.tr(context),
+                        'deleteAccount'.tr,
                       ),
                       actions: [
                         TextButton(
                           child: Text(
-                            'cancel'.tr(context),
+                            'cancel'.tr,
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();
@@ -103,7 +102,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         TextButton(
                           child: Text(
-                            'Delete'.tr(context),
+                            'Delete'.tr,
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();

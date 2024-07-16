@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:flutter/material.dart';
@@ -123,7 +124,7 @@ class _BottomSheetReviewState extends State<BottomSheetReview> {
                   },
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(25))),
-                  color: primaryColor,
+                  color: appConstant.primaryColor,
                   child: Text(
                     'submit'.tr(context),
                     style: const TextStyle(fontSize: 18, color: Colors.white),

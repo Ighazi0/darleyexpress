@@ -2,11 +2,13 @@ import 'dart:io';
 import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/cubit/auth_cubit.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/forgot_bottom_sheet.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -40,7 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 500),
                         child: Text(
-                          signIn ? 'signIn'.tr(context) : 'signUp'.tr(context),
+                          signIn ? 'signIn'.tr : 'signUp'.tr,
                           key: ValueKey<String>(signIn ? 'signIn' : 'signUp'),
                           style: const TextStyle(
                               fontSize: 25, fontWeight: FontWeight.w500),
@@ -53,9 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 500),
                         child: Text(
-                          signIn
-                              ? 'welcomeBack'.tr(context)
-                              : 'fill'.tr(context),
+                          signIn ? 'welcomeBack'.tr : 'fill'.tr,
                           textAlign: TextAlign.center,
                           key:
                               ValueKey<String>(signIn ? 'welcomeBack' : 'fill'),
@@ -70,7 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           controller: auth.name,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'pleaseName'.tr(context);
+                              return 'pleaseName'.tr;
                             }
                             return null;
                           },
@@ -84,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         controller: auth.email,
                         validator: (value) {
                           if (!value!.contains('@') && !value.contains('.')) {
-                            return 'pleaseEmail'.tr(context);
+                            return 'pleaseEmail'.tr;
                           }
                           return null;
                         },
@@ -99,7 +99,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         controller: auth.password,
                         validator: (value) {
                           if (value!.length < 8) {
-                            return 'pleasePassword'.tr(context);
+                            return 'pleasePassword'.tr;
                           }
                           return null;
                         },
@@ -110,15 +110,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                             style: ButtonStyle(
-                                overlayColor: MaterialStateProperty.all(
+                                overlayColor: WidgetStateProperty.all(
                                     Colors.amber.shade50)),
                             onPressed: () {
                               staticWidgets.showBottom(
                                   context, const BottomSheetForgot(), 0.4, 0.5);
                             },
-                            child: Text('forgot'.tr(context),
+                            child: Text('forgot'.tr,
                                 style: TextStyle(
-                                  color: primaryColor,
+                                  color: appConstant.primaryColor,
                                 ))),
                       ),
                     if (!signIn)
@@ -133,24 +133,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 onChanged: (v) {
                                   auth.agreeTerm();
                                 },
-                                activeColor: primaryColor,
+                                activeColor: appConstant.primaryColor,
                               ),
                               Text(
-                                'agree'.tr(context),
+                                'agree'.tr,
                                 style: const TextStyle(fontSize: 16),
                               ),
                               TextButton(
                                   style: ButtonStyle(
-                                      overlayColor: MaterialStateProperty.all(
+                                      overlayColor: WidgetStateProperty.all(
                                           Colors.amber.shade100)),
                                   onPressed: () {
                                     staticFunctions.urlLauncher(Uri.parse(''));
                                   },
                                   child: Text(
-                                    'term'.tr(context),
+                                    'term'.tr,
                                     style: TextStyle(
                                         fontSize: 16,
-                                        color: primaryColor,
+                                        color: appConstant.primaryColor,
                                         decoration: TextDecoration.underline),
                                   ))
                             ],
@@ -159,7 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: state is LoadingState
                           ? const CircularProgressIndicator()
                           : MaterialButton(
-                              minWidth: dWidth,
+                              minWidth: Get.width,
                               height: 50,
                               onPressed: () async {
                                 auth.auth(context);
@@ -167,11 +167,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(25))),
-                              color: primaryColor,
+                              color: appConstant.primaryColor,
                               child: Text(
-                                signIn
-                                    ? 'signIn'.tr(context)
-                                    : 'signUp'.tr(context),
+                                signIn ? 'signIn'.tr : 'signUp'.tr,
                                 style: const TextStyle(
                                     fontSize: 18, color: Colors.white),
                               ),
@@ -191,7 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 thickness: 1,
                               ),
                             ),
-                            Text('or'.tr(context)),
+                            Text('or'.tr),
                             Container(
                               width: 100,
                               margin:
@@ -257,9 +255,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         AnimatedSwitcher(
                           duration: const Duration(milliseconds: 500),
                           child: Text(
-                            signIn
-                                ? 'dontHave'.tr(context)
-                                : 'haveAcc'.tr(context),
+                            signIn ? 'dontHave'.tr : 'haveAcc'.tr,
                             key: ValueKey<String>(
                                 signIn ? 'dontHave' : 'haveAcc'),
                             style: const TextStyle(fontWeight: FontWeight.w400),
@@ -270,18 +266,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             auth.changeStatus();
                           },
                           style: ButtonStyle(
-                              overlayColor: MaterialStateProperty.all(
+                              overlayColor: WidgetStateProperty.all(
                                   Colors.amber.shade50)),
                           child: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 500),
-                            child: Text(
-                                signIn
-                                    ? 'signUp'.tr(context)
-                                    : 'signIn'.tr(context),
+                            child: Text(signIn ? 'signUp'.tr : 'signIn'.tr,
                                 key: ValueKey<String>(
                                     signIn ? 'signUp' : 'signIn'),
                                 style: TextStyle(
-                                  color: primaryColor,
+                                  color: appConstant.primaryColor,
                                 )),
                           ),
                         ),
@@ -290,16 +283,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Align(
                       child: TextButton(
                         onPressed: () async {
-                          navigatorKey.currentState
-                              ?.pushReplacementNamed('user');
+                          Get.offNamed('user');
                         },
                         style: ButtonStyle(
-                            overlayColor: MaterialStateProperty.all(
-                                Colors.amber.shade50)),
-                        child: Text('skip'.tr(context),
+                            overlayColor:
+                                WidgetStateProperty.all(Colors.amber.shade50)),
+                        child: Text('skip'.tr,
                             key: ValueKey<String>(signIn ? 'signUp' : 'signIn'),
                             style: TextStyle(
-                              color: primaryColor,
+                              color: appConstant.primaryColor,
                             )),
                       ),
                     ),

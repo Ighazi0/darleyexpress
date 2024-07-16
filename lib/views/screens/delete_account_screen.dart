@@ -1,8 +1,7 @@
-import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
@@ -37,7 +36,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       controller: auth.email,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'pleaseEmail'.tr(context);
+                          return 'pleaseEmail'.tr;
                         }
                         return null;
                       },
@@ -51,7 +50,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       controller: auth.password,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'pleasePassword'.tr(context);
+                          return 'pleasePassword'.tr;
                         }
                         return null;
                       },

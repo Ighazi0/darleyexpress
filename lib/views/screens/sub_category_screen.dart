@@ -1,11 +1,11 @@
-import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:darleyexpress/views/widgets/product_tile.dart';
 import 'package:darleyexpress/views/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SubCategoryScreen extends StatefulWidget {
   const SubCategoryScreen({super.key, required this.category});
@@ -20,7 +20,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBarCustom(
-          title: locale.locale == 'ar'
+          title: Get.locale!.languageCode == 'ar'
               ? widget.category.titleAr
               : widget.category.titleEn,
           action: const {},
@@ -47,7 +47,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                           height: 10,
                         ),
                         Text(
-                          'noProducts'.tr(context),
+                          'noProducts'.tr,
                           style: const TextStyle(fontWeight: FontWeight.w500),
                         )
                       ],

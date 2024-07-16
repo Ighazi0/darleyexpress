@@ -1,12 +1,11 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryptlib_2_0/cryptlib_2_0.dart';
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:get/get.dart';
 
 class BottomSheetPayment extends StatefulWidget {
   const BottomSheetPayment({super.key});
@@ -53,7 +52,7 @@ class _BottomSheetPaymentState extends State<BottomSheetPayment> {
     setState(() {
       loading = false;
     });
-    Navigator.pop(context);
+    Get.back();
   }
 
   @override
@@ -74,7 +73,7 @@ class _BottomSheetPaymentState extends State<BottomSheetPayment> {
             controller: staticWidgets.scrollController,
             children: [
               CreditCardWidget(
-                cardBgColor: primaryColor,
+                cardBgColor: appConstant.primaryColor,
                 enableFloatingCard: true,
                 cardNumber: cardNumber,
                 expiryDate: expiryDate,
@@ -132,9 +131,9 @@ class _BottomSheetPaymentState extends State<BottomSheetPayment> {
                         shape: const RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(25))),
-                        color: primaryColor,
+                        color: appConstant.primaryColor,
                         child: Text(
-                          'submit'.tr(context),
+                          'submit'.tr,
                           style: const TextStyle(
                               fontSize: 18, color: Colors.white),
                         ),
