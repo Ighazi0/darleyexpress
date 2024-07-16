@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:darleyexpress/views/screens/user_screen.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewer extends StatefulWidget {
@@ -42,7 +43,7 @@ class _WebViewerState extends State<WebViewer> {
             });
           },
           onUrlChange: (UrlChange change) async {
-            print(change.url);
+            Get.log(change.url.toString());
             // if (change.url!
             //     .contains('https://uae.paymob.com/api/acceptance/post_pay')) {
 
@@ -53,18 +54,15 @@ class _WebViewerState extends State<WebViewer> {
               String text = Platform.isIOS
                   ? data.toString()
                   : jsonDecode(data).toString();
-              print(text);
+              Get.log(text);
               if (text.contains('Successful')) {
-                print('object');
-                userCubit.changeDone(true);
+                Get.find<UserController>().changeDone(true);
 
                 Navigator.pop(context);
               }
             });
             // });
             // }
-            print(
-                '================================================================');
           },
         ),
       )

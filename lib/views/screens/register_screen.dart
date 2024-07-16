@@ -1,13 +1,10 @@
 import 'dart:io';
-import 'package:darleyexpress/controller/app_localization.dart';
+import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/controller/my_app.dart';
-import 'package:darleyexpress/cubit/auth_cubit.dart';
 import 'package:darleyexpress/get_initial.dart';
-import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/forgot_bottom_sheet.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 
@@ -24,8 +21,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<AuthCubit, AuthState>(
-        builder: (context, state) {
+      body: GetBuilder(
+        init: AuthController(),
+        builder: (auth) {
           signIn = auth.signIn;
           return Form(
             key: auth.key,
@@ -156,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ],
                           )),
                     Align(
-                      child: state is LoadingState
+                      child: auth.loading
                           ? const CircularProgressIndicator()
                           : MaterialButton(
                               minWidth: Get.width,

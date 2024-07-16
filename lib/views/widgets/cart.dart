@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/controller/my_app.dart';
-import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/views/screens/product_details.dart';
-import 'package:darleyexpress/views/screens/splash_screen.dart';
-import 'package:darleyexpress/views/screens/user_screen.dart';
+
 import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:darleyexpress/views/widgets/remove_cart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
@@ -23,8 +22,9 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCubit, UserState>(
-      builder: (context, state) {
+    return GetBuilder(
+      init: UserController(),
+      builder: (userCubit) {
         return Scaffold(
             bottomNavigationBar: userCubit.cartList.isEmpty
                 ? null
@@ -51,7 +51,10 @@ class _CartState extends State<Cart> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
                               onPressed: () {
-                                if (auth.userData.uid.isEmpty) {
+                                if (Get.find<AuthController>()
+                                    .userData
+                                    .uid
+                                    .isEmpty) {
                                   Get.offNamed('register');
 
                                   Fluttertoast.showToast(msg: 'pleaseFirst'.tr);

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/user_model.dart';
-import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:darleyexpress/views/widgets/payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +17,8 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+  var auth = Get.find<AuthController>();
+
   int i = -1;
   @override
   Widget build(BuildContext context) {

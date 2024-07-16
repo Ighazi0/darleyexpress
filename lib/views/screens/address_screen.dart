@@ -1,7 +1,7 @@
+import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/user_model.dart';
 import 'package:darleyexpress/views/screens/address_details.dart';
-import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +14,8 @@ class AddressScreen extends StatefulWidget {
 }
 
 class _AddressScreenState extends State<AddressScreen> {
+  var auth = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

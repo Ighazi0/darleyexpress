@@ -1,10 +1,8 @@
 import 'package:darleyexpress/controller/my_app.dart';
-import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
-import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/icon_badge.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class UserBottomBar extends StatefulWidget {
@@ -30,8 +28,9 @@ class _UserBottomBarState extends State<UserBottomBar> {
               ],
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-          child: BlocBuilder<UserCubit, UserState>(
-            builder: (context, state) {
+          child: GetBuilder(
+            init: UserController(),
+            builder: (userCubit) {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: List.generate(

@@ -1,4 +1,5 @@
-import 'package:darleyexpress/views/screens/splash_screen.dart';
+import 'package:darleyexpress/controller/auth_controller.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,8 @@ class DeleteAccountScreen extends StatefulWidget {
 }
 
 class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+  var auth = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +68,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                         auth.logOut();
                       }
                     },
-                    color: primaryColor,
+                    color: appConstant.primaryColor,
                     child: const Text('Delete'),
                   ),
                 ],
@@ -87,7 +90,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                         onPressed: () {
                           auth.logOut();
                         },
-                        color: primaryColor,
+                        color: appConstant.primaryColor,
                         child: const Text('Yes'),
                       ),
                       MaterialButton(

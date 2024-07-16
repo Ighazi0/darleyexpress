@@ -1,7 +1,7 @@
-import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -15,11 +15,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarCustom(
-        title: 'notifications'.tr(context),
+        title: 'notifications'.tr,
         action: const {},
       ),
       body: RefreshIndicator(
-        color: primaryColor,
+        color: appConstant.primaryColor,
         onRefresh: () async {
           setState(() {});
         },
@@ -39,7 +39,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       height: 10,
                     ),
                     Text(
-                      'noNotifications'.tr(context),
+                      'noNotifications'.tr,
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     )
                   ],

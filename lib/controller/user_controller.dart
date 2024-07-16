@@ -1,17 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
-import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 
-part 'user_state.dart';
-
-class UserCubit extends Cubit<UserState> {
-  UserCubit() : super(UserInitial());
+class UserController extends GetxController {
   TextEditingController search = TextEditingController();
   int selectedIndex = 0;
   Map<String, CartModel> cartList = {};
@@ -41,7 +37,7 @@ class UserCubit extends Cubit<UserState> {
 
   removeFromCart(id) {
     cartList.remove(id);
-    emit(UserLoaded());
+    update();
   }
 
   addToCart(ProductModel p, int c) {
@@ -54,21 +50,21 @@ class UserCubit extends Cubit<UserState> {
       cartList.putIfAbsent(p.id, () => CartModel(productData: p, count: c));
     }
 
-    emit(UserLoaded());
+    update();
   }
 
   changeIndex(x) {
     selectedIndex = x;
-    emit(UserLoaded());
+    update();
   }
 
   clearCart() {
     cartList.clear();
-    emit(UserLoaded());
+    update();
   }
 
   favoriteStatus(ProductModel product) async {
-    if (auth.userData.uid.isEmpty) {
+    if (Get.find<AuthController>().userData.uid.isEmpty) {
       Get.offNamed('register');
 
       Fluttertoast.showToast(msg: 'Please sign in first');

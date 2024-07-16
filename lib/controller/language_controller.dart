@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LanguageController extends GetxController {
-  String locale = 'ar';
+  String locale = 'en';
 
   String getSavedLanguage() {
     final cachedLanguageCode = getStorage.read('locale');
@@ -11,7 +11,7 @@ class LanguageController extends GetxController {
     if (cachedLanguageCode != null) {
       return cachedLanguageCode;
     } else {
-      return 'ar';
+      return 'en';
     }
   }
 

@@ -1,9 +1,8 @@
-import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/controller/auth_controller.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
-import 'package:darleyexpress/views/screens/splash_screen.dart';
-import 'package:darleyexpress/views/screens/user_screen.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -18,11 +17,14 @@ class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _UserAppBarState extends State<UserAppBar> {
+  var auth = Get.find<AuthController>();
+
   bool end = true;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCubit, UserState>(
-      builder: (context, state) {
+    return GetBuilder(
+      init: UserController(),
+      builder: (userCubit) {
         return PreferredSize(
             preferredSize: Size(Get.width, 130),
             child: AnimatedContainer(

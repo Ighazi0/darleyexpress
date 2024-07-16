@@ -1,11 +1,9 @@
+import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/controller/language_controller.dart';
-import 'package:darleyexpress/cubit/auth_cubit.dart';
 import 'package:darleyexpress/get_initial.dart';
-import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -18,6 +16,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  var auth = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,8 +28,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Column(
         children: [
           if (auth.userData.uid.isNotEmpty)
-            BlocBuilder<AuthCubit, AuthState>(
-              builder: (context, state) {
+            GetBuilder(
+              init: AuthController(),
+              builder: (auth) {
                 return SwitchListTile(
                   value: auth.notification,
                   activeColor: appConstant.primaryColor,

@@ -1,12 +1,10 @@
-import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/widgets/product_tile.dart';
 import 'package:darleyexpress/views/widgets/shimmer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
 
 class WishList extends StatefulWidget {
   const WishList({super.key});
@@ -18,8 +16,9 @@ class WishList extends StatefulWidget {
 class _WishListState extends State<WishList> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCubit, UserState>(
-      builder: (context, state) {
+    return GetBuilder(
+      init: UserController(),
+      builder: (context) {
         return Container(
             height: Get.height,
             width: Get.width,

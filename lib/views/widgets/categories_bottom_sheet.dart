@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/views/screens/category_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class BottomSheetCategories extends StatefulWidget {
   const BottomSheetCategories({super.key});
@@ -23,7 +23,7 @@ class _BottomSheetCategoriesState extends State<BottomSheetCategories> {
         ),
         Center(
           child: Text(
-            'categories'.tr(context),
+            'categories'.tr,
             style: const TextStyle(fontSize: 25),
           ),
         ),
@@ -86,7 +86,7 @@ class _BottomSheetCategoriesState extends State<BottomSheetCategories> {
                                 margin: const EdgeInsets.only(top: 5),
                                 height: 20,
                                 child: Text(
-                                  locale.locale == 'ar'
+                                  Get.locale!.languageCode == 'ar'
                                       ? category.titleAr
                                       : category.titleEn,
                                   overflow: TextOverflow.ellipsis,

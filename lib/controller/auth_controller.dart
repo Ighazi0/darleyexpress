@@ -1,22 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/user_model.dart';
-import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-part 'auth_state.dart';
 
-class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthInitial());
-
+class AuthController extends GetxController {
   GlobalKey<FormState> key = GlobalKey();
   final _googleSignIn = GoogleSignIn();
   AuthorizationCredentialAppleID? appleCredential;
@@ -24,24 +19,22 @@ class AuthCubit extends Cubit<AuthState> {
       password = TextEditingController(),
       name = TextEditingController();
   UserModel userData = UserModel(address: []);
-  bool agree = false, signIn = true, notification = false;
+  bool agree = false, signIn = true, notification = false, loading = false;
 
   changeNotification(x) async {
-    final prefs = await SharedPreferences.getInstance();
     notification = x;
-    prefs.setBool('notification', x);
+    getStorage.write('notification', x);
     if (x) {
       requestPermission();
     } else {
       firebaseMessaging.deleteToken();
     }
-    emit(AuthInitial());
+    update();
   }
 
   requestPermission() async {
-    SharedPreferences.getInstance().then((value) {
-      notification = value.getBool('notification') ?? true;
-    });
+    notification = getStorage.read('notification') ?? true;
+
     await firebaseMessaging.requestPermission(
         alert: true, badge: true, sound: true);
 
@@ -59,16 +52,16 @@ class AuthCubit extends Cubit<AuthState> {
 
   agreeTerm() {
     agree = !agree;
-    emit(AuthInitial());
+    update();
   }
 
   changeStatus() {
     signIn = !signIn;
-    emit(AuthInitial());
+    update();
   }
 
   logOut() async {
-    userCubit.selectedIndex = 0;
+    Get.find<UserController>().selectedIndex = 0;
     _googleSignIn.signOut();
     userData = UserModel(address: []);
     await firebaseAuth.signOut();
@@ -125,7 +118,9 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> appleSignIn() async {
     HapticFeedback.lightImpact();
-    emit(LoadingState());
+    loading = true;
+
+    update();
     try {
       appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
@@ -151,22 +146,26 @@ class AuthCubit extends Cubit<AuthState> {
       name.clear();
       password.clear();
     } catch (e) {
-      emit(AuthInitial());
+      loading = false;
       Fluttertoast.showToast(msg: 'Error');
     }
-    emit(AuthInitial());
+    update();
   }
 
   Future<void> googleSignIn() async {
     HapticFeedback.lightImpact();
-    emit(LoadingState());
+    loading = true;
+
+    update();
     try {
       GoogleSignInAccount? googleSignInAccount;
 
       googleSignInAccount = await _googleSignIn.signIn();
 
       if (googleSignInAccount == null) {
-        emit(AuthInitial());
+        loading = false;
+
+        update();
         return;
       }
 
@@ -186,11 +185,13 @@ class AuthCubit extends Cubit<AuthState> {
       name.clear();
       password.clear();
     } catch (e) {
-      emit(AuthInitial());
+      loading = false;
+
+      update();
       Fluttertoast.showToast(msg: e.toString());
     }
 
-    emit(AuthInitial());
+    update();
   }
 
   Future<void> createUser(
@@ -246,7 +247,9 @@ class AuthCubit extends Cubit<AuthState> {
     if (!key.currentState!.validate()) {
       return;
     }
-    emit(LoadingState());
+    loading = true;
+
+    update();
     try {
       if (signIn) {
         await signInAuth();
@@ -262,7 +265,7 @@ class AuthCubit extends Cubit<AuthState> {
       }
       Fluttertoast.showToast(msg: 'invalidCredentials'.tr);
     }
-    emit(AuthInitial());
+    update();
   }
 
   Future<void> signUp() async {

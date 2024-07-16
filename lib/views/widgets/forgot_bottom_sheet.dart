@@ -1,6 +1,6 @@
+import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/get_initial.dart';
-import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:darleyexpress/views/widgets/edit_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +17,7 @@ class BottomSheetForgot extends StatefulWidget {
 class _BottomSheetForgotState extends State<BottomSheetForgot> {
   final GlobalKey<FormState> key = GlobalKey();
   var loading = false;
+  var auth = Get.find<AuthController>();
 
   resetPass() async {
     if (!key.currentState!.validate()) {

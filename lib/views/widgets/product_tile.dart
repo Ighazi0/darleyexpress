@@ -1,13 +1,12 @@
-import 'package:darleyexpress/controller/app_localization.dart';
-import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/controller/auth_controller.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
+import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/product_details.dart';
-import 'package:darleyexpress/views/screens/splash_screen.dart';
-import 'package:darleyexpress/views/screens/user_screen.dart';
+
 import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:darleyexpress/views/widgets/network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 
@@ -20,10 +19,12 @@ class ProductTile extends StatefulWidget {
 }
 
 class _ProductTileState extends State<ProductTile> {
+  var auth = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCubit, UserState>(
-      builder: (context, state) {
+    return GetBuilder(
+      init: UserController(),
+      builder: (userCubit) {
         return GestureDetector(
           onTap: () {
             Navigator.push(
@@ -211,7 +212,7 @@ class _ProductTileState extends State<ProductTile> {
                 child: Row(
                   children: [
                     Text(
-                      '${'AED'.tr(context)} ${widget.product.price.toStringAsFixed(2)}',
+                      '${'AED'.tr} ${widget.product.price.toStringAsFixed(2)}',
                       style: TextStyle(
                           decoration: widget.product.discount != 0
                               ? TextDecoration.lineThrough
@@ -224,7 +225,7 @@ class _ProductTileState extends State<ProductTile> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 3),
                   child: Text(
-                    '${'AED'.tr(context)} ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
+                    '${'AED'.tr} ${(widget.product.price - (widget.product.price * (widget.product.discount / 100))).toStringAsFixed(2)}',
                   ),
                 ),
             ],

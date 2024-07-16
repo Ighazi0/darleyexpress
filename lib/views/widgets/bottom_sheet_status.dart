@@ -1,9 +1,8 @@
 import 'package:darleyexpress/controller/my_app.dart';
-import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/order_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class BottomSheetStatus extends StatefulWidget {
@@ -22,8 +21,9 @@ class _BottomSheetStatusState extends State<BottomSheetStatus> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCubit, UserState>(
-      builder: (context, state) {
+    return GetBuilder(
+      init: UserController(),
+      builder: (userCubit) {
         return ListView(
           controller: staticWidgets.scrollController,
           children: [

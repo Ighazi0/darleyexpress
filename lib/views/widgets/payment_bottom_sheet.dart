@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cryptlib_2_0/cryptlib_2_0.dart';
+import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/get_initial.dart';
-import 'package:darleyexpress/views/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:get/get.dart';
@@ -48,7 +48,7 @@ class _BottomSheetPaymentState extends State<BottomSheetPayment> {
       ])
     });
 
-    await auth.getUserData();
+    await Get.find<AuthController>().getUserData();
     setState(() {
       loading = false;
     });

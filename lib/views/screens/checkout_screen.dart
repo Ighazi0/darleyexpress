@@ -1,19 +1,18 @@
 import 'dart:convert';
+import 'package:darleyexpress/controller/auth_controller.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/order_model.dart';
 import 'package:darleyexpress/models/payment_model.dart';
 import 'package:darleyexpress/views/screens/order_details.dart';
 import 'package:darleyexpress/views/widgets/web_viewer.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:darleyexpress/controller/app_localization.dart';
 import 'package:darleyexpress/models/cart_model.dart';
 import 'package:darleyexpress/models/coupon_model.dart';
 import 'package:darleyexpress/views/screens/product_details.dart';
-import 'package:darleyexpress/views/screens/splash_screen.dart';
-import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,6 +29,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   CouponModel couponData = CouponModel();
   TextEditingController code = TextEditingController();
   String invoiceID = '';
+  var auth = Get.find<AuthController>(),
+      userController = Get.find<UserController>();
 
   makePayment() async {
     try {
@@ -156,19 +157,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     await makePayment();
 
-    done = userCubit.done;
+    done = userController.done;
 
     if (done) {
-      userCubit.changeDone(false);
-      Fluttertoast.showToast(msg: 'orderPlaced'.tr(context));
+      userController.changeDone(false);
+      Fluttertoast.showToast(msg: 'orderPlaced'.tr);
 
-      for (int i = 0; i < userCubit.cartList.entries.length; i++) {
+      for (int i = 0; i < userController.cartList.entries.length; i++) {
         await firestore
             .collection('products')
-            .doc(userCubit.cartList.entries.toList()[i].key)
+            .doc(userController.cartList.entries.toList()[i].key)
             .update({
           'stock': FieldValue.increment(
-              -userCubit.cartList.entries.toList()[i].value.count),
+              -userController.cartList.entries.toList()[i].value.count),
           'seller': FieldValue.increment(1)
         });
       }
@@ -176,7 +177,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       var data = {
         'number': numbers + 1,
         'uid': firebaseAuth.currentUser!.uid,
-        'total': userCubit.totalCartPrice(),
+        'total': userController.totalCartPrice(),
         'discount': couponData.discount,
         'delivery': 25,
         'rated': false,
@@ -194,7 +195,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         //   'number': CryptLib.instance.encryptPlainTextWithRandomIV(
         //       auth.userData.wallet!.first.number, "number"),
         // },
-        'orderList': userCubit.cartList.entries
+        'orderList': userController.cartList.entries
             .map((e) => {
                   'id': e.key,
                   'titleEn': e.value.productData!.titleEn,
@@ -210,13 +211,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           .collection('orders')
           .doc(id.millisecondsSinceEpoch.toString())
           .set(data);
-      Get.off(() => MaterialPageRoute(
-            builder: (context) => OrderDetails(
-                order: OrderModel.fromJson(
-                    data, id.millisecondsSinceEpoch.toString())),
-          ));
+      Get.off(
+        () => OrderDetails(
+            order: OrderModel.fromJson(
+                data, id.millisecondsSinceEpoch.toString())),
+      );
 
-      userCubit.clearCart();
+      userController.clearCart();
     } else {
       Fluttertoast.showToast(msg: 'Payment failed');
       setState(() {
@@ -251,7 +252,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '${'total'.tr(context)}: ${'AED'.tr(context)} ${(userCubit.totalCartPrice()).toStringAsFixed(2)}',
+                        '${'total'.tr}: ${'AED'.tr} ${(userController.totalCartPrice()).toStringAsFixed(2)}',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             decoration: couponData.id.isNotEmpty
@@ -260,7 +261,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                       if (couponData.id.isNotEmpty)
                         Text(
-                          '${'AED'.tr(context)} ${(userCubit.totalCartPrice() - ((userCubit.totalCartPrice() * (couponData.discount / 100)) > couponData.max ? couponData.max : (userCubit.totalCartPrice() * (couponData.discount / 100)))).toStringAsFixed(2)} ',
+                          '${'AED'.tr} ${(userController.totalCartPrice() - ((userController.totalCartPrice() * (couponData.discount / 100)) > couponData.max ? couponData.max : (userController.totalCartPrice() * (couponData.discount / 100)))).toStringAsFixed(2)} ',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -287,8 +288,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               //       const BottomSheetPayment(), 0.85, 0.9);
                               // }
                             } else {
-                              Fluttertoast.showToast(
-                                  msg: 'pleaseAddress'.tr(context));
+                              Fluttertoast.showToast(msg: 'pleaseAddress'.tr);
                             }
                           },
                           height: 45,
@@ -298,12 +298,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   BorderRadius.all(Radius.circular(20))),
                           color: appConstant.primaryColor,
                           textColor: Colors.white,
-                          child: Text('placeOrder'.tr(context)),
+                          child: Text('placeOrder'.tr),
                         ),
                 ])),
       ),
       appBar: AppBarCustom(
-        title: 'CHECKOUT'.tr(context),
+        title: 'CHECKOUT'.tr,
         action: const {},
       ),
       body: Padding(
@@ -312,7 +312,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'shipping'.tr(context),
+              'shipping'.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             auth.userData.address!.isEmpty
@@ -328,7 +328,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         side: BorderSide(),
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                     child: Text(
-                      'addNew'.tr(context),
+                      'addNew'.tr,
                       style:
                           TextStyle(fontSize: 12, color: Colors.amber.shade700),
                     ),
@@ -353,7 +353,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           side: BorderSide(),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: Text(
-                        'change'.tr(context),
+                        'change'.tr,
                         style: TextStyle(
                             fontSize: 12, color: Colors.amber.shade700),
                       ),
@@ -363,7 +363,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               color: Colors.grey,
             ),
             Text(
-              'havePromo'.tr(context),
+              'havePromo'.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             const SizedBox(
@@ -379,7 +379,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: TextField(
                       controller: code,
                       decoration: InputDecoration(
-                          hintText: 'promo'.tr(context),
+                          hintText: 'promo'.tr,
                           enabledBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.transparent),
                           ),
@@ -419,13 +419,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       if (couponData.endTime!
                                           .isBefore(DateTime.now())) {
                                         Fluttertoast.showToast(
-                                            msg: 'expired'.tr(context));
+                                            msg: 'expired'.tr);
                                         couponData = CouponModel();
                                       }
                                     } else {
                                       couponData = CouponModel();
-                                      Fluttertoast.showToast(
-                                          msg: 'noCode'.tr(context));
+                                      Fluttertoast.showToast(msg: 'noCode'.tr);
                                     }
                                   });
                               setState(() {
@@ -437,7 +436,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(25))),
-                            child: Text('apply'.tr(context)),
+                            child: Text('apply'.tr),
                           ),
                   )
                 ],
@@ -448,20 +447,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 title: Text(couponData.titleEn),
                 trailing: Text('${couponData.discount}%'),
                 subtitle: Text(
-                    '${'upTo'.tr(context)} ${couponData.max.toStringAsFixed(2)} ${'AED'.tr(context)}'),
+                    '${'upTo'.tr} ${couponData.max.toStringAsFixed(2)} ${'AED'.tr}'),
               ),
             const Divider(
               color: Colors.grey,
             ),
             Text(
-              'orderList'.tr(context),
+              'orderList'.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: userCubit.cartList.length,
+                itemCount: userController.cartList.length,
                 itemBuilder: (context, index) {
-                  CartModel cart = userCubit.cartList.values.toList()[index];
+                  CartModel cart =
+                      userController.cartList.values.toList()[index];
                   return ListTile(
                     leading: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -486,7 +486,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                     visualDensity: const VisualDensity(vertical: 4),
                     subtitle: Text(
-                      '${'AED'.tr(context)} ${cart.productData!.price}',
+                      '${'AED'.tr} ${cart.productData!.price}',
                       style: const TextStyle(
                           color: Colors.black, fontWeight: FontWeight.w500),
                     ),

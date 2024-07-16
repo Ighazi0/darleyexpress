@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:darleyexpress/controller/my_app.dart';
-import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/banner_model.dart';
 import 'package:darleyexpress/models/category_model.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/category_screen.dart';
-import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/categories_bottom_sheet.dart';
 import 'package:darleyexpress/views/widgets/network_image.dart';
 import 'package:darleyexpress/views/widgets/product_tile.dart';
@@ -16,7 +15,6 @@ import 'package:darleyexpress/views/widgets/shimmer.dart';
 import 'package:darleyexpress/views/widgets/user_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
@@ -58,8 +56,9 @@ class _HomeState extends State<Home> {
         appBar: UserAppBar(
           scroll: scroll,
         ),
-        body: BlocBuilder<UserCubit, UserState>(
-          builder: (context, state) {
+        body: GetBuilder(
+          init: UserController(),
+          builder: (userCubit) {
             return userCubit.search.text.isNotEmpty
                 ? Padding(
                     padding:

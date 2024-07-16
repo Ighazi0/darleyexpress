@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darleyexpress/constant_data.dart';
+import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/controller/firebase_options.dart';
 import 'package:darleyexpress/controller/language_controller.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -18,14 +20,9 @@ class GetInitial {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     Get.put(LanguageController());
-    // Get.put(AuthController());
-    // Get.put(HomeController());
-    // Get.put(ProfileController());
-    // Get.put(StoreController());
-    // Get.put(CartController());
-    // Get.put(GroupController());
-    // Get.put(ChatController());
-    // Get.put(SooqController());
+    Get.put(AuthController());
+    Get.put(UserController());
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);

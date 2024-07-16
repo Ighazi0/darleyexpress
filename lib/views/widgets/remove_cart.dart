@@ -1,12 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:darleyexpress/controller/my_app.dart';
-import 'package:darleyexpress/cubit/user_cubit.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/cart_model.dart';
-import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 class BottomSheetRemoveCart extends StatefulWidget {
   const BottomSheetRemoveCart({super.key, this.index = 0});
@@ -21,14 +20,15 @@ class _BottomSheetRemoveCartState extends State<BottomSheetRemoveCart> {
 
   @override
   void initState() {
-    cart = userCubit.cartList.values.toList()[widget.index];
+    cart = Get.find<UserController>().cartList.values.toList()[widget.index];
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCubit, UserState>(
-      builder: (context, state) {
+    return GetBuilder(
+      init: UserController(),
+      builder: (userCubit) {
         return ListView(
           controller: staticWidgets.scrollController,
           children: [

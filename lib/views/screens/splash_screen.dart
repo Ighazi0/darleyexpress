@@ -1,7 +1,6 @@
-import 'package:darleyexpress/cubit/auth_cubit.dart';
+import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -11,13 +10,10 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-AuthCubit auth = AuthCubit();
-
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    auth = BlocProvider.of<AuthCubit>(context);
-    auth.checkUser();
+    Get.find<AuthController>().checkUser();
     super.initState();
   }
 

@@ -1,8 +1,8 @@
 import 'package:darleyexpress/controller/my_app.dart';
+import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/product_model.dart';
 import 'package:darleyexpress/views/screens/full_screen.dart';
-import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:darleyexpress/views/widgets/counter.dart';
 import 'package:darleyexpress/views/widgets/network_image.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +18,7 @@ class ProductDetails extends StatefulWidget {
 class _ProductDetailsState extends State<ProductDetails> {
   final PageController _pageController = PageController();
   int _activePage = 0, count = 1;
+  var userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +87,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                         InkWell(
                           onTap: () {
-                            userCubit.addToCart(widget.product, count);
+                            userController.addToCart(widget.product, count);
                             Navigator.pop(context);
                           },
                           child: Container(
@@ -172,7 +173,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               size: 18,
                             ),
                             onPressed: () async {
-                              await userCubit.favoriteStatus(product);
+                              await userController.favoriteStatus(product);
                             },
                           );
                         }
@@ -187,7 +188,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             size: 18,
                           ),
                           onPressed: () async {
-                            await userCubit.favoriteStatus(widget.product);
+                            await userController.favoriteStatus(widget.product);
                           },
                         );
                       }),
