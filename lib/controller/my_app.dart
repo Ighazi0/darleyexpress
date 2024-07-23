@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
           progressIndicatorTheme:
               ProgressIndicatorThemeData(color: appConstant.primaryColor),
           scaffoldBackgroundColor: Colors.white,
+          
           primaryColor: appConstant.primaryColor,
           appBarTheme: AppBarTheme(backgroundColor: appConstant.primaryColor)),
       routes: appConstant.routes,

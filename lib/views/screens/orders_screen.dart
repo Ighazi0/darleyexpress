@@ -1,3 +1,4 @@
+import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
 import 'package:darleyexpress/models/order_model.dart';
 import 'package:darleyexpress/views/screens/order_details.dart';
@@ -29,7 +30,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         child: FutureBuilder(
           future: firestore
               .collection('orders')
-              .where('uid', isEqualTo: firebaseAuth.currentUser!.uid)
+              .where('uid', isEqualTo: Get.find<AuthController>().userData.uid)
               .get(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -71,8 +72,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         setState(() {});
                       },
                       title: Text('${'orderNo'.tr}#${order.number}'),
-                      subtitle: Text(DateFormat(
-                              'dd/MM/yyyy hh:mm a', Get.locale!.languageCode)
+                      subtitle: Text(DateFormat('dd/MM/yyyy hh:mm a')
                           .format(order.timestamp!)),
                       trailing: Icon(
                         order.status == 'inProgress'
