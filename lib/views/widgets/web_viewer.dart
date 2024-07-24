@@ -55,10 +55,13 @@ class _WebViewerState extends State<WebViewer> {
                   ? data.toString()
                   : jsonDecode(data).toString();
               Get.log(text);
-              if (text.contains('Successful')) {
+              if (text
+                  .toLowerCase()
+                  .removeAllWhitespace
+                  .contains('paymentsuccessful')) {
                 Get.find<UserController>().changeDone(true);
 
-                Navigator.pop(context);
+                Get.back();
               }
             });
             // });

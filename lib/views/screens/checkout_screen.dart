@@ -163,6 +163,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        'Payment Successful\n\nThank you for your purchase! You will receive an email with your order details shortly.\n\nTotal amountAED 1\n\nDone'
+            .toLowerCase()
+            .removeAllWhitespace
+            .contains('paymentsuccessful'));
     return Scaffold(
       bottomNavigationBar: SafeArea(
         child: Container(
