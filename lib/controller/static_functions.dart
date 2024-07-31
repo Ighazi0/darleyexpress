@@ -16,6 +16,6 @@ class StaticFunctions {
   }
 
   urlLauncher(Uri uri) async {
-    await launchUrl(uri);
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 }

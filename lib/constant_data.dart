@@ -12,6 +12,7 @@ import 'package:darleyexpress/views/screens/orders_screen.dart';
 import 'package:darleyexpress/views/screens/payment_screen.dart';
 import 'package:darleyexpress/views/screens/register_screen.dart';
 import 'package:darleyexpress/views/screens/settings_screen.dart';
+import 'package:darleyexpress/views/screens/updated_screen.dart';
 import 'package:darleyexpress/views/screens/user_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +49,7 @@ class AppConstant {
     'coupons': (context) => const AdminCoupons(),
     'checkout': (context) => const CheckoutScreen(),
     'notification': (context) => const NotificationScreen(),
+    'updated': (context) => const UpdatedScreen(),
   };
 
   ThemeData theme = ThemeData(

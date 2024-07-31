@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthController extends GetxController {
@@ -69,17 +70,36 @@ class AuthController extends GetxController {
   }
 
   checkUser() async {
+    var v = '0', app = {};
     if (firebaseAuth.currentUser != null) {
       if (firebaseAuth.currentUser!.uid == staticData.adminUID) {
         await Future.delayed(const Duration(seconds: 1));
       } else {
-        final stopwatch = Stopwatch()..start();
-        await getUserData();
-        stopwatch.stop();
-        if (stopwatch.elapsed.inSeconds < 2) {
-          await Future.delayed(
-              Duration(seconds: 2 - stopwatch.elapsed.inSeconds));
+        await firestore
+            .collection('appInfo')
+            .doc('0')
+            .get()
+            .then((value) async {
+          app = value.data() as Map;
+          PackageInfo packageInfo = await PackageInfo.fromPlatform();
+          v = packageInfo.version;
+        }).onError((e, e1) {
+          Get.offNamed('updated');
+        });
+
+        if (GetPlatform.isIOS) {
+          if (v != app['ios']) {
+            Get.offNamed('updated');
+            return;
+          }
+        } else {
+          if (v != app['android']) {
+            Get.offNamed('updated');
+            return;
+          }
         }
+
+        await getUserData();
       }
     } else {
       await Future.delayed(const Duration(seconds: 2));
