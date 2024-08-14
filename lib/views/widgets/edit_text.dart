@@ -9,6 +9,7 @@ class EditText extends StatefulWidget {
       required this.controller,
       required this.validator,
       required this.hint,
+      this.length,
       this.secure = false,
       this.number = false,
       required this.title});
@@ -17,6 +18,7 @@ class EditText extends StatefulWidget {
   final String hint;
   final Function function;
   final bool secure;
+  final int? length;
   final String? Function(String?)? validator;
   final TextEditingController controller;
 
@@ -41,6 +43,7 @@ class _EditTextState extends State<EditText> {
             keyboardType: widget.number ? TextInputType.number : null,
             obscureText: !showPass && widget.secure,
             cursorColor: appConstant.primaryColor,
+            maxLength: widget.length,
             onFieldSubmitted: (value) => widget.function(),
             decoration: InputDecoration(
                 hintText: widget.hint,

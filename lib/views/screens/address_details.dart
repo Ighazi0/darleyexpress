@@ -26,13 +26,15 @@ class _AddressDetailsState extends State<AddressDetails> {
   var auth = Get.find<AuthController>();
 
   submit(delete) async {
-    if (!key.currentState!.validate()) {
-      return;
+    if (!delete) {
+      if (!key.currentState!.validate()) {
+        return;
+      }
     }
     setState(() {
       loading = true;
     });
-
+    String phonex = '+971${phone.text}';
     if (delete) {
       await firestore
           .collection('users')
@@ -41,7 +43,7 @@ class _AddressDetailsState extends State<AddressDetails> {
         'address': FieldValue.arrayRemove([
           {
             'name': widget.address.name,
-            'phone': widget.address.phone,
+            'phone': phonex,
             'address': widget.address.address,
             'label': widget.address.label
           }
@@ -57,7 +59,7 @@ class _AddressDetailsState extends State<AddressDetails> {
                 name: name.text,
                 address: address.text,
                 label: label,
-                phone: phone.text));
+                phone: phonex));
 
         await firestore
             .collection('users')
@@ -80,7 +82,7 @@ class _AddressDetailsState extends State<AddressDetails> {
               'name': name.text,
               'address': address.text,
               'label': label,
-              'phone': phone.text,
+              'phone': phonex
             }
           ])
         });
@@ -98,7 +100,7 @@ class _AddressDetailsState extends State<AddressDetails> {
     if (widget.address.label.isNotEmpty) {
       label = widget.address.label;
       address.text = widget.address.address;
-      phone.text = widget.address.phone;
+      phone.text = widget.address.phone.replaceFirst('+971', '');
       name.text = widget.address.name;
     }
     super.initState();
@@ -182,18 +184,29 @@ class _AddressDetailsState extends State<AddressDetails> {
                 },
                 hint: '',
                 title: 'address'),
-            EditText(
-                function: () {},
-                number: true,
-                controller: phone,
-                validator: (p) {
-                  if (p!.isEmpty) {
-                    return 'pleasephone'.tr;
-                  }
-                  return null;
-                },
-                hint: '009',
-                title: 'phone'),
+            Row(
+              children: [
+                const Text('+971'),
+                const SizedBox(
+                  width: 20,
+                ),
+                Flexible(
+                  child: EditText(
+                      function: () {},
+                      number: true,
+                      controller: phone,
+                      validator: (p) {
+                        if (p!.length < 9) {
+                          return 'pleasephone'.tr;
+                        }
+                        return null;
+                      },
+                      length: 9,
+                      hint: '123456789',
+                      title: 'phone'),
+                ),
+              ],
+            ),
             if (widget.address.label.isNotEmpty && !loading)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

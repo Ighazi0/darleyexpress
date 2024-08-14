@@ -113,6 +113,7 @@ class AuthController extends GetxController {
         await firestore
             .collection('users')
             .doc(firebaseAuth.currentUser!.uid)
+            // .doc('hiP36E2GauXh58htWy11NJyWa2J2')
             .get()
             .then((value) {
           userData = UserModel.fromJson(value.data() as Map);
@@ -285,6 +286,8 @@ class AuthController extends GetxController {
       }
       Fluttertoast.showToast(msg: 'invalidCredentials'.tr);
     }
+    loading = false;
+
     update();
   }
 

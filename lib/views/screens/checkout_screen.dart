@@ -50,12 +50,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               },
               body: {
                 'amount_cents':
-                    // '100',
                     (Get.find<UserController>().totalCartPrice() * 100)
                         .toStringAsFixed(2),
                 'full_name': auth.userData.name,
                 'email': auth.userData.email,
-                'phone_number': '+971',
+                'phone_number': auth.userData.address!.first.phone,
                 'payment_methods': '22632',
                 'payment_link_image': '',
                 'save_selection': 'false',
