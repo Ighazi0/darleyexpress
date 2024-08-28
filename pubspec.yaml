@@ -3,7 +3,7 @@ description: Ecommerce app
 
 publish_to: "none"
 
-version: 1.0.9+14
+version: 1.2.0+15
 
 environment:
   sdk: ">=3.1.4 <4.0.0"

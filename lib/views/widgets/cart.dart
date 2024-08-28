@@ -26,7 +26,14 @@ class _CartState extends State<Cart> {
       init: UserController(),
       builder: (userCubit) {
         return Scaffold(
-            bottomNavigationBar: userCubit.cartList.isEmpty
+            bottomNavigationBar: userCubit.cartList.isEmpty ||
+                    !Get.find<AuthController>().appData!.orders ||
+                    Get.find<AuthController>()
+                        .appData!
+                        .paymobs!
+                        .where((e) => e.status)
+                        .toList()
+                        .isEmpty
                 ? null
                 : Container(
                     width: Get.width,

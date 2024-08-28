@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:darleyexpress/controller/my_app.dart';
 import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
+import 'package:darleyexpress/models/app_data_model.dart';
 import 'package:darleyexpress/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,34 @@ class AuthController extends GetxController {
       password = TextEditingController(),
       name = TextEditingController();
   UserModel userData = UserModel(address: []);
+  AppDataModel? appData;
   bool agree = false, signIn = true, notification = false, loading = false;
+
+  changeOrders() {
+    appData!.orders = !appData!.orders;
+    firestore
+        .collection('appInfo')
+        .doc('0')
+        .update({'orders': appData!.orders});
+    update();
+  }
+
+  changePaymobs(x) {
+    appData!.paymobs!.firstWhere((w) => w.id == x).status =
+        !appData!.paymobs!.firstWhere((w) => w.id == x).status;
+
+    firestore.collection('appInfo').doc('0').update({
+      'paymobs': appData!.paymobs!
+          .map((m) => {
+                'id': m.id,
+                'username': m.username,
+                'status': m.status,
+                'name': m.name
+              })
+          .toList()
+    });
+    update();
+  }
 
   changeNotification(x) async {
     notification = x;
@@ -70,35 +98,35 @@ class AuthController extends GetxController {
   }
 
   checkUser() async {
-    var v = '0', app = {};
+    String v = '0';
+    await firestore.collection('appInfo').doc('0').get().then((value) async {
+      appData = AppDataModel.fromJson(value.data() as Map);
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      v = packageInfo.version;
+    }).onError((e, e1) {
+      Get.offNamed('updated');
+    });
+
+    if (!appData!.server) {
+      Get.offNamed('updated');
+      return;
+    }
+
+    if (GetPlatform.isIOS) {
+      if (v != appData!.ios) {
+        Get.offNamed('updated');
+        return;
+      }
+    } else {
+      if (v != appData!.android) {
+        Get.offNamed('updated');
+        return;
+      }
+    }
     if (firebaseAuth.currentUser != null) {
       if (firebaseAuth.currentUser!.uid == staticData.adminUID) {
         await Future.delayed(const Duration(seconds: 1));
       } else {
-        await firestore
-            .collection('appInfo')
-            .doc('0')
-            .get()
-            .then((value) async {
-          app = value.data() as Map;
-          PackageInfo packageInfo = await PackageInfo.fromPlatform();
-          v = packageInfo.version;
-        }).onError((e, e1) {
-          Get.offNamed('updated');
-        });
-
-        if (GetPlatform.isIOS) {
-          if (v != app['ios']) {
-            Get.offNamed('updated');
-            return;
-          }
-        } else {
-          if (v != app['android']) {
-            Get.offNamed('updated');
-            return;
-          }
-        }
-
         await getUserData();
       }
     } else {

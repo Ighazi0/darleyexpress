@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:darleyexpress/controller/auth_controller.dart';
 import 'package:darleyexpress/controller/user_controller.dart';
 import 'package:darleyexpress/get_initial.dart';
+import 'package:darleyexpress/models/app_data_model.dart';
 import 'package:darleyexpress/models/order_model.dart';
 import 'package:darleyexpress/models/payment_model.dart';
 import 'package:darleyexpress/views/screens/order_details.dart';
@@ -25,6 +26,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
+  Paymob? paymob;
   bool makeOrder = false, loading = false;
   CouponModel couponData = CouponModel();
   TextEditingController code = TextEditingController();
@@ -37,7 +39,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       var response = await http.post(
           Uri.parse('https://uae.paymob.com/api/auth/tokens'),
           headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({"username": "522820783", "password": "Dara@1991"}));
+          body: jsonEncode(
+              {"username": paymob!.username, "password": "Dara@1991"}));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         var data = PaymentModel.fromMap(jsonDecode(response.body));
@@ -55,7 +58,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 'full_name': auth.userData.name,
                 'email': auth.userData.email,
                 'phone_number': auth.userData.address!.first.phone,
-                'payment_methods': '22632',
+                'payment_methods': paymob!.id,
                 'payment_link_image': '',
                 'save_selection': 'false',
                 'is_live': 'true'
@@ -158,6 +161,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         makeOrder = false;
       });
     }
+  }
+
+  @override
+  void initState() {
+    paymob = auth.appData!.paymobs!.first;
+    super.initState();
   }
 
   @override
@@ -298,84 +307,101 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               color: Colors.grey,
             ),
             Text(
-              'havePromo'.tr,
+              'Payment methods'.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             const SizedBox(
               height: 10,
             ),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(25)),
-                  color: Colors.grey.shade200),
-              child: Row(
-                children: [
-                  Flexible(
-                    child: TextField(
-                      controller: code,
-                      decoration: InputDecoration(
-                          hintText: 'promo'.tr,
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 15)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: loading
-                        ? const CircularProgressIndicator()
-                        : MaterialButton(
-                            textColor: Colors.white,
-                            onPressed: () async {
-                              setState(() {
-                                loading = true;
-                              });
+            // Container(
+            //   decoration: BoxDecoration(
+            //       borderRadius: const BorderRadius.all(Radius.circular(25)),
+            //       color: Colors.grey.shade200),
+            //   child: Row(
+            //     children: [
+            //       Flexible(
+            //         child: TextField(
+            //           controller: code,
+            //           decoration: InputDecoration(
+            //               hintText: 'promo'.tr,
+            //               enabledBorder: const OutlineInputBorder(
+            //                 borderSide: BorderSide(color: Colors.transparent),
+            //               ),
+            //               focusedBorder: const OutlineInputBorder(
+            //                 borderSide: BorderSide(color: Colors.transparent),
+            //               ),
+            //               border: const OutlineInputBorder(
+            //                 borderSide: BorderSide(color: Colors.transparent),
+            //               ),
+            //               contentPadding:
+            //                   const EdgeInsets.symmetric(horizontal: 15)),
+            //         ),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.symmetric(horizontal: 10),
+            //         child: loading
+            //             ? const CircularProgressIndicator()
+            //             : MaterialButton(
+            //                 textColor: Colors.white,
+            //                 onPressed: () async {
+            //                   setState(() {
+            //                     loading = true;
+            //                   });
 
-                              await firestore
-                                  .collection('coupons')
-                                  .where('code', whereIn: [
-                                    code.text.toLowerCase(),
-                                    code.text.toUpperCase()
-                                  ])
-                                  .get()
-                                  .then((value) {
-                                    if (value.size > 0) {
-                                      couponData = CouponModel.fromJson(
-                                          value.docs.first.data());
+            //                   await firestore
+            //                       .collection('coupons')
+            //                       .where('code', whereIn: [
+            //                         code.text.toLowerCase(),
+            //                         code.text.toUpperCase()
+            //                       ])
+            //                       .get()
+            //                       .then((value) {
+            //                         if (value.size > 0) {
+            //                           couponData = CouponModel.fromJson(
+            //                               value.docs.first.data());
 
-                                      if (couponData.endTime!
-                                          .isBefore(DateTime.now())) {
-                                        Fluttertoast.showToast(
-                                            msg: 'expired'.tr);
-                                        couponData = CouponModel();
-                                      }
-                                    } else {
-                                      couponData = CouponModel();
-                                      Fluttertoast.showToast(msg: 'noCode'.tr);
-                                    }
-                                  });
-                              setState(() {
-                                loading = false;
-                              });
-                            },
-                            color: appConstant.primaryColor,
-                            height: 40,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(25))),
-                            child: Text('apply'.tr),
-                          ),
-                  )
-                ],
-              ),
+            //                           if (couponData.endTime!
+            //                               .isBefore(DateTime.now())) {
+            //                             Fluttertoast.showToast(
+            //                                 msg: 'expired'.tr);
+            //                             couponData = CouponModel();
+            //                           }
+            //                         } else {
+            //                           couponData = CouponModel();
+            //                           Fluttertoast.showToast(msg: 'noCode'.tr);
+            //                         }
+            //                       });
+            //                   setState(() {
+            //                     loading = false;
+            //                   });
+            //                 },
+            //                 color: appConstant.primaryColor,
+            //                 height: 40,
+            //                 shape: const RoundedRectangleBorder(
+            //                     borderRadius:
+            //                         BorderRadius.all(Radius.circular(25))),
+            //                 child: Text('apply'.tr),
+            //               ),
+            //       )
+            //     ],
+            //   ),
+            // ),
+            Column(
+              children: auth.appData!.paymobs!
+                  .where((w) => w.status)
+                  .map((m) => RadioListTile(
+                        activeColor: appConstant.primaryColor,
+                        contentPadding: EdgeInsets.zero,
+                        value: m,
+                        onChanged: (value) {
+                          setState(() {
+                            paymob = m;
+                          });
+                        },
+                        groupValue: paymob,
+                        title: Text(m.name),
+                      ))
+                  .toList(),
             ),
             if (couponData.id.isNotEmpty)
               ListTile(

@@ -9,104 +9,131 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var auth = Get.find<AuthController>();
-
-    return Container(
-      width: Get.width,
-      height: Get.height,
-      color: Colors.white,
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(
-              auth.userData.name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-            ),
-          ),
-          if (auth.userData.uid.isNotEmpty)
-            ListTile(
-              title: Text(
-                'myOrders'.tr,
+    return GetBuilder(
+      init: AuthController(),
+      builder: (auth) {
+        return Container(
+          width: Get.width,
+          height: Get.height,
+          color: Colors.white,
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(
+                  auth.userData.name,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w500),
+                ),
               ),
-              onTap: () {
-                Navigator.pushNamed(context, 'orders');
-              },
-              leading: const Icon(Icons.content_paste),
-            ),
-          if (auth.userData.uid.isNotEmpty)
-            ListTile(
-              title: Text(
-                'manageAdd'.tr,
+              if (auth.userData.uid.isNotEmpty)
+                ListTile(
+                  title: Text(
+                    'myOrders'.tr,
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, 'orders');
+                  },
+                  leading: const Icon(Icons.content_paste),
+                ),
+              if (auth.userData.uid.isNotEmpty)
+                ListTile(
+                  title: Text(
+                    'manageAdd'.tr,
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, 'address');
+                  },
+                  leading: const Icon(Icons.map),
+                ),
+              if (auth.userData.uid.isNotEmpty)
+                ListTile(
+                  title: Text(
+                    'paymentMethod'.tr,
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, 'payment');
+                  },
+                  leading: const Icon(Icons.wallet),
+                ),
+              ListTile(
+                title: Text(
+                  'settings'.tr,
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, 'settings');
+                },
+                leading: const Icon(
+                  Icons.settings,
+                ),
               ),
-              onTap: () {
-                Navigator.pushNamed(context, 'address');
-              },
-              leading: const Icon(Icons.map),
-            ),
-          if (auth.userData.uid.isNotEmpty)
-            ListTile(
-              title: Text(
-                'paymentMethod'.tr,
+              ListTile(
+                title: Text(
+                  'help'.tr,
+                ),
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  var url = Uri(
+                    scheme: 'mailto',
+                    path: 'comma0tech@gmail.com',
+                    query: 'subject=Help',
+                  );
+                  staticFunctions.urlLauncher(url);
+                },
+                leading: const Icon(
+                  Icons.help_center,
+                ),
               ),
-              onTap: () {
-                Navigator.pushNamed(context, 'payment');
-              },
-              leading: const Icon(Icons.wallet),
-            ),
-          ListTile(
-            title: Text(
-              'settings'.tr,
-            ),
-            onTap: () {
-              Navigator.pushNamed(context, 'settings');
-            },
-            leading: const Icon(
-              Icons.settings,
-            ),
+              ListTile(
+                title: Text(
+                  'contactUs'.tr,
+                ),
+                onTap: () {
+                  staticFunctions.urlLauncher(Uri.parse('tel:+1234567890'));
+                },
+                leading: const Icon(
+                  Icons.contact_phone_rounded,
+                ),
+              ),
+              if (auth.userData.uid == 'hiP36E2GauXh58htWy11NJyWa2J2')
+                SwitchListTile(
+                  value: auth.appData!.orders,
+                  onChanged: (e) {
+                    auth.changeOrders();
+                  },
+                  title: const Text('Accept orders?'),
+                ),
+              if (auth.userData.uid == 'hiP36E2GauXh58htWy11NJyWa2J2')
+                Column(
+                    children: auth.appData!.paymobs!
+                        .map(
+                          (m) => SwitchListTile(
+                            value: auth.appData!.paymobs!
+                                .firstWhere((w) => w.id == m.id)
+                                .status,
+                            onChanged: (e) {
+                              auth.changePaymobs(m.id);
+                            },
+                            title: Text(m.name),
+                          ),
+                        )
+                        .toList()),
+              ListTile(
+                leading: Icon(
+                  auth.userData.uid.isNotEmpty ? Icons.logout : Icons.login,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  auth.userData.uid.isNotEmpty ? 'logOut'.tr : 'signIn'.tr,
+                  style: const TextStyle(color: Colors.red),
+                ),
+                onTap: () {
+                  auth.logOut();
+                },
+              ),
+            ],
           ),
-          ListTile(
-            title: Text(
-              'help'.tr,
-            ),
-            onTap: () {
-              HapticFeedback.lightImpact();
-              var url = Uri(
-                scheme: 'mailto',
-                path: 'comma0tech@gmail.com',
-                query: 'subject=Help',
-              );
-              staticFunctions.urlLauncher(url);
-            },
-            leading: const Icon(
-              Icons.help_center,
-            ),
-          ),
-          ListTile(
-            title: Text(
-              'contactUs'.tr,
-            ),
-            onTap: () {
-              staticFunctions.urlLauncher(Uri.parse('tel:+1234567890'));
-            },
-            leading: const Icon(
-              Icons.contact_phone_rounded,
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              auth.userData.uid.isNotEmpty ? Icons.logout : Icons.login,
-              color: Colors.red,
-            ),
-            title: Text(
-              auth.userData.uid.isNotEmpty ? 'logOut'.tr : 'signIn'.tr,
-              style: const TextStyle(color: Colors.red),
-            ),
-            onTap: () {
-              auth.logOut();
-            },
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
